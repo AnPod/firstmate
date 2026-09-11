@@ -1,0 +1,19 @@
+# Live refusals and gate-failure close (commit bcdf291, real agy 1.2.1, lab tmux)
+
+== refusal 1: secondmate ==
+error: agy is a verified crewmate/scout adapter only and cannot run a secondmate; it has no primary supervision protocol. Select a harness verified for secondmates.
+rc=1
+
+== refusal 2: unlisted model (real 'agy models' probe) ==
+error: agy model 'gemini-9.9-nonexistent' is not listed by 'agy models'; choose a listed id or omit --model
+rc=1; windows before == windows after (no pane created)
+
+== FM_AGY_MODELS_TIMEOUT=0 clamp (live, real probe answered) ==
+error: agy model 'gemini-9.9-nonexistent' is not listed by 'agy models'; choose a listed id or omit --model
+rc=1 elapsed=3s (no hang; probe ran under the clamped default bound)
+
+== readiness-gate failure closes the endpoint (FM_AGY_READY_POLLS=2 x 0.5s) ==
+error: agy did not start processing its brief in the pre-trusted worktree in window firstmate:fm-agygf1; inspect window firstmate:fm-agygf1
+spawn-exit=1
+status record: failed: agy did not start processing its brief in the pre-trusted worktree in window firstmate:fm-agygf1
+window fm-agygf1 gone from the lab session after the failure; agy processes surviving 4s later: 0

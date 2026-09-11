@@ -1,0 +1,9 @@
+# Live agy signals guard at the committed target 53fa240 (this run, round 5)
+# command: FM_AGY_SIGNALS_LIVE=1 bash tests/fm-agy-signals-live-e2e.test.sh
+# The guard launches real agy 1.2.1 under a throwaway HOME (copy of ~/.gemini)
+# in its own lab tmux socket and cleans both up via its EXIT trap.
+ok - the real agy busy footer matches fm_busy_agy_tail_busy in flight
+ok - the real agy worker processed its launch prompt
+ok - a single Escape cancels the real agy turn
+ok - /quit stops the real agy process
+GUARD_EXIT=0

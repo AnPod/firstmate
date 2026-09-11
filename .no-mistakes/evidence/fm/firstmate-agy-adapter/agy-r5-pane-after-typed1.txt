@@ -1,0 +1,54 @@
+  '/tmp/fm-agy-typed-r5/lab.3222695/home/state/agye2e1.inbox'/handled/`.
+  The move IS the acknowledgement: without it firstmate rings again and
+  eventually treats you as stuck. An empty or absent inbox needs no action.
+
+  # Definition of done
+  Write your findings to
+  `/tmp/fm-agy-typed-r5/lab.3222695/home/data/agye2e1/report.md`.
+  The report must stand alone: what you did, what you found, the evidence
+  (commands run, output, file:line references), and what you recommend.
+  If your deliverable is a visual artifact the captain will review and iterate
+  on, you may host the Lavish review loop yourself (poll, revise, re-serve,
+  staying alive) instead of handing it back to firstmate.
+  Before reporting done, read and follow
+  `/home/andpod/.no-mistakes/worktrees/057dfecc4525/01M296GDJAW0VX9RWCHBA4ZF65/
+  .agents/skills/captain-hold-lifecycle/SKILL.md`
+  and pass its shared completion gate for the report and any visual review.
+  When the report is complete, append `done: {one-line conclusion}` to the
+  status file and stop.
+  If your findings reveal work that should ship (e.g. you reproduced a bug and
+  the fix is clear), say so in the report; firstmate may promote this task in
+  place, and you would then receive mode-specific ship instructions as a
+  follow-up message.
+
+  # Current worker role contract
+  When this task works on Firstmate itself, this section supersedes every
+  earlier brief instruction about your role and identity.
+  When this task works on Firstmate itself, the repository root `AGENTS.md`
+  (also imported by `CLAUDE.md`) is the primary/secondmate supervisor's
+  contract: follow this brief instead of that supervisor contract.
+  For that Firstmate task, do the assigned work yourself and report to
+  firstmate; do not adopt the supervisor identity, delegate the task, run fleet
+  supervision, or address the captain.
+  This exception preserves this brief's safety and authority boundaries and
+  applicable contributor guidance, including `CONTRIBUTING.md` and
+  `firstmate-coding-guidelines` for Firstmate changes.
+  Other projects retain their own instructions unchanged.
+
+● Bash(printf "run1: AGY-E2E-RUN1-TOKEN\n" >> progress.md &...) (ctrl+o to
+expand)
+
+  I have appended the line run1: AGY-E2E-RUN1-TOKEN to progress.md and
+  recorded completion in /tmp/fm-agy-typed-
+  r5/lab.3222695/home/state/agye2e1.status.
+
+────────────────────────────────────────────────────────────
+> Append exactly one line to progress.md in this worktree (create it if
+  missing): typed1: AGY-E2E-TYPED-TOKEN  Then append done: typed1 handled to
+  the status file and stop.
+⣻  Generating...
+└ Tip: Start your message with ! to run a shell command.
+────────────────────────────────────────────────────────────────────────────────
+>
+────────────────────────────────────────────────────────────────────────────────
+esc to cancel                                             Gemini 3.8 Flash · low

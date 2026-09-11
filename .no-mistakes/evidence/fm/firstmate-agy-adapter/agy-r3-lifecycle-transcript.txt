@@ -1,0 +1,61 @@
+# Live agy worker lifecycle through the real product (tmux backend, throwaway HOME, agy 1.2.1, commit bcdf291)
+# All firstmate state and the agy trust store lived under /tmp/fm-agy-e2e-r3.kiAcpK; the lab tmux server ran under that HOME.
+
+== spawn: bin/fm-spawn.sh agye2e1 <proj> --scout --harness agy --model gemini-3.8-flash-low --effort low --backend tmux ==
+spawned agye2e1 harness=agy kind=scout window=firstmate:fm-agye2e1 worktree=/tmp/fm-agy-e2e-r3.kiAcpK/home/.treehouse/proj-929554/1/proj
+(readiness gate required a busy verdict before this success line)
+
+== turn side effects ==
+worktree progress.md run1 line + status file line both on disk:
+run1: AGY-E2E-RUN1-TOKEN
+done: agy e2e run1 turn complete
+
+== observe: fm_busy_classify mid-turn (after durable steer) ==
+poll1: busy agy-regex   (pinned 'esc to cancel' row captured in agy-r3-busy-pane-tail.txt)
+settled pane classifies: unknown agy-regex (never idle on absence)
+
+== durable steer: bin/fm-send.sh agye2e1 ... (exit 0, record 001.msg) ==
+progress.md after steer:
+run1: AGY-E2E-RUN1-TOKEN
+steer1: AGY-E2E-STEER1-TOKEN
+status after steer:
+done: agy e2e run1 turn complete
+done: steer handled
+inbox: handled/001.msg present
+
+== typed plane, explicit tmux endpoint (bin/fm-send.sh 'firstmate:fm-agye2e1' ...): 3 of 3 exit 1 ==
+error: text not submitted to firstmate:fm-agye2e1 (delivery unconfirmed; verdict=unknown; tried explicit target 'firstmate:fm-agye2e1' matched /tmp/fm-agy-e2e-r3.kiAcpK/home/state/agye2e1.meta; backend=tmux)
+error: text not submitted to firstmate:fm-agye2e1 (delivery unconfirmed; verdict=unknown; tried explicit target 'firstmate:fm-agye2e1' matched /tmp/fm-agy-e2e-r3.kiAcpK/home/state/agye2e1.meta; backend=tmux)
+error: text not submitted to firstmate:fm-agye2e1 (delivery unconfirmed; verdict=unknown; tried explicit target 'firstmate:fm-agye2e1' matched /tmp/fm-agy-e2e-r3.kiAcpK/home/state/agye2e1.meta; backend=tmux)
+yet every message landed and ran (typed1/typed2/typed3 lines in progress.md, done: handled in status).
+Instrumentation: idle->busy transition occurs ~1.4-1.6s after Enter (short msg) and ~4s (multi-line msg);
+submit-core default confirm budget is retries=3 x sleep=0.4 (~1.7s incl. overhead); direct core probe with
+retries=3 confirmed once on a short message, retries=10 confirmed - the budget is the lever.
+
+== interrupt: bin/fm-control.sh agye2e1 interrupt mid-essay-turn ==
+interrupt-delivered agye2e1 harness=agy backend=tmux verified=agent-alive cancel=unconfirmed (rc=0)
+pane (see agy-r3-after-interrupt-pane.txt): 'Interrupted - What should Antigravity CLI do instead?' + idle composer
+
+== same-copy relaunch: bin/fm-control.sh agye2e1 relaunch --note ... (rc=0) ==
+relaunched agye2e1 harness=agy from=agy model=gemini-3.8-flash-low effort=low backend=tmux endpoint=firstmate:fm-agye2e1 worktree=/tmp/fm-agy-e2e-r3.kiAcpK/home/.treehouse/proj-929554/1/proj
+progress.md after relaunch turn (every predecessor line intact, replacement appended):
+run1: AGY-E2E-RUN1-TOKEN
+steer1: AGY-E2E-STEER1-TOKEN
+typed1: AGY-E2E-TYPED-TOKEN
+typed2: AGY-E2E-TYPED2-TOKEN
+typed3: AGY-E2E-TYPED3-TOKEN
+latency1: AGY-E2E-LATENCY-TOKEN
+relaunch1: AGY-E2E-RELAUNCH-TOKEN
+status history:
+done: agy e2e run1 turn complete
+done: steer handled
+done: typed handled
+done: typed2 handled
+done: typed3 handled
+done: latency handled
+done: relaunched ok
+progress note recorded in instructions:
+## Progress note (2026-09-11T22:11:30Z)
+
+== exit: bin/fm-control.sh agye2e1 exit ==
+stopped agye2e1 harness=agy backend=tmux (rc=0); pane command after exit: bash; worktree intact (all 7 lines)

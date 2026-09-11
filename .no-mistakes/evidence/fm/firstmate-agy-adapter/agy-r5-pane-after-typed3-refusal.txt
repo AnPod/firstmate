@@ -1,0 +1,54 @@
+  # Current worker role contract
+  When this task works on Firstmate itself, this section supersedes every
+  earlier brief instruction about your role and identity.
+  When this task works on Firstmate itself, the repository root `AGENTS.md`
+  (also imported by `CLAUDE.md`) is the primary/secondmate supervisor's
+  contract: follow this brief instead of that supervisor contract.
+  For that Firstmate task, do the assigned work yourself and report to
+  firstmate; do not adopt the supervisor identity, delegate the task, run fleet
+  supervision, or address the captain.
+  This exception preserves this brief's safety and authority boundaries and
+  applicable contributor guidance, including `CONTRIBUTING.md` and
+  `firstmate-coding-guidelines` for Firstmate changes.
+  Other projects retain their own instructions unchanged.
+
+● Bash(printf "run1: AGY-E2E-RUN1-TOKEN\n" >> progress.md &...) (ctrl+o to
+expand)
+
+  I have appended the line run1: AGY-E2E-RUN1-TOKEN to progress.md and
+  recorded completion in /tmp/fm-agy-typed-
+  r5/lab.3222695/home/state/agye2e1.status.
+
+────────────────────────────────────────────────────────────
+> Append exactly one line to progress.md in this worktree (create it if
+  missing): typed1: AGY-E2E-TYPED-TOKEN  Then append done: typed1 handled to
+  the status file and stop.
+
+● Bash(printf "typed1: AGY-E2E-TYPED-TOKEN\n" >> progress.m...) (ctrl+o to
+expand)
+  I have appended typed1: AGY-E2E-TYPED-TOKEN to progress.md and appended
+  done: typed1 handled to /tmp/fm-agy-typed-
+  r5/lab.3222695/home/state/agye2e1.status.
+
+────────────────────────────────────────────────────────────
+> Steer: update progress.md in this worktree.Step 1: append exactly one line:
+  typed2: AGY-E2E-TYPED2-TOKENStep 2: change nothing else in
+  progress.md.Context A: the captain wants confirmation that a realistic
+  multi-line brief still confirms within the agy submit budget.Context B: this
+  padding makes the composer render longer, like a real brief.Context C: pad
+  line three of the brief body for realistic length.Context D: pad line four of
+  the brief body for realistic length.Finally append done: typed2 handled to
+  the status file and stop.
+
+● Bash(printf "typed2: AGY-E2E-TYPED2-TOKEN\n" >> progress....) (ctrl+o to
+expand)
+
+  I have appended typed2: AGY-E2E-TYPED2-TOKEN to progress.md and appended
+  done: typed2 handled to /tmp/fm-agy-typed-
+  r5/lab.3222695/home/state/agye2e1.status.
+
+────────────────────────────────────────────────────────────────────────────────
+> Append exactly one line to progress.md in this worktree: typed3:
+  AGY-E2E-TYPED3-TOKEN  Then append done: typed3 handle
+────────────────────────────────────────────────────────────────────────────────
+                                                          Gemini 3.8 Flash · low

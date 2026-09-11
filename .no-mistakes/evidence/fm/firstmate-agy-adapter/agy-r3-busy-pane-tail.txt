@@ -1,0 +1,6 @@
+⣟  Reading file...
+└ Tip: Use /voice (or press f5) to record your prompt with your microphone.
+────────────────────────────────────────────────────────────────────────────────
+>
+────────────────────────────────────────────────────────────────────────────────
+esc to cancel                                             Gemini 3.8 Flash · low

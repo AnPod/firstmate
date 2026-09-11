@@ -1,0 +1,109 @@
+# Live typed-plane re-drive after the confirm-budget fix (agy 1.2.1, commit bcdf291, fix uncommitted in bin/fm-send.sh)
+# lab=/tmp/fm-agy-typed-r4.3104819
+# real trust store sha256 pre-run: 6ac7cc345eae9459552ac25310c99698f35b79eefae618ffe57087511e3df920
+# agy processes pre-run: 0
+== scaffold brief ==
+scaffolded: /tmp/fm-agy-typed-r4.3104819/home/data/agye2e1/brief.md (scout; replace {TASK} and {FIRSTMATE_SPEC})
+brief filled
+== spawn (readiness gate must require a busy verdict) ==
+/home/andpod/.no-mistakes/worktrees/057dfecc4525/01M296GDJAW0VX9RWCHBA4ZF65/bin/fm-spawn.sh: line 455: /tmp/fm-agy-typed-r4.3104819/home/bin/fm-guard.sh: No such file or directory
+/home/andpod/.no-mistakes/worktrees/057dfecc4525/01M296GDJAW0VX9RWCHBA4ZF65/bin/fm-spawn.sh: line 3306: /tmp/fm-agy-typed-r4.3104819/home/bin/fm-agy-trust.sh: No such file or directory
+warning: could not pre-register agy workspace trust for /tmp/fm-agy-typed-r4.3104819/home/.treehouse/proj-7da547/1/proj; the launch will answer the folder-trust dialog in window firstmate:fm-agye2e1 instead
+error: agy did not start processing its brief after the folder-trust dialog was answered in window firstmate:fm-agye2e1; inspect window firstmate:fm-agye2e1
+# Live typed-plane re-drive after the confirm-budget fix (agy 1.2.1, commit bcdf291, fix uncommitted in bin/fm-send.sh)
+# lab=/tmp/fm-agy-typed-r4.3110372
+# real trust store sha256 pre-run: 6ac7cc345eae9459552ac25310c99698f35b79eefae618ffe57087511e3df920
+# agy processes pre-run: 0
+== scaffold brief ==
+scaffolded: /tmp/fm-agy-typed-r4.3110372/home/data/agye2e1/brief.md (scout; replace {TASK} and {FIRSTMATE_SPEC})
+brief filled
+== spawn (readiness gate must require a busy verdict) ==
+spawned agye2e1 harness=agy kind=scout window=firstmate:fm-agye2e1 worktree=/tmp/fm-agy-typed-r4.3110372/home/.treehouse/proj-b53d16/1/proj
+peek worktree line: worktree...
+worktree=/tmp/fm-agy-typed-r4.3110372/home/.treehouse/proj-b53d16/1/proj status=/tmp/fm-agy-typed-r4.3110372/home/state/agye2e1.status
+== wait for the spawn turn to run and settle ==
+run1 line present after ~6s
+pane settled (no busy footer)
+== THE SCENARIO: typed steer into the explicit tmux agy endpoint ==
+WARNING: watcher still down (same stale episode; last beat: never, grace 300s) - full banner already printed this episode.
+typed attempt 1 rc=0 elapsed=6.3s
+FAIL: typed1 line never appeared though send exited 0
+agy processes surviving after cleanup: 1
+lab removed
+# Live typed-plane re-drive after the confirm-budget fix (agy 1.2.1, commit bcdf291, fix uncommitted in bin/fm-send.sh)
+# lab=/tmp/fm-agy-typed-r4.3125655
+# real trust store sha256 pre-run: 6ac7cc345eae9459552ac25310c99698f35b79eefae618ffe57087511e3df920
+# agy processes pre-run: 0
+== scaffold brief ==
+scaffolded: /tmp/fm-agy-typed-r4.3125655/home/data/agye2e1/brief.md (scout; replace {TASK} and {FIRSTMATE_SPEC})
+brief filled
+== spawn (readiness gate must require a busy verdict) ==
+spawned agye2e1 harness=agy kind=scout window=firstmate:fm-agye2e1 worktree=/tmp/fm-agy-typed-r4.3125655/home/.treehouse/proj-fd2859/1/proj
+peek worktree line: worktree...
+worktree=/tmp/fm-agy-typed-r4.3125655/home/.treehouse/proj-fd2859/1/proj status=/tmp/fm-agy-typed-r4.3125655/home/state/agye2e1.status
+== wait for the spawn turn to run and settle ==
+run1 line present after ~6s
+pane settled (no busy footer)
+== THE SCENARIO: typed steer into the explicit tmux agy endpoint ==
+WARNING: watcher still down (same stale episode; last beat: never, grace 300s) - full banner already printed this episode.
+typed attempt 1 rc=0 elapsed=6.2s
+typed1 landed and ran; send exit 0
+WARNING: watcher still down (same stale episode; last beat: never, grace 300s) - full banner already printed this episode.
+error: text not submitted to firstmate:fm-agye2e1 (delivery unconfirmed; verdict=unknown; tried explicit target 'firstmate:fm-agye2e1' matched /tmp/fm-agy-typed-r4.3125655/home/state/agye2e1.meta; backend=tmux)
+typed attempt 2 rc=1 elapsed=5.9s
+FAIL: typed attempt 2 did not exit 0
+agy processes surviving after cleanup: 0
+lab removed
+# Live typed-plane re-drive after the confirm-budget fix (agy 1.2.1, commit bcdf291, fix uncommitted in bin/fm-send.sh)
+# lab=/tmp/fm-agy-typed-r4.3134848
+# real trust store sha256 pre-run: 6ac7cc345eae9459552ac25310c99698f35b79eefae618ffe57087511e3df920
+# agy processes pre-run: 0
+== scaffold brief ==
+scaffolded: /tmp/fm-agy-typed-r4.3134848/home/data/agye2e1/brief.md (scout; replace {TASK} and {FIRSTMATE_SPEC})
+brief filled
+== spawn (readiness gate must require a busy verdict) ==
+spawned agye2e1 harness=agy kind=scout window=firstmate:fm-agye2e1 worktree=/tmp/fm-agy-typed-r4.3134848/home/.treehouse/proj-8e9bdd/1/proj
+peek worktree line: worktree...
+worktree=/tmp/fm-agy-typed-r4.3134848/home/.treehouse/proj-8e9bdd/1/proj status=/tmp/fm-agy-typed-r4.3134848/home/state/agye2e1.status
+== wait for the spawn turn to run and settle ==
+run1 line present after ~9s
+pane settled (no busy footer)
+== THE SCENARIO: typed steer into the explicit tmux agy endpoint ==
+WARNING: watcher still down (same stale episode; last beat: never, grace 300s) - full banner already printed this episode.
+typed attempt 1 rc=0 elapsed=6.4s
+typed1 landed and ran; send exit 0
+WARNING: watcher still down (same stale episode; last beat: never, grace 300s) - full banner already printed this episode.
+typed attempt 2 rc=0 elapsed=7.7s
+typed2 landed and ran; send exit 0
+== worktree progress.md ==
+run1: AGY-E2E-RUN1-TOKEN
+typed1: AGY-E2E-TYPED-TOKEN
+typed2: AGY-E2E-TYPED2-TOKEN
+== status history ==
+done: agy e2e run1 turn complete
+done: typed handled
+done: typed2 handled
+== inbox record moved to handled ==
+== cleanup ==
+# real trust store sha256 post-run: f597ade346f1fbea679642812aead3bcbc95ae3430ec301282657f0b2c637532
+ISOLATION FAIL: real trust store changed
+agy processes surviving after cleanup: 0
+lab removed
+
+== isolation correction (appended after the run) ==
+The ISOLATION FAIL line above is a bug in the drive script, not a breach: POST_SHA was
+computed after the script had exported HOME=$LAB/home, so it hashed the lab's trust-store
+copy (which fm-agy-trust legitimately registered the lab worktree in). The REAL
+~/.gemini/antigravity-cli/settings.json, hashed directly after cleanup, is:
+6ac7cc345eae9459552ac25310c99698f35b79eefae618ffe57087511e3df920  (== pre-run, and == the
+r3 isolation check) with mtime 2026-09-11 12:54:34 predating every r4 run; it contains no
+lab path. Operator isolation held.
+Also record: attempt 2's first drive (retries=10, ~4.4s window) exited 1 verdict=unknown
+while its message landed - the ~4-5s long-brief render outran the first raised budget,
+which is why the agy default now stands at 20 retries (~8s at the default cadence).
+
+== final state verified through the real product (this run) ==
+typed short steer: send exit 0 (6.4s incl. confirm + settle), worktree line + handled status line
+typed long brief:  send exit 0 (7.7s incl. confirm + settle), worktree line + handled status line
+spawn: trust pre-registered, readiness gate required a busy verdict, turn ran in the lab worktree
+no surviving agy processes; lab tmux server killed; lab directory removed
