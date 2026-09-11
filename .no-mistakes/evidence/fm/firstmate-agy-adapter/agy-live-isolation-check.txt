@@ -1,0 +1,11 @@
+# Operator isolation check (run after all live scenarios, 2026-09-11T10:39:58+02:00)
+Real ~/.gemini/antigravity-cli/settings.json sha256 (pre-run: df7632aad8721b3cde199d0b8d1ec0af038b61461c435cdadbe44f05d6de885c):
+df7632aad8721b3cde199d0b8d1ec0af038b61461c435cdadbe44f05d6de885c  /home/andpod/.gemini/antigravity-cli/settings.json
+real store IDENTICAL to pre-run snapshot (diff exit 0)
+store mtime (pre-run: 2026-09-10 17:11:02):
+2026-09-10 17:11:02.841884926 +0200
+agy processes surviving anywhere: 0
+tmux servers after lab teardown:
+error connecting to /tmp/tmux-1000/fm-agy-signals-3582941 (No such file or directory)
+herdr default session (must be the one running default, untouched):
+{"sessions":[{"default":true,"name":"default","running":true,"session_dir":"/home/andpod/.config/herdr","socket_path":"/home/andpod/.config/herdr/herdr.sock"}]}

@@ -1,0 +1,22 @@
+# Live refusal 1: agy cannot run a secondmate (no primary supervision protocol)
+WARNING: watcher still down (same stale episode; last beat: 164s ago, grace 300s) - full banner already printed this episode.
+error: agy is a verified crewmate/scout adapter only and cannot run a secondmate; it has no primary supervision protocol. Select a harness verified for secondmates.
+rc=1
+
+# Live refusal 2: an unlisted model refuses before any pane exists (real "agy models" probe)
+WARNING: watcher still down (same stale episode; last beat: 164s ago, grace 300s) - full banner already printed this episode.
+error: agy model 'gemini-9.9-nonexistent' is not listed by 'agy models'; choose a listed id or omit --model
+rc=1
+# windows before refusal 2 == windows after (no pane created):
+
+# Live gate-failure drive: readiness window tightened (FM_AGY_READY_POLLS=2 x 0.5s)
+error: agy did not start processing its brief in the pre-trusted worktree in window firstmate:fm-agygf1
+spawn-exit=1
+# task status record:
+failed: agy did not start processing its brief in the pre-trusted worktree in window firstmate:fm-agygf1
+# endpoint closed (window list after): fm-agy-e2e-lifecycle fm-agye2e1  (fm-agygf1 gone)
+# agy processes surviving 3s later: none
+
+# FM_AGY_MODELS_TIMEOUT=0 clamp live: real probe answered, unlisted model refused, no hang
+error: agy model 'gemini-9.9-nonexistent' is not listed by 'agy models'; choose a listed id or omit --model
+rc=1 elapsed=2s (no hang)

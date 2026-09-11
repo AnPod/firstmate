@@ -1,0 +1,63 @@
+# Live agy worker lifecycle through the real product (tmux backend, throwaway HOME, agy 1.2.0)
+# All firstmate state and the agy trust store lived under /tmp/fm-agy-e2e-lifecycle; the lab tmux server was started under that HOME so panes inherited it.
+
+== spawn (readiness gate requires a busy verdict before success) ==
+spawned agye2e1 harness=agy kind=scout window=firstmate:fm-agye2e1 worktree=/tmp/fm-agy-e2e-lifecycle/home/.treehouse/proj-c4ed82/1/proj
+
+== worker wrote the worktree file and appended to its status file (outside the worktree) ==
+progress.md:
+run1: AGY-E2E-RUN1-TOKEN
+steer1: AGY-E2E-STEER1-TOKEN
+relaunch1: AGY-E2E-RELAUNCH-TOKEN
+status:
+done: agy e2e run1 turn complete
+done: steer handled
+done: relaunched ok
+
+== settled pane after run1 (idle composer '? for shortcuts') ==
+expand)
+
+  Tasks completed:
+
+  1. Created progress.md with run1: AGY-E2E-RUN1-TOKEN.
+  2. Appended done: agy e2e run1 turn complete to /tmp/fm-agy-e2e-
+  lifecycle/home/state/agye2e1.status.
+
+────────────────────────────────────────────────────────────────────────────────
+>
+────────────────────────────────────────────────────────────────────────────────
+? for shortcuts                                           Gemini 3.8 Flash · low
+
+== durable steer: bin/fm-send.sh agye2e1 ... (rc=0; record 001.msg) ==
+progress.md after steer:
+run1: AGY-E2E-RUN1-TOKEN
+steer1: AGY-E2E-STEER1-TOKEN
+relaunch1: AGY-E2E-RELAUNCH-TOKEN
+status after steer:
+done: agy e2e run1 turn complete
+done: steer handled
+done: relaunched ok
+inbox:
+handled
+001.msg
+
+== same-copy relaunch: bin/fm-control.sh agye2e1 relaunch --note ... ==
+relaunched agye2e1 harness=agy from=agy model=gemini-3.8-flash-low effort=low backend=tmux endpoint=firstmate:fm-agye2e1 worktree=/tmp/fm-agy-e2e-lifecycle/home/.treehouse/proj-c4ed82/1/proj
+progress.md after relaunch (predecessor lines intact, replacement appended):
+run1: AGY-E2E-RUN1-TOKEN
+steer1: AGY-E2E-STEER1-TOKEN
+relaunch1: AGY-E2E-RELAUNCH-TOKEN
+status history (all three done lines preserved):
+done: agy e2e run1 turn complete
+done: steer handled
+done: relaunched ok
+
+== exit: bin/fm-control.sh agye2e1 exit ==
+stopped agye2e1 harness=agy backend=tmux endpoint=firstmate:fm-agye2e1 worktree=/tmp/fm-agy-e2e-lifecycle/home/.treehouse/proj-c4ed82/1/proj
+pane command after exit: bash (endpoint preserved, agent gone)
+worktree intact:
+run1: AGY-E2E-RUN1-TOKEN
+steer1: AGY-E2E-STEER1-TOKEN
+relaunch1: AGY-E2E-RELAUNCH-TOKEN
+progress.md
+README.md
