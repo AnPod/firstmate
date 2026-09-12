@@ -1,0 +1,70 @@
+Live end-to-end drive of the firstmate agy adapter (branch fm/firstmate-agy-adapter, commit 6f201579)
+Host: agy 1.2.2 at /home/andpod/.local/bin/agy, tmux 3.7c, treehouse, node 26.8.1
+Isolation: throwaway HOME (copy of ~/.gemini) for the spawn and every pane, throwaway FM_HOME,
+fixture project in /tmp, treehouse pool created under the throwaway HOME, fresh tmux server
+(no operator tmux server was running before or after). The operator's real
+~/.gemini/antigravity-cli/settings.json is byte-identical before and after the whole run
+(sha256 e6b2f2fd...29102d0, see agy-real-store-before.sha256).
+
+=== 1. SPAWN (bin/fm-spawn.sh agy-e2e1 <project> --scout --harness agy --model gemini-3.8-flash-low --effort low --backend tmux) ===
+stdout: spawned agy-e2e1 harness=agy kind=scout window=firstmate:fm-agy-e2e1 worktree=/tmp/fm-agy-e2e.249784/home/.treehouse/project-d5e3bd/1/project
+
+state/agy-e2e1.meta after spawn:
+window=firstmate:fm-agy-e2e1
+endpoint_task_id=agy-e2e1
+worktree=/tmp/fm-agy-e2e.249784/home/.treehouse/project-d5e3bd/1/project
+project=/tmp/fm-agy-e2e.249784/project
+harness=agy
+kind=scout
+tasktmp=/tmp/fm-agy-e2e1
+model=gemini-3.8-flash-low
+effort=low
+spawn_gen=s1789249624.253086.9184
+
+Worker turn result (real agy turn, supervised by the agy readiness gate):
+state/agy-e2e1.status: done: agy e2e turn complete
+worktree/agy-e2e.txt:  AGY_E2E_LIVE_OK
+
+Idle pane after the turn (tail):
+  The Antigravity CLI crewmate successfully completed the live verification
+  task under firstmate supervision. Created agy-e2e.txt with AGY_E2E_LIVE_OK,
+  recorded completion in the status file, and wrote findings to the report.
+ How's the CLI experience so far? Help us improve:
+ [1] Good  [2] Fine  [3] Bad  [0] Skip
+? for shortcuts                                           Gemini 3.8 Flash · low
+
+=== 2. STEER (bin/fm-send.sh agy-e2e1 "Create a second file named agy-steer.txt ...") ===
+exit=0; durable record state/agy-e2e1.inbox/001.msg written (watcher-down banner is expected:
+no supervision daemon runs in the lab; the record IS the delivery).
+Worker result: worktree/agy-steer.txt contains AGY_E2E_STEER_OK and the record moved to
+state/agy-e2e1.inbox/handled/001.msg (the move is the acknowledgement).
+
+=== 3. RELAUNCH (bin/fm-control.sh agy-e2e1 relaunch --note "verify prior files, append relaunched: done") ===
+stdout: relaunched agy-e2e1 harness=agy from=agy model=gemini-3.8-flash-low effort=low backend=tmux endpoint=firstmate:fm-agy-e2e1 worktree=/tmp/fm-agy-e2e.249784/home/.treehouse/project-d5e3bd/1/project
+Replacement verified both prior files and appended:
+state/agy-e2e1.status:
+done: agy e2e turn complete
+relaunched: done
+Replacement pane mid-turn (real busy surface observed):
+  ● Bash(cat agy-e2e.txt && cat agy-steer.txt)
+  ⡿  Running command...
+esc to cancel                                             Gemini 3.8 Flash · low
+
+=== 4. EXIT (bin/fm-control.sh agy-e2e1 exit) ===
+stdout: stopped agy-e2e1 harness=agy backend=tmux endpoint=firstmate:fm-agy-e2e1 worktree=/tmp/fm-agy-e2e.249784/home/.treehouse/project-d5e3bd/1/project
+Postconditions: `pgrep -x agy` finds no agy process; the pane is a lone shell in the worktree
+("Resume with -c ... [andpod@omarchy-one project]$"); both work files and both status lines intact.
+
+=== 5. ADVERSARIAL DRIVES (same lab) ===
+a. Unlisted model: bin/fm-spawn.sh agy-badmodel ... --harness agy --model totally-bogus-model
+   -> "error: agy model 'totally-bogus-model' is not listed by 'agy models'; choose a listed id
+   or omit --model", exit 1, no window created (tmux list-windows shows only the pre-existing
+   bash + fm-agy-e2e1 windows), no state/agy-badmodel.meta written. The refusal ran against the
+   real `agy models` listing of agy 1.2.2.
+b. Secondmate: bin/fm-spawn.sh agy-2nd ... --harness agy --secondmate
+   -> "error: agy is a verified crewmate/scout adapter only and cannot run a secondmate; it has
+   no primary supervision protocol...", exit 1.
+c. Trust scope (real bin/fm-agy-trust.sh against the throwaway store): refuses the home directory
+   and the primary project checkout (exit 1 each); the store's trustedWorkspaces entry count is
+   unchanged after both refusals. The spawn itself appended exactly the task worktree path to the
+   throwaway store's trustedWorkspaces before launch.

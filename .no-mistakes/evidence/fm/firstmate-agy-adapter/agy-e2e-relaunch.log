@@ -1,0 +1,2 @@
+WARNING: watcher still down (same stale episode; last beat: never, grace 300s) - full banner already printed this episode.
+relaunched agy-e2e1 harness=agy from=agy model=gemini-3.8-flash-low effort=low backend=tmux endpoint=firstmate:fm-agy-e2e1 worktree=/tmp/fm-agy-e2e.249784/home/.treehouse/project-d5e3bd/1/project
