@@ -814,6 +814,35 @@ EOF
   pass "context digest distinguishes ABSENT, empty-but-present, and populated files"
 }
 
+# --- startup-memory budget hint in the context digest ------------------------
+
+test_startup_memory_budget_hint_at_threshold() {
+  local rec root home fakebin out
+  rec=$(new_world memory-budget-hint)
+  IFS='|' read -r root home fakebin <<EOF
+$rec
+EOF
+  make_fake_toolchain "$fakebin"
+  make_fake_ps_claude "$fakebin"
+
+  # 100-token budget; 270 bytes -> ceil(270/3)=90 tokens = exactly 90%.
+  printf '100\n' > "$home/config/startup-memory-budget"
+  python3 -c 'open("'"$home"'/data/captain.md","w").write("x"*270)'
+
+  out=$(run_session_start "$home" "$root" "$fakebin:$BASE_PATH")
+  assert_contains "$out" "STARTUP_MEMORY_BUDGET: 90 of 100 estimated tokens (90%) - run /stow" \
+    "digest did not surface the /stow trigger at the 90% threshold"
+
+  # Below threshold stays silent.
+  printf '10\n' > "$home/config/startup-memory-budget"
+  printf 'hi\n' > "$home/data/captain.md"
+  out=$(run_session_start "$home" "$root" "$fakebin:$BASE_PATH")
+  assert_not_contains "$out" "STARTUP_MEMORY_BUDGET:" \
+    "digest printed a budget hint while well under the allowance"
+
+  pass "session-start prints STARTUP_MEMORY_BUDGET at or above 90%, stays silent below"
+}
+
 # --- lock refusal: read-only path --------------------------------------------
 
 test_lock_refusal_read_only_path() {
@@ -2949,6 +2978,7 @@ EOF
 }
 
 test_context_digest_absent_empty_present
+test_startup_memory_budget_hint_at_threshold
 test_lock_refusal_read_only_path
 test_lock_write_failure_read_only_path
 test_trace_context_effective_state_is_frozen_after_lock

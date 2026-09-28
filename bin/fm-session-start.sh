@@ -283,6 +283,8 @@ stage() {  # <stage-name>: breadcrumb for the parent's truncation banner
 . "$SCRIPT_DIR/fm-timeout-lib.sh"
 # shellcheck source=bin/fm-session-lock-lib.sh
 . "$SCRIPT_DIR/fm-session-lock-lib.sh"
+# shellcheck source=bin/fm-startup-memory-budget-lib.sh
+. "$SCRIPT_DIR/fm-startup-memory-budget-lib.sh"
 
 if [ -z "${FM_SESSION_START_STAGE_FILE:-}" ]; then
   SESSION_START_BUDGET=${FM_SESSION_START_TIMEOUT:-120}
@@ -414,6 +416,27 @@ print_file_or_absent() {
   else
     printf 'ABSENT\n'
   fi
+}
+
+# Print a /stow trigger when startup memory is near or over the configured
+# budget. Healthy homes stay silent (same posture as the rest of bootstrap).
+# An unreadable budget or memory file stays silent here; bootstrap already
+# owns the invalid-budget diagnostic.
+print_startup_memory_budget_hint() {
+  local budget total=0 tokens file pct
+  fm_startup_memory_budget_read "$CONFIG" >/dev/null 2>&1 || return 0
+  budget=$FM_STARTUP_MEMORY_BUDGET_VALUE
+  for file in captain.md captain-shared.md learnings.md; do
+    fm_startup_memory_measure_file "$DATA/$file" >/dev/null 2>&1 || return 0
+    total=$((total + FM_STARTUP_MEMORY_MEASURE_TOKENS))
+  done
+  # Silent below 90%: total/budget < 0.9 <=> total*10 < budget*9.
+  if [ "$((total * 10))" -lt "$((budget * 9))" ]; then
+    return 0
+  fi
+  pct=$((total * 100 / budget))
+  printf 'STARTUP_MEMORY_BUDGET: %s of %s estimated tokens (%s%%) - run /stow\n' \
+    "$total" "$budget" "$pct"
 }
 
 print_backlog_pointer() {
@@ -1004,6 +1027,7 @@ print_file_or_absent "$DATA/secondmates.md" "data/secondmates.md"
 print_file_or_absent "$DATA/captain.md" "data/captain.md"
 print_file_or_absent "$DATA/captain-shared.md" "data/captain-shared.md (shared, main-authoritative, read-only in secondmate homes)"
 print_file_or_absent "$DATA/learnings.md" "data/learnings.md"
+print_startup_memory_budget_hint
 
 # --- 9. closing reminder -----------------------------------------------
 stage next-step
