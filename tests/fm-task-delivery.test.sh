@@ -959,6 +959,50 @@ EOF
     "an indented same-level heading was not named as the line that ended the spec"
   assert_absent "$home/state/$id.meta" "indented same-level heading refusal wrote task metadata"
 
+  id=delivery-indented-sibling
+  mkdir -p "$home/data/$id"
+  cat > "$home/data/$id/brief.md" <<'EOF'
+# Task
+## Captain's intent
+
+ ## Firstmate spec
+Keep the fix inside the pager.
+
+# Definition of done
+Delivery contract: mode=direct-PR
+EOF
+  out=$(run_spawn "$home" "$fakebin" "$id" "$proj" claude --mode direct-PR --yolo off)
+  status=$?
+  [ "$status" -ne 0 ] || fail "spawn with an indented sibling spec heading should exit non-zero"
+  assert_contains "$out" "must contain nonempty ## Captain's intent and ## Firstmate spec" \
+    "an indented sibling spec heading dropped the ordinary nonempty refusal"
+  assert_not_contains "$out" "parsed empty because" \
+    "an indented ## Firstmate spec was treated as a nested heading to relevel"
+  assert_not_contains "$out" "use ### or deeper" \
+    "an indented sibling spec heading suggested a deeper heading level"
+  assert_absent "$home/state/$id.meta" "indented sibling spec refusal wrote task metadata"
+
+  id=delivery-indented-sibling-three
+  mkdir -p "$home/data/$id"
+  cat > "$home/data/$id/brief.md" <<'EOF'
+# Task
+## Firstmate spec
+
+   ## Captain's intent
+Fix the pager off-by-one.
+
+# Definition of done
+Delivery contract: mode=direct-PR
+EOF
+  out=$(run_spawn "$home" "$fakebin" "$id" "$proj" claude --mode direct-PR --yolo off)
+  status=$?
+  [ "$status" -ne 0 ] || fail "spawn with a three-space sibling intent heading should exit non-zero"
+  assert_contains "$out" "must contain nonempty ## Captain's intent and ## Firstmate spec" \
+    "a three-space sibling intent heading dropped the ordinary nonempty refusal"
+  assert_not_contains "$out" "parsed empty because" \
+    "a three-space ## Captain's intent was treated as a nested heading to relevel"
+  assert_absent "$home/state/$id.meta" "three-space sibling intent refusal wrote task metadata"
+
   id=delivery-level-one-end
   mkdir -p "$home/data/$id"
   cat > "$home/data/$id/brief.md" <<'EOF'

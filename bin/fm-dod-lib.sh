@@ -252,10 +252,12 @@ fm_brief_task_content_valid() {  # <file>
 # When a present subsection parses empty because an unfenced same-level heading
 # ended it before any body text, print one clause naming that heading. A sibling
 # contract heading or a following level-1 heading is how a blank subsection
-# ordinarily ends, and then this prints nothing. The ending rule itself stays in
-# bin/fm-brief-heading-lib.sh.
+# ordinarily ends, and then this prints nothing. The sibling compare ignores up
+# to three leading spaces, the same indent the heading reader allows, so an
+# indented ` ## Firstmate spec` stays the sibling rather than a heading to
+# relevel. The ending rule itself stays in bin/fm-brief-heading-lib.sh.
 fm_brief_task_heading_cutoff_clause() {  # <file>
-  local file=$1 heading body term level subject
+  local file=$1 heading body term term_cmp level subject n
   local -a subjects=()
   [ -f "$file" ] && [ -r "$file" ] || return 1
   for heading in "## Captain's intent" "## Firstmate spec"; do
@@ -263,7 +265,13 @@ fm_brief_task_heading_cutoff_clause() {  # <file>
     body=$(fm_brief_task_heading_body "$file" "$heading")
     [ -z "$(printf '%s' "$body" | tr -d '[:space:]')" ] || continue
     term=$(fm_brief_task_heading_terminator "$file" "$heading") || continue
-    case "$term" in
+    term_cmp=$term
+    n=0
+    while [ "$n" -lt 3 ] && [ "${term_cmp# }" != "$term_cmp" ]; do
+      term_cmp=${term_cmp# }
+      n=$((n + 1))
+    done
+    case "$term_cmp" in
       "## Captain's intent"|"## Firstmate spec") continue ;;
     esac
     level=$(fm_brief_heading_line_level "$term")
