@@ -93,6 +93,9 @@
 # render temps. report.md and every other durable record, including
 # contributions.json, stay. A --force discard and a captain-held retain leave
 # the briefs, because a successor spawn of that same id still reads brief.md.
+# A manual backlog never records that retain, so the same question is asked
+# again at removal time: briefs stay unless the read proves the item is not
+# held, and a failed read keeps them too.
 # Worktree-slot ownership (teardown-slot-collision): a treehouse pool slot is
 # reused across tasks, so a stale, duplicated, or drifted worktree= record can
 # name a slot a DIFFERENT live task now holds. Cleanup kills every process under
@@ -1420,12 +1423,26 @@ retire_busy_state() {
 # report.md is the scout deliverable, and contributions.json is the durable
 # observation record. A symlink or other non-regular input is left in place
 # rather than followed. A --force discard and a captain-held retain skip this
-# entirely so a successor spawn can still read brief.md.
+# entirely so a successor spawn can still read brief.md. A manual backlog
+# skips that retain, so this asks the same open question and keeps the briefs
+# unless the read proves the item is not held.
 remove_landed_launch_briefs() {
-  local dir path name
+  local dir path name open_status
   [ "$KIND" = ship ] || [ "$KIND" = scout ] || return 0
   [ "$FORCE" != --force ] || return 0
   [ "${BACKLOG_TRANSITION:-close}" != retain ] || return 0
+  if [ "${TEARDOWN_BACKLOG_APPLIES:-0}" != 1 ] && fm_backlog_backend_manual "$CONFIG"; then
+    open_status=0
+    FM_HOME="$FM_HOME" FM_STATE_OVERRIDE="$STATE" \
+      FM_DATA_OVERRIDE="$DATA" FM_CONFIG_OVERRIDE="$CONFIG" \
+      "$SCRIPT_DIR/fm-captain-hold.sh" open "$ID" >/dev/null 2>&1 || open_status=$?
+    if [ "$open_status" != 1 ]; then
+      if [ "$open_status" != 0 ]; then
+        echo "warning: leaving generated launch inputs for $ID; whether its backlog item is still held for the captain could not be read" >&2
+      fi
+      return 0
+    fi
+  fi
   dir=$DATA/$ID
   [ -e "$dir" ] || [ -L "$dir" ] || return 0
   if [ -L "$dir" ] || [ ! -d "$dir" ]; then

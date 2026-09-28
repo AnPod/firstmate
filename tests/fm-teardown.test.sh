@@ -899,6 +899,55 @@ test_captain_held_teardown_keeps_generated_briefs() {
   pass "a captain-held teardown leaves generated briefs for a successor spawn"
 }
 
+test_manual_backend_captain_hold_keeps_generated_briefs() {
+  local case_dir rc
+  case_dir=$(make_case manual-held-brief-cleanup)
+  write_meta "$case_dir" no-mistakes ship
+  printf '%s\n' 'pr=https://github.com/example/repo/pull/7' >> "$case_dir/state/task-x1.meta"
+  seed_backlog_in_flight "$case_dir"
+  seed_generated_launch_inputs "$case_dir"
+  FM_HOME="$case_dir" FM_STATE_OVERRIDE="$case_dir/state" \
+    FM_DATA_OVERRIDE="$case_dir/data" FM_CONFIG_OVERRIDE="$case_dir/config" \
+    "$ROOT/bin/fm-captain-hold.sh" hold task-x1 --reason "captain must decide" \
+    >/dev/null \
+    || fail "manual-held-brief-cleanup: could not hold the task"
+  printf '%s\n' manual > "$case_dir/config/backlog-backend"
+
+  set +e
+  run_teardown "$case_dir" > "$case_dir/stdout" 2> "$case_dir/stderr"
+  rc=$?
+  set -e
+
+  expect_code 0 "$rc" "manual-held-brief-cleanup: teardown should succeed: $(cat "$case_dir/stderr")"
+  assert_absent "$case_dir/state/task-x1.meta" "manual-held-brief-cleanup: task record still present"
+  assert_generated_launch_inputs_kept "$case_dir"
+  [ "$(backlog_row_state "$case_dir")" = in_flight ] \
+    || fail "manual-held-brief-cleanup: manual backlog was closed"
+  pass "a captain-held task on a manual backlog keeps generated briefs"
+}
+
+test_manual_backend_without_hold_removes_generated_briefs() {
+  local case_dir rc
+  case_dir=$(make_case manual-unheld-brief-cleanup)
+  write_meta "$case_dir" no-mistakes ship
+  printf '%s\n' 'pr=https://github.com/example/repo/pull/7' >> "$case_dir/state/task-x1.meta"
+  printf '%s\n' manual > "$case_dir/config/backlog-backend"
+  seed_backlog_in_flight "$case_dir"
+  seed_generated_launch_inputs "$case_dir"
+
+  set +e
+  run_teardown "$case_dir" > "$case_dir/stdout" 2> "$case_dir/stderr"
+  rc=$?
+  set -e
+
+  expect_code 0 "$rc" "manual-unheld-brief-cleanup: teardown should succeed: $(cat "$case_dir/stderr")"
+  assert_absent "$case_dir/state/task-x1.meta" "manual-unheld-brief-cleanup: task record still present"
+  assert_generated_launch_inputs_removed "$case_dir"
+  [ "$(backlog_row_state "$case_dir")" = in_flight ] \
+    || fail "manual-unheld-brief-cleanup: manual backlog was closed"
+  pass "a manual backlog without a captain hold still removes generated briefs"
+}
+
 test_landed_scout_teardown_removes_briefs_and_keeps_the_report() {
   local case_dir rc dir
   case_dir=$(make_case scout-brief-cleanup)
@@ -4444,11 +4493,16 @@ test_forced_secondmate_own_missing_adapter_sibling_refuses_before_child_cleanup
 test_retained_sources_still_reach_the_ordinary_refusal
 test_local_only_fork_remote_allows
 test_teardown_closes_the_backlog_item_itself
-test_teardown_closes_a_gerrit_task_with_its_change_url_as_a_notetest_landed_teardown_removes_generated_briefs_and_keeps_the_report
+test_teardown_closes_a_gerrit_task_with_its_change_url_as_a_note
+test_landed_teardown_removes_generated_briefs_and_keeps_the_report
 test_refused_teardown_keeps_generated_briefs
 test_forced_teardown_keeps_generated_briefs
 test_captain_held_teardown_keeps_generated_briefs
 test_landed_scout_teardown_removes_briefs_and_keeps_the_reporttest_teardown_manual_backend_leaves_the_backlog_to_the_operator
+test_manual_backend_captain_hold_keeps_generated_briefs
+test_manual_backend_without_hold_removes_generated_briefs
+test_landed_scout_teardown_removes_briefs_and_keeps_the_report
+test_teardown_manual_backend_leaves_the_backlog_to_the_operator
 test_local_only_truly_unpushed_refuses
 test_local_only_merged_to_local_main_allows
 test_no_mistakes_origin_remote_allows
