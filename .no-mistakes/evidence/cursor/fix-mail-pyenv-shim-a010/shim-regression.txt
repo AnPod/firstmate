@@ -1,0 +1,23 @@
+Test-only validation with a disposable PATH-relookup shim, bounded recursion guard, and existing stubbed IMAP fixtures. Not a real pyenv installation or live mail service.
+
+base: test_poll_retries_transient_fetch_and_surfaces_real_metadata
+exit=1
+not ok - first poll of a failing fetch must succeed: expected exit 0, got 1
+shim diagnostic: recursive python3 PATH lookup detected
+
+
+base: test_poll_sanitizes_header_fields
+exit=1
+not ok - sanitizing poll must succeed: expected exit 0, got 1
+shim diagnostic: recursive python3 PATH lookup detected
+
+
+target: test_poll_retries_transient_fetch_and_surfaces_real_metadata
+exit=0
+ok - fm-mail: a transient fetch failure recovers real metadata on a later poll
+shim diagnostic: no recursion detected
+
+target: test_poll_sanitizes_header_fields
+exit=0
+ok - fm-mail: poll sanitizes tabs and newlines in header fields
+shim diagnostic: no recursion detected

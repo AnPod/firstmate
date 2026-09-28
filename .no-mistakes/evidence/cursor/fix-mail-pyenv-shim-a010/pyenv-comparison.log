@@ -1,0 +1,14 @@
+Real upstream pyenv; PYENV_VERSION=system. Drivers execute unchanged selected test functions with isolated HOME_DIR/state precreated, as earlier suite cases normally do. IMAP remains stubbed.
+pyenv revision: bb15db59a4bae0b11f9699c8c738836e5511e8d3
+/home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MMXQGQ7X6EA22BC1VGNC0P/.test-mail-validation/pyenv/shims/python3
+/usr/bin/python3
+$ timeout 8s bash tests/.mail-validation-base-retry.sh
+exit=124
+$ timeout 8s bash tests/.mail-validation-base-sanitize.sh
+exit=124
+$ timeout 8s bash tests/.mail-validation-fixed-retry.sh
+ok - fm-mail: a transient fetch failure recovers real metadata on a later poll
+exit=0
+$ timeout 8s bash tests/.mail-validation-fixed-sanitize.sh
+ok - fm-mail: poll sanitizes tabs and newlines in header fields
+exit=0
