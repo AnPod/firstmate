@@ -1,0 +1,84 @@
+[
+  {
+    "version": "before",
+    "case": "decision-batch",
+    "home": "/home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home 5up74xpo",
+    "exit": 0,
+    "stdout": "signal: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home 5up74xpo/state/choice.status /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home 5up74xpo/state/ordinary.status\n",
+    "stderr": "",
+    "queue": "1790621538\t1\tsignal\tchoice.status\tsignal: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home 5up74xpo/state/choice.status /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home 5up74xpo/state/ordinary.status\n1790621539\t2\tsignal\tordinary.status\tsignal: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home 5up74xpo/state/choice.status /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home 5up74xpo/state/ordinary.status\n1790621539\t3\tsignal\tchoice.status\tsignal: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home 5up74xpo/state/choice.status /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home 5up74xpo/state/ordinary.status\n1790621539\t4\tsignal\tordinary.status\tsignal: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home 5up74xpo/state/choice.status /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home 5up74xpo/state/ordinary.status\n",
+    "markers": {
+      ".seen-ordinary_status": "v2\tr1:3236007374726f6e673a36353035363a3533373837393a323032362d30392d32382031383a35323a31372e313530323732343033202b3030303000726567756c61722066696c653a38316134002d007265616461626c65007265616461626c65\t-",
+      ".seen-choice_status": "v2\tr1:3635007374726f6e673a36353035363a3533373837383a323032362d30392d32382031383a35323a31372e313530323732343033202b3030303000726567756c61722066696c653a38316134002d007265616461626c65007265616461626c65\t-"
+    },
+    "passed": false
+  },
+  {
+    "version": "before",
+    "case": "unknown-turnend",
+    "home": "/home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home c9xr2l52",
+    "exit": 0,
+    "stdout": "signal: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home c9xr2l52/state/stopped.turn-ended\n",
+    "stderr": "",
+    "queue": "1790621540\t1\tsignal\tstopped.turn-ended\tsignal: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home c9xr2l52/state/stopped.turn-ended\n1790621541\t2\tsignal\tstopped.turn-ended\tsignal: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home c9xr2l52/state/stopped.turn-ended\n",
+    "markers": {
+      ".seen-stopped_turn-ended": "11:1790621539"
+    },
+    "passed": true
+  },
+  {
+    "version": "before",
+    "case": "plain-home",
+    "home": "/home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch-control-3p5tq0i3",
+    "exit": 0,
+    "stdout": "signal: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch-control-3p5tq0i3/state/choice.status /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch-control-3p5tq0i3/state/ordinary.status\n",
+    "stderr": "",
+    "queue": "1790621543\t1\tsignal\tchoice.status\tneeds-decision: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch-control-3p5tq0i3/state/choice.status /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch-control-3p5tq0i3/state/ordinary.status\n1790621543\t2\tsignal\tordinary.status\tsignal: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch-control-3p5tq0i3/state/choice.status /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch-control-3p5tq0i3/state/ordinary.status\n1790621543\t3\tsignal\tchoice.status\tneeds-decision: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch-control-3p5tq0i3/state/choice.status /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch-control-3p5tq0i3/state/ordinary.status\n1790621543\t4\tsignal\tordinary.status\tsignal: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch-control-3p5tq0i3/state/choice.status /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch-control-3p5tq0i3/state/ordinary.status\n",
+    "markers": {
+      ".seen-ordinary_status": "v2\tr1:3236007374726f6e673a36353035363a3533373837393a323032362d30392d32382031383a35323a32312e313432323634353339202b3030303000726567756c61722066696c653a38316134002d007265616461626c65007265616461626c65\t26@strong:65056:537879:2026-09-28 18:52:21.142264539 +0000",
+      ".seen-choice_status": "v2\tr1:3635007374726f6e673a36353035363a3533373837383a323032362d30392d32382031383a35323a32312e313432323634353339202b3030303000726567756c61722066696c653a38316134002d007265616461626c65007265616461626c65\t65@strong:65056:537878:2026-09-28 18:52:21.142264539 +0000"
+    },
+    "passed": true
+  },
+  {
+    "version": "after",
+    "case": "decision-batch",
+    "home": "/home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home mlq4cfks",
+    "exit": 0,
+    "stdout": "signal: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home mlq4cfks/state/choice.status /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home mlq4cfks/state/ordinary.status\n",
+    "stderr": "",
+    "queue": "1790621545\t1\tsignal\tchoice.status\tneeds-decision: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home mlq4cfks/state/choice.status /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home mlq4cfks/state/ordinary.status\n1790621545\t2\tsignal\tordinary.status\tsignal: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home mlq4cfks/state/choice.status /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home mlq4cfks/state/ordinary.status\n1790621545\t3\tsignal\tchoice.status\tneeds-decision: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home mlq4cfks/state/choice.status /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home mlq4cfks/state/ordinary.status\n1790621545\t4\tsignal\tordinary.status\tsignal: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home mlq4cfks/state/choice.status /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home mlq4cfks/state/ordinary.status\n",
+    "markers": {
+      ".seen-ordinary_status": "v2\tr1:3236007374726f6e673a36353035363a3533373837393a323032362d30392d32382031383a35323a32332e353036323539383735202b3030303000726567756c61722066696c653a38316134002d007265616461626c65007265616461626c65\t26@strong:65056:537879:2026-09-28 18:52:23.506259875 +0000",
+      ".seen-choice_status": "v2\tr1:3635007374726f6e673a36353035363a3533373837383a323032362d30392d32382031383a35323a32332e353032323539383833202b3030303000726567756c61722066696c653a38316134002d007265616461626c65007265616461626c65\t65@strong:65056:537878:2026-09-28 18:52:23.502259883 +0000"
+    },
+    "passed": true
+  },
+  {
+    "version": "after",
+    "case": "unknown-turnend",
+    "home": "/home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home hqcs_y0e",
+    "exit": 0,
+    "stdout": "signal: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home hqcs_y0e/state/stopped.turn-ended\n",
+    "stderr": "",
+    "queue": "1790621547\t1\tsignal\tstopped.turn-ended\tsignal: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home hqcs_y0e/state/stopped.turn-ended\n1790621547\t2\tsignal\tstopped.turn-ended\tsignal: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch live home hqcs_y0e/state/stopped.turn-ended\n",
+    "markers": {
+      ".seen-stopped_turn-ended": "11:1790621545"
+    },
+    "passed": true
+  },
+  {
+    "version": "after",
+    "case": "plain-home",
+    "home": "/home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch-control-5kmrnpp1",
+    "exit": 0,
+    "stdout": "signal: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch-control-5kmrnpp1/state/choice.status /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch-control-5kmrnpp1/state/ordinary.status\n",
+    "stderr": "",
+    "queue": "1790621549\t1\tsignal\tchoice.status\tneeds-decision: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch-control-5kmrnpp1/state/choice.status /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch-control-5kmrnpp1/state/ordinary.status\n1790621549\t2\tsignal\tordinary.status\tsignal: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch-control-5kmrnpp1/state/choice.status /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch-control-5kmrnpp1/state/ordinary.status\n1790621549\t3\tsignal\tchoice.status\tneeds-decision: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch-control-5kmrnpp1/state/choice.status /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch-control-5kmrnpp1/state/ordinary.status\n1790621549\t4\tsignal\tordinary.status\tsignal: /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch-control-5kmrnpp1/state/choice.status /home/ubuntu/.no-mistakes/worktrees/c52ddf65534b/01M3MNM74DNRNQE28001Q9YR1C/.watch-control-5kmrnpp1/state/ordinary.status\n",
+    "markers": {
+      ".seen-ordinary_status": "v2\tr1:3236007374726f6e673a36353035363a3533373837393a323032362d30392d32382031383a35323a32372e373334323531353232202b3030303000726567756c61722066696c653a38316134002d007265616461626c65007265616461626c65\t26@strong:65056:537879:2026-09-28 18:52:27.734251522 +0000",
+      ".seen-choice_status": "v2\tr1:3635007374726f6e673a36353035363a3533373837383a323032362d30392d32382031383a35323a32372e373334323531353232202b3030303000726567756c61722066696c653a38316134002d007265616461626c65007265616461626c65\t65@strong:65056:537878:2026-09-28 18:52:27.734251522 +0000"
+    },
+    "passed": true
+  }
+]
