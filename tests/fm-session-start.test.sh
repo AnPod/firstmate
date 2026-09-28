@@ -827,15 +827,16 @@ EOF
 
   # 100-token budget; 270 bytes -> ceil(270/3)=90 tokens = exactly 90%.
   printf '100\n' > "$home/config/startup-memory-budget"
-  python3 -c 'open("'"$home"'/data/captain.md","w").write("x"*270)'
+  # The final memory file has no trailing newline; the warning must own a line.
+  python3 -c 'open("'"$home"'/data/learnings.md","w").write("x"*270)'
 
   out=$(run_session_start "$home" "$root" "$fakebin:$BASE_PATH")
-  assert_contains "$out" "STARTUP_MEMORY_BUDGET: 90 of 100 estimated tokens (90%) - run /stow" \
+  assert_contains "$out" $'\nSTARTUP_MEMORY_BUDGET: 90 of 100 estimated tokens (90%) - run /stow\n' \
     "digest did not surface the /stow trigger at the 90% threshold"
 
   # Below threshold stays silent.
   printf '10\n' > "$home/config/startup-memory-budget"
-  printf 'hi\n' > "$home/data/captain.md"
+  printf 'hi\n' > "$home/data/learnings.md"
   out=$(run_session_start "$home" "$root" "$fakebin:$BASE_PATH")
   assert_not_contains "$out" "STARTUP_MEMORY_BUDGET:" \
     "digest printed a budget hint while well under the allowance"

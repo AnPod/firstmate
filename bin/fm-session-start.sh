@@ -435,7 +435,7 @@ print_startup_memory_budget_hint() {
     return 0
   fi
   pct=$((total * 100 / budget))
-  printf 'STARTUP_MEMORY_BUDGET: %s of %s estimated tokens (%s%%) - run /stow\n' \
+  printf '\nSTARTUP_MEMORY_BUDGET: %s of %s estimated tokens (%s%%) - run /stow\n' \
     "$total" "$budget" "$pct"
 }
 
