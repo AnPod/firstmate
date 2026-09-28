@@ -1,0 +1,75 @@
+[
+  {
+    "name": "below-threshold",
+    "exit": 0,
+    "checks": {
+      "complete": true,
+      "read_only": true,
+      "no_threshold_warning": true
+    },
+    "result": "pass"
+  },
+  {
+    "name": "exact-threshold",
+    "exit": 0,
+    "checks": {
+      "complete": true,
+      "read_only": true,
+      "standalone_warning": true,
+      "context_placement": true
+    },
+    "result": "pass"
+  },
+  {
+    "name": "over-budget-shared-unicode",
+    "exit": 0,
+    "checks": {
+      "complete": true,
+      "read_only": true,
+      "standalone_warning": false,
+      "context_placement": true
+    },
+    "result": "fail"
+  },
+  {
+    "name": "over-budget-newline",
+    "exit": 0,
+    "checks": {
+      "complete": true,
+      "read_only": true,
+      "standalone_warning": true,
+      "context_placement": true
+    },
+    "result": "pass"
+  },
+  {
+    "name": "invalid-zero",
+    "exit": 0,
+    "checks": {
+      "complete": true,
+      "read_only": true,
+      "no_threshold_warning": true
+    },
+    "result": "pass"
+  },
+  {
+    "name": "invalid-multiline",
+    "exit": 0,
+    "checks": {
+      "complete": true,
+      "read_only": true,
+      "no_threshold_warning": true
+    },
+    "result": "pass"
+  },
+  {
+    "name": "absent-memory",
+    "exit": 0,
+    "checks": {
+      "complete": true,
+      "read_only": true,
+      "no_threshold_warning": true
+    },
+    "result": "pass"
+  }
+]

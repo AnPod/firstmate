@@ -1,0 +1,45 @@
+[
+  {
+    "scenario": "below-threshold",
+    "result": "pass",
+    "warning": []
+  },
+  {
+    "scenario": "exact-threshold",
+    "result": "pass",
+    "warning": [
+      "STARTUP_MEMORY_BUDGET: 90 of 100 estimated tokens (90%) - run /stow"
+    ]
+  },
+  {
+    "scenario": "over-budget",
+    "result": "pass",
+    "warning": [
+      "STARTUP_MEMORY_BUDGET: 121 of 100 estimated tokens (121%) - run /stow"
+    ]
+  },
+  {
+    "scenario": "no-final-newline",
+    "result": "pass",
+    "warning": [
+      "STARTUP_MEMORY_BUDGET: 121 of 100 estimated tokens (121%) - run /stow"
+    ]
+  },
+  {
+    "scenario": "aggregate-utf8",
+    "result": "pass",
+    "warning": [
+      "STARTUP_MEMORY_BUDGET: 90 of 100 estimated tokens (90%) - run /stow"
+    ]
+  },
+  {
+    "scenario": "invalid-budget",
+    "result": "pass",
+    "warning": []
+  },
+  {
+    "scenario": "absent-memory",
+    "result": "pass",
+    "warning": []
+  }
+]
