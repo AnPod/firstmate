@@ -10,6 +10,9 @@
 # rows. It does not keyword-lint prose.
 # When docs/scripts.md is tracked, every tracked file under bin/ needs exactly
 # one table row, and every row must name a tracked bin/ file.
+# A row counts only when its filename is in backticks and the purpose cell
+# between the next two pipes is non-empty. A filename that is not in backticks,
+# or an empty purpose cell, is refused rather than ignored.
 set -eu
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -29,9 +32,10 @@ from urllib.parse import unquote, urlsplit
 
 MARKDOWN_LINK_RE = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
 HTML_LINK_RE = re.compile(r"\b(?:href|src)=[\"']([^\"']+)[\"']", re.IGNORECASE)
-TOOLBELT_ROW_RE = re.compile(
-    r"^\|\s*(?:\[`([^`]+)`\]\([^)]+\)|`([^`]+)`)\s*\|"
+TOOLBELT_SCRIPT_CELL_RE = re.compile(
+    r"^\s*(?:\[`([^`]+)`\]\([^)]+\)|`([^`]+)`)\s*$"
 )
+TOOLBELT_SEPARATOR_CELL_RE = re.compile(r"^\s*:?-{3,}:?\s*$")
 REQUIRED_TRACKED_PATTERNS = ["*.md", "*.mdx", "*.rst", "*.txt", "docs/examples/*"]
 
 
@@ -265,11 +269,7 @@ def validate_toolbelt(root: Path) -> None:
         text = (root / "docs/scripts.md").read_text(encoding="utf-8")
     except (OSError, UnicodeDecodeError) as exc:
         fail(f"cannot read docs/scripts.md: {exc}")
-    rows: list[str] = []
-    for line in text.splitlines():
-        match = TOOLBELT_ROW_RE.match(line)
-        if match:
-            rows.append(match.group(1) or match.group(2))
+    rows = toolbelt_row_names(text)
     duplicates = sorted(name for name, count in Counter(rows).items() if count != 1)
     if duplicates:
         fail("bin toolbelt rows repeated: " + ", ".join(duplicates))
@@ -283,6 +283,37 @@ def validate_toolbelt(root: Path) -> None:
         if extra:
             details.append("rows without a tracked bin file: " + ", ".join(extra))
         fail("bin toolbelt coverage: " + "; ".join(details))
+
+
+def toolbelt_script_name(cell: str) -> str | None:
+    match = TOOLBELT_SCRIPT_CELL_RE.match(cell)
+    if not match:
+        return None
+    return match.group(1) or match.group(2)
+
+
+def toolbelt_row_names(text: str) -> list[str]:
+    rows: list[str] = []
+    for line_number, line in enumerate(text.splitlines(), start=1):
+        if not line.startswith("|"):
+            continue
+        cells = line.split("|")
+        if len(cells) < 2:
+            continue
+        script_cell = cells[1]
+        if script_cell.strip().lower() == "script" or TOOLBELT_SEPARATOR_CELL_RE.match(script_cell):
+            continue
+        name = toolbelt_script_name(script_cell)
+        if name is None:
+            label = script_cell.strip() or f"line {line_number}"
+            fail(f"bin toolbelt row filename is not in backticks: {label}")
+        purpose = cells[2] if len(cells) > 2 else ""
+        # A complete row is `| name | purpose |`, so split() yields a trailing
+        # empty field and the purpose sits strictly between the second and third pipes.
+        if len(cells) < 4 or not purpose.strip():
+            fail(f"bin toolbelt row missing purpose: {name}")
+        rows.append(name)
+    return rows
 
 
 def main() -> int:

@@ -218,8 +218,52 @@ MD
   pass "toolbelt rows must match tracked bin files exactly"
 }
 
+test_toolbelt_rows_require_purpose_and_backticks() {
+  local repo="$TMP_ROOT/toolbelt-shape"
+  write_toolbelt_fixture "$repo"
+
+  cat > "$repo/docs/scripts.md" <<'MD'
+# Toolbelt
+
+| Script | Purpose |
+| --- | --- |
+| [`fm-present.sh`](../bin/fm-present.sh) | Present entrypoint |
+| `backends/helper.py` |
+MD
+  git -C "$repo" add docs/scripts.md
+  run_expect_failure "bin toolbelt row missing purpose: backends/helper.py" \
+    "$CHECK" --root "$repo"
+
+  cat > "$repo/docs/scripts.md" <<'MD'
+# Toolbelt
+
+| Script | Purpose |
+| --- | --- |
+| `fm-present.sh` |
+| `backends/helper.py` | Nested helper |
+MD
+  git -C "$repo" add docs/scripts.md
+  run_expect_failure "bin toolbelt row missing purpose: fm-present.sh" \
+    "$CHECK" --root "$repo"
+
+  cat > "$repo/docs/scripts.md" <<'MD'
+# Toolbelt
+
+| Script | Purpose |
+| --- | --- |
+| [`fm-present.sh`](../bin/fm-present.sh) | Present entrypoint |
+| `backends/helper.py` | Nested helper |
+| fm-ghost.sh | Names no file |
+MD
+  git -C "$repo" add docs/scripts.md
+  run_expect_failure "bin toolbelt row filename is not in backticks: fm-ghost.sh" \
+    "$CHECK" --root "$repo"
+  pass "toolbelt rows need a backticked filename and a non-empty purpose"
+}
+
 test_repository_inventory_passes
 test_duplicate_and_setup_classification_fail
 test_required_pointer_fails
 test_local_links_and_no_keyword_heuristic
 test_toolbelt_rows_match_tracked_bin
+test_toolbelt_rows_require_purpose_and_backticks
