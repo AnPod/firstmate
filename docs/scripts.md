@@ -1,7 +1,7 @@
 # The bin/ toolbelt
 
 The first mate drives these; interactive entrypoints work by hand too, while `*-lib.sh` files are sourced helpers.
-The table lists every tracked file under `bin/`, and `fm-doc-audience-check.sh` refuses a missing, extra, or repeated row.
+The table lists every tracked file under `bin/`, and `fm-doc-audience-check.sh` refuses a missing, extra, or repeated row, a filename that is not in backticks, and a row whose purpose cell is empty.
 Each row is one purpose clause only: the script's own header comment is the authoritative description of its behavior, flags, and contracts, so read the header before first use.
 If you have changed away from the firstmate home in an interactive shell, invoke these scripts by absolute path through the repo's `bin/` directory; the scripts self-locate internally after they start.
 The shared no-mistakes gate lifecycle boundary is summarized in [architecture.md](architecture.md#no-mistakes-gate-authority-boundary), while `docs/sessionstart-nudge.md` covers the silent session-open hook use; `fm-gate-refuse-lib.sh`'s header owns its exact contract.
