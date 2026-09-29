@@ -9,7 +9,11 @@
 # This check validates that structure, local links, and docs/scripts.md toolbelt
 # rows. It does not keyword-lint prose.
 # When docs/scripts.md is tracked, every tracked file under bin/ needs exactly
-# one table row, and every row must name a tracked bin/ file.
+# one row in the toolbelt table, and every such row must name a tracked bin/ file.
+# That table starts at the header row whose first cell is Script and the separator
+# under it, and ends at the first line that is not a table row.
+# Other tables and pipe-prefixed examples are ignored.
+# A table row may begin with up to three spaces before its opening pipe.
 # A row counts only when its filename is in backticks and the purpose cell
 # between the next two pipes is non-empty. A filename that is not in backticks,
 # or an empty purpose cell, is refused rather than ignored.
@@ -36,6 +40,9 @@ TOOLBELT_SCRIPT_CELL_RE = re.compile(
     r"^\s*(?:\[`([^`]+)`\]\([^)]+\)|`([^`]+)`)\s*$"
 )
 TOOLBELT_SEPARATOR_CELL_RE = re.compile(r"^\s*:?-{3,}:?\s*$")
+# GFM tables allow a row to be indented by up to three spaces.
+# Four spaces is a code block.
+TOOLBELT_TABLE_LINE_RE = re.compile(r"^ {0,3}(\|.*)$")
 REQUIRED_TRACKED_PATTERNS = ["*.md", "*.mdx", "*.rst", "*.txt", "docs/examples/*"]
 
 
@@ -292,12 +299,42 @@ def toolbelt_script_name(cell: str) -> str | None:
     return match.group(1) or match.group(2)
 
 
+def toolbelt_table_body(line: str) -> str | None:
+    match = TOOLBELT_TABLE_LINE_RE.match(line)
+    if match is None:
+        return None
+    return match.group(1)
+
+
 def toolbelt_row_names(text: str) -> list[str]:
-    rows: list[str] = []
-    for line_number, line in enumerate(text.splitlines(), start=1):
-        if not line.startswith("|"):
+    lines = text.splitlines()
+    data_start: int | None = None
+    for index, line in enumerate(lines):
+        header = toolbelt_table_body(line)
+        if header is None:
             continue
-        cells = line.split("|")
+        header_cells = header.split("|")
+        if len(header_cells) < 2 or header_cells[1].strip().lower() != "script":
+            continue
+        if index + 1 >= len(lines):
+            continue
+        separator = toolbelt_table_body(lines[index + 1])
+        if separator is None:
+            continue
+        separator_cells = separator.split("|")
+        if len(separator_cells) < 2 or not TOOLBELT_SEPARATOR_CELL_RE.match(separator_cells[1]):
+            continue
+        data_start = index + 2
+        break
+    if data_start is None:
+        return []
+
+    rows: list[str] = []
+    for line_number, line in enumerate(lines[data_start:], start=data_start + 1):
+        body = toolbelt_table_body(line)
+        if body is None:
+            break
+        cells = body.split("|")
         if len(cells) < 2:
             continue
         script_cell = cells[1]
