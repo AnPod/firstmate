@@ -261,9 +261,89 @@ MD
   pass "toolbelt rows need a backticked filename and a non-empty purpose"
 }
 
+test_toolbelt_ignores_other_tables_and_pipe_examples() {
+  local repo="$TMP_ROOT/toolbelt-other-tables"
+  write_toolbelt_fixture "$repo"
+  cat > "$repo/docs/scripts.md" <<'MD'
+# Toolbelt
+
+Other tables and pipe-prefixed examples are not toolbelt rows.
+
+| Column | Note |
+| --- | --- |
+| `fm-present.sh` | Unrelated table must not count as a second row |
+| fm-not-backticked.sh | Unrelated table must not be rejected |
+
+```
+| `fm-example.sh` | Pipe-prefixed example |
+```
+
+| Script | Purpose |
+| --- | --- |
+| `fm-present.sh` | Present entrypoint |
+| `backends/helper.py` | Nested helper |
+
+| `fm-later.sh` | Pipe-prefixed example after the table |
+
+| Later | Column |
+| --- | --- |
+| `fm-ghost.sh` | Later table is outside the toolbelt |
+MD
+  git -C "$repo" add docs/scripts.md
+  "$CHECK" --root "$repo" >/dev/null \
+    || fail "unrelated tables and pipe-prefixed examples were treated as toolbelt rows"
+  pass "only the toolbelt table contributes rows"
+}
+
+test_toolbelt_counts_rows_with_up_to_three_leading_spaces() {
+  local repo="$TMP_ROOT/toolbelt-indent"
+  write_toolbelt_fixture "$repo"
+
+  cat > "$repo/docs/scripts.md" <<'MD'
+# Toolbelt
+
+| Script | Purpose |
+| --- | --- |
+| `fm-present.sh` | Present entrypoint |
+   | `backends/helper.py` | Nested helper |
+MD
+  git -C "$repo" add docs/scripts.md
+  "$CHECK" --root "$repo" >/dev/null \
+    || fail "a toolbelt row indented by three spaces was not counted"
+
+  cat > "$repo/docs/scripts.md" <<'MD'
+# Toolbelt
+
+| Script | Purpose |
+| --- | --- |
+| `fm-present.sh` | Present entrypoint |
+   | `fm-present.sh` | Indented duplicate |
+| `backends/helper.py` | Nested helper |
+MD
+  git -C "$repo" add docs/scripts.md
+  run_expect_failure "bin toolbelt rows repeated: fm-present.sh" \
+    "$CHECK" --root "$repo"
+
+  cat > "$repo/docs/scripts.md" <<'MD'
+# Toolbelt
+
+| Script | Purpose |
+| --- | --- |
+| `fm-present.sh` | Present entrypoint |
+| `backends/helper.py` | Nested helper |
+    | `fm-present.sh` | Four spaces is not a table row |
+MD
+  git -C "$repo" add docs/scripts.md
+  "$CHECK" --root "$repo" >/dev/null \
+    || fail "a four-space pipe line was counted as a toolbelt row"
+  pass "toolbelt rows may be indented by up to three spaces"
+}
+
 test_repository_inventory_passes
 test_duplicate_and_setup_classification_fail
 test_required_pointer_fails
 test_local_links_and_no_keyword_heuristic
 test_toolbelt_rows_match_tracked_bin
 test_toolbelt_rows_require_purpose_and_backticks
+test_toolbelt_ignores_other_tables_and_pipe_examples
+test_toolbelt_counts_rows_with_up_to_three_leading_spaces
