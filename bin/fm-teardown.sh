@@ -90,7 +90,8 @@
 # name a live quarantined space and is retained for that sweep.
 # data/<id>/ stays. A landed ship or scout close removes generated launch inputs
 # there: brief.md, launch-brief.md, ship-instructions.md, and their in-progress
-# render temps. report.md and every other durable record, including
+# render temps. A busy spawn preserves these inputs while the old record closes.
+# Enumeration or removal failure preserves the task record for retry. report.md and every other durable record, including
 # contributions.json, stay. A --force discard and a captain-held retain leave
 # the briefs, because a successor spawn of that same id still reads brief.md.
 # A manual backlog never records that retain, so the same question is asked
@@ -458,8 +459,27 @@ DESCENDANT_TASK_IDS=()
 DESCENDANT_TASK_KINDS=()
 DESCENDANT_TASK_HOMES=()
 DESCENDANT_TREEHOUSE_LOCK_PATHS=()
+LAUNCH_INPUT_LOCK_HELD=0
+LAUNCH_INPUT_MANIFEST=
+release_launch_input_cleanup() {
+  local cleanup_status=0
+  if [ -n "$LAUNCH_INPUT_MANIFEST" ]; then
+    if rm -f -- "$LAUNCH_INPUT_MANIFEST"; then
+      LAUNCH_INPUT_MANIFEST=
+    else
+      echo "warning: cannot remove generated launch input manifest for $ID; retaining task record for retry" >&2
+      cleanup_status=1
+    fi
+  fi
+  if [ "$LAUNCH_INPUT_LOCK_HELD" = 1 ]; then
+    fm_lock_release "$STATE/.spawn-$ID.lock" || return 1
+    LAUNCH_INPUT_LOCK_HELD=0
+  fi
+  return "$cleanup_status"
+}
 teardown_release_locks() {
   local status=$? i
+  release_launch_input_cleanup || true
   if declare -F teardown_release_herdr_locks >/dev/null 2>&1; then
     teardown_release_herdr_locks || true
   fi
@@ -1426,6 +1446,9 @@ retire_busy_state() {
 # entirely so a successor spawn can still read brief.md. A manual backlog
 # skips that retain, so this asks the same open question and keeps the briefs
 # unless the read proves the item is not held.
+# A busy spawn preserves inputs without blocking record cleanup. Enumerate render
+# temps successfully before deleting anything; a failed sweep retains the task
+# record for retry. The EXIT cleanup also releases an interrupted spawn-lock hold.
 remove_landed_launch_briefs() {
   local dir path name open_status
   [ "$KIND" = ship ] || [ "$KIND" = scout ] || return 0
@@ -1443,11 +1466,35 @@ remove_landed_launch_briefs() {
       return 0
     fi
   fi
+  if ! fm_lock_try_acquire "$STATE/.spawn-$ID.lock"; then
+    echo "warning: leaving generated launch inputs for $ID; a spawn is in progress" >&2
+    return 0
+  fi
+  LAUNCH_INPUT_LOCK_HELD=1
   dir=$DATA/$ID
-  [ -e "$dir" ] || [ -L "$dir" ] || return 0
+  if [ ! -e "$dir" ] && [ ! -L "$dir" ]; then
+    release_launch_input_cleanup
+    return 0
+  fi
   if [ -L "$dir" ] || [ ! -d "$dir" ]; then
     echo "warning: leaving generated launch inputs for $ID; $dir is not a real directory" >&2
+    release_launch_input_cleanup
     return 0
+  fi
+  if ! LAUNCH_INPUT_MANIFEST=$(mktemp "$STATE/.launch-inputs-$ID.XXXXXX"); then
+    echo "warning: cannot create generated launch input manifest for $ID; retaining task record for retry" >&2
+    release_launch_input_cleanup
+    return 1
+  fi
+  if ! find "$dir" -mindepth 1 -maxdepth 1 \( \
+      -name '.launch-brief.md.*' -o \
+      -name '.ship-instructions.md.*' -o \
+      -name '.brief.md.promote.*' -o \
+      -name '.brief.md.scout.*' \
+    \) -print0 > "$LAUNCH_INPUT_MANIFEST"; then
+    echo "warning: cannot enumerate generated launch inputs for $ID; retaining task record for retry" >&2
+    release_launch_input_cleanup
+    return 1
   fi
   for name in brief.md launch-brief.md ship-instructions.md; do
     path=$dir/$name
@@ -1456,20 +1503,24 @@ remove_landed_launch_briefs() {
       echo "warning: leaving $path; landed teardown removes only a regular generated launch input" >&2
       continue
     fi
-    rm -f -- "$path" || return 1
+    if ! rm -f -- "$path"; then
+      echo "warning: cannot remove generated launch input $path; retaining task record for retry" >&2
+      release_launch_input_cleanup
+      return 1
+    fi
   done
   while IFS= read -r -d '' path; do
     if [ -L "$path" ] || [ ! -f "$path" ]; then
       echo "warning: leaving $path; landed teardown removes only a regular generated launch input" >&2
       continue
     fi
-    rm -f -- "$path" || return 1
-  done < <(find "$dir" -mindepth 1 -maxdepth 1 \( \
-      -name '.launch-brief.md.*' -o \
-      -name '.ship-instructions.md.*' -o \
-      -name '.brief.md.promote.*' -o \
-      -name '.brief.md.scout.*' \
-    \) -print0)
+    if ! rm -f -- "$path"; then
+      echo "warning: cannot remove generated launch input $path; retaining task record for retry" >&2
+      release_launch_input_cleanup
+      return 1
+    fi
+  done < "$LAUNCH_INPUT_MANIFEST"
+  release_launch_input_cleanup
 }
 
 validate_pr_poll_cleanup() {
