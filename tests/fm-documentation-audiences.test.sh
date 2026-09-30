@@ -339,6 +339,75 @@ MD
   pass "toolbelt rows may be indented by up to three spaces"
 }
 
+test_toolbelt_fenced_tables_cannot_hide_real_rows() {
+  local repo="$TMP_ROOT/toolbelt-fences" fence mode expected
+  write_toolbelt_fixture "$repo"
+  for fence in '```' '~~~'; do
+    for mode in valid missing extra duplicate; do
+      python3 - "$repo/docs/scripts.md" "$fence" "$mode" <<'PYFIXTURE'
+import sys
+from pathlib import Path
+
+path, fence, mode = sys.argv[1:]
+header = "| Script | Purpose |\n| --- | --- |\n"
+rows = ["| `fm-present.sh` | Present entrypoint |\n",
+        "| `backends/helper.py` | Nested helper |\n"]
+# Wrong delimiters and short runs must not close the indented fence.
+other = "~~~" if fence[0] == "`" else "```"
+example = ("   " + fence + fence[0] + " example\n" + other + "\n" +
+           fence + "\n" + header + "".join(rows) +
+           "   " + fence + fence[0] * 2 + "  \n\n")
+if mode == "missing":
+    rows.pop()
+elif mode == "extra":
+    rows.append("| `fm-ghost.sh` | Extra row |\n")
+elif mode == "duplicate":
+    rows.append(rows[0])
+Path(path).write_text("# Toolbelt\n\n" + example + header + "".join(rows))
+PYFIXTURE
+      case "$mode" in
+        valid)
+          "$CHECK" --root "$repo" >/dev/null             || fail "a $fence example was selected instead of the real table"
+          continue ;;
+        missing) expected="missing rows: backends/helper.py" ;;
+        extra) expected="rows without a tracked bin file: fm-ghost.sh" ;;
+        duplicate) expected="bin toolbelt rows repeated: fm-present.sh" ;;
+      esac
+      run_expect_failure "$expected" "$CHECK" --root "$repo"
+    done
+  done
+  pass "backtick and tilde examples cannot hide missing, extra, or repeated toolbelt rows"
+}
+
+test_toolbelt_requires_one_unfenced_script_table() {
+  local repo="$TMP_ROOT/toolbelt-candidates"
+  write_toolbelt_fixture "$repo"
+  python3 - "$repo/docs/scripts.md" <<'PYFIXTURE'
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+path.write_text("| Script | Note |\n| --- | --- |\n| unrelated | Example |\n\n" + path.read_text())
+PYFIXTURE
+  run_expect_failure "bin toolbelt table ambiguous: found 2 unfenced Script tables"     "$CHECK" --root "$repo"
+
+  cat > "$repo/docs/scripts.md" <<'MD'
+# Toolbelt
+
+```markdown
+| Script | Purpose |
+| --- | --- |
+| `fm-present.sh` | Example |
+```
+
+| Column | Note |
+| --- | --- |
+| unrelated | Example |
+MD
+  run_expect_failure "bin toolbelt table missing: expected exactly one unfenced Script table"     "$CHECK" --root "$repo"
+  pass "missing and ambiguous unfenced Script tables fail explicitly"
+}
+
 test_repository_inventory_passes
 test_duplicate_and_setup_classification_fail
 test_required_pointer_fails
@@ -347,3 +416,5 @@ test_toolbelt_rows_match_tracked_bin
 test_toolbelt_rows_require_purpose_and_backticks
 test_toolbelt_ignores_other_tables_and_pipe_examples
 test_toolbelt_counts_rows_with_up_to_three_leading_spaces
+test_toolbelt_fenced_tables_cannot_hide_real_rows
+test_toolbelt_requires_one_unfenced_script_table

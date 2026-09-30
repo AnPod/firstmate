@@ -10,9 +10,12 @@
 # rows. It does not keyword-lint prose.
 # When docs/scripts.md is tracked, every tracked file under bin/ needs exactly
 # one row in the toolbelt table, and every such row must name a tracked bin/ file.
-# That table starts at the header row whose first cell is Script and the separator
-# under it, and ends at the first line that is not a table row.
-# Other tables and pipe-prefixed examples are ignored.
+# Exactly one unfenced table must have Script as its first header cell and a
+# separator under it; missing or ambiguous candidates are refused explicitly.
+# Backtick and tilde fences (up to three leading spaces) are ignored, closing
+# only with the same delimiter and at least the opening length.
+# The selected table ends at the first line that is not a table row.
+# Tables with other headers and pipe-prefixed examples are ignored.
 # A table row may begin with up to three spaces before its opening pipe.
 # A row counts only when its filename is in backticks and the purpose cell
 # between the next two pipes is non-empty. A filename that is not in backticks,
@@ -308,7 +311,21 @@ def toolbelt_table_body(line: str) -> str | None:
 
 def toolbelt_row_names(text: str) -> list[str]:
     lines = text.splitlines()
-    data_start: int | None = None
+    # Keep line positions intact so headers cannot pair across fenced blocks.
+    fence: tuple[str, int] | None = None
+    for index, line in enumerate(lines):
+        if fence is not None:
+            delimiter, length = fence
+            if re.fullmatch(r" {0,3}" + re.escape(delimiter) + r"{" + str(length) + r",}[ \t]*", line):
+                fence = None
+            lines[index] = ""
+            continue
+        opening = re.match(r"^ {0,3}(`{3,}|~{3,})(.*)$", line)
+        if opening and (opening.group(1)[0] == "~" or "`" not in opening.group(2)):
+            fence = (opening.group(1)[0], len(opening.group(1)))
+            lines[index] = ""
+
+    candidates: list[int] = []
     for index, line in enumerate(lines):
         header = toolbelt_table_body(line)
         if header is None:
@@ -324,10 +341,12 @@ def toolbelt_row_names(text: str) -> list[str]:
         separator_cells = separator.split("|")
         if len(separator_cells) < 2 or not TOOLBELT_SEPARATOR_CELL_RE.match(separator_cells[1]):
             continue
-        data_start = index + 2
-        break
-    if data_start is None:
-        return []
+        candidates.append(index + 2)
+    if not candidates:
+        fail("bin toolbelt table missing: expected exactly one unfenced Script table")
+    if len(candidates) != 1:
+        fail("bin toolbelt table ambiguous: found " + str(len(candidates)) + " unfenced Script tables")
+    data_start = candidates[0]
 
     rows: list[str] = []
     for line_number, line in enumerate(lines[data_start:], start=data_start + 1):
