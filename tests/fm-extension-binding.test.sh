@@ -1364,6 +1364,11 @@ FM_HOME="$H_ACTIVE_RUNNER" "$PROCEVENT" register-extension ext-flow active-sourc
 FM_HOME="$H_ACTIVE_RUNNER" "$PROCEVENT" start active-source > "$TMP_ROOT/active-runner.out" 2>&1 &
 active_runner_pid=$!
 wait_for_file "$active_runner_marker" || fail "active extension runner never entered its poll"
+: > "$H_ACTIVE_RUNNER/state/procevent/active-source.runner"
+active_restart=$(FM_HOME="$H_ACTIVE_RUNNER" "$PROCEVENT" start active-source) \
+  || fail "empty runner record bypassed the live claim"
+assert_contains "$active_restart" "already owned: active-source" "empty runner record displaced the live owner"
+[ ! -s "$H_ACTIVE_RUNNER/state/procevent/active-source.runner" ] || fail "live owner's empty runner record changed"
 expect_failure "prior runner remains active" env FM_HOME="$H_ACTIVE_RUNNER" "$PROCEVENT" register-extension ext-flow active-source --config-ref replacement
 expect_failure "prior runner remains active" env FM_HOME="$H_ACTIVE_RUNNER" "$PROCEVENT" register lavish active-source -- /bin/echo built-in
 touch "$active_runner_release"
@@ -1377,6 +1382,69 @@ active_replacement=$(FM_HOME="$H_ACTIVE_RUNNER" "$PROCEVENT" register-extension 
 active_replacement_owner=$(printf '%s\n' "$active_replacement" | sed -n 's/^owner-token: //p')
 FM_HOME="$H_ACTIVE_RUNNER" "$PROCEVENT" retire active-source --if-owner "$active_replacement_owner" >/dev/null
 pass "all registration owner transitions wait for the prior extension runner"
+
+H_RUNNER_RESTART="$HOMES/runner-restart"; new_home "$H_RUNNER_RESTART"
+bind_package "$H_RUNNER_RESTART" "$P_FLOW" ext-flow >/dev/null
+FM_HOME="$H_RUNNER_RESTART" "$PROCEVENT" register-extension ext-flow stale-source --config-ref good >/dev/null
+(exit 0) &
+dead_runner_pid=$!
+wait "$dead_runner_pid"
+runner_record="$H_RUNNER_RESTART/state/procevent/stale-source.runner"
+printf '%s\n' "$dead_runner_pid" > "$runner_record"
+chmod 0600 "$runner_record"
+FM_HOME="$H_RUNNER_RESTART" "$PROCEVENT" start stale-source > "$TMP_ROOT/stale-runner.out" 2>&1 \
+  || fail "dead extension runner record prevented restart"
+assert_present "$H_RUNNER_RESTART/state/procevent-inbox/stale-source.1.result" "restart did not capture extension evidence"
+assert_absent "$runner_record" "restarted extension retained its runner record"
+pass "a dead extension runner record allows restart and capture"
+
+FM_HOME="$H_RUNNER_RESTART" "$PROCEVENT" register-extension ext-flow empty-source --config-ref good >/dev/null
+runner_record="$H_RUNNER_RESTART/state/procevent/empty-source.runner"
+: > "$runner_record"
+chmod 0600 "$runner_record"
+FM_HOME="$H_RUNNER_RESTART" "$PROCEVENT" start empty-source > "$TMP_ROOT/empty-runner.out" 2>&1 \
+  || fail "empty extension runner residue prevented restart"
+assert_present "$H_RUNNER_RESTART/state/procevent-inbox/empty-source.1.result" "empty-residue restart did not capture extension evidence"
+assert_absent "$runner_record" "empty-residue restart retained its runner record"
+pass "an empty extension runner residue allows restart and capture"
+
+refused_marker="$TMP_ROOT/refused-runner.marker"
+refused_release="$TMP_ROOT/refused-runner.release"
+touch "$refused_release"
+sleep 300 &
+active_runner_pid=$!
+for runner_case in live malformed symlink fifo; do
+  runner_source="refused-$runner_case"
+  FM_HOME="$H_RUNNER_RESTART" "$PROCEVENT" register-extension ext-flow "$runner_source" \
+    --config-ref "active-block|$refused_marker|$refused_release" >/dev/null
+  runner_record="$H_RUNNER_RESTART/state/procevent/$runner_source.runner"
+  case "$runner_case" in
+    live) printf '%s\n' "$active_runner_pid" > "$runner_record" ;;
+    malformed) printf 'not-a-pid\n' > "$runner_record" ;;
+    symlink) ln -s "$TMP_ROOT/runner-target" "$runner_record" ;;
+    fifo) mkfifo "$runner_record" ;;
+  esac
+  [ "$runner_case" = symlink ] || chmod 0600 "$runner_record"
+  if [ "$runner_case" = fifo ]; then
+    fifo_started=$SECONDS
+    expect_failure "capture failed: cannot create" timeout 10 env FM_HOME="$H_RUNNER_RESTART" "$PROCEVENT" start "$runner_source"
+    [ "$((SECONDS - fifo_started))" -lt 10 ] || fail "FIFO runner refusal waited for the timeout"
+  else
+    expect_failure "capture failed: cannot create" env FM_HOME="$H_RUNNER_RESTART" "$PROCEVENT" start "$runner_source"
+  fi
+  case "$runner_case" in
+    live) [ "$(cat "$runner_record")" = "$active_runner_pid" ] || fail "live runner record changed" ;;
+    malformed) [ "$(cat "$runner_record")" = not-a-pid ] || fail "malformed runner record changed" ;;
+    symlink) [ -L "$runner_record" ] || fail "runner symlink was removed" ;;
+    fifo) [ -p "$runner_record" ] || fail "runner FIFO was removed" ;;
+  esac
+  assert_absent "$refused_marker" "refused runner invoked its adapter"
+  assert_absent "$H_RUNNER_RESTART/state/procevent-inbox/$runner_source.1.result" "refused runner captured a result"
+done
+kill -TERM "$active_runner_pid"
+wait "$active_runner_pid" 2>/dev/null || true
+active_runner_pid=
+pass "live, malformed, symlink, and FIFO extension runner records remain refused"
 fi
 
 # --- owner tokens, overridden state, sweep, and legacy compatibility --------
