@@ -90,7 +90,9 @@
 # name a live quarantined space and is retained for that sweep.
 # data/<id>/ stays. A landed ship or scout close removes generated launch inputs
 # there: brief.md, launch-brief.md, ship-instructions.md, and their in-progress
-# render temps. A busy spawn preserves these inputs while the old record closes.
+# render temps. Teardown takes the spawn lock before the meta lock and holds it
+# through cleanup and record removal; contention or unverifiable ownership refuses
+# before destructive cleanup, preserving the inputs and task record for retry.
 # Enumeration or removal failure preserves the task record for retry. report.md and every other durable record, including
 # contributions.json, stay. A --force discard and a captain-held retain leave
 # the briefs, because a successor spawn of that same id still reads brief.md.
@@ -471,10 +473,6 @@ release_launch_input_cleanup() {
       cleanup_status=1
     fi
   fi
-  if [ "$LAUNCH_INPUT_LOCK_HELD" = 1 ]; then
-    fm_lock_release "$STATE/.spawn-$ID.lock" || return 1
-    LAUNCH_INPUT_LOCK_HELD=0
-  fi
   return "$cleanup_status"
 }
 teardown_release_locks() {
@@ -502,6 +500,10 @@ teardown_release_locks() {
   if [ "$META_LOCK_HELD" = 1 ]; then
     fm_lock_release "$META_LOCK" || true
     META_LOCK_HELD=0
+  fi
+  if [ "$LAUNCH_INPUT_LOCK_HELD" = 1 ]; then
+    fm_lock_release "$STATE/.spawn-$ID.lock" || true
+    LAUNCH_INPUT_LOCK_HELD=0
   fi
   if [ -n "${SM_LIVENESS_LOCK:-}" ]; then
     fm_lock_release "$SM_LIVENESS_LOCK" || true
@@ -533,6 +535,16 @@ fm_backlog_record_present "$META" "task record" "$STATE" || {
   echo "error: teardown refused: $FM_BACKLOG_TRANSITION_ERROR" >&2
   exit 1
 }
+# Match spawn's lock order and exclude same-ID launch readers and renderers.
+if ! fm_lock_try_acquire "$STATE/.spawn-$ID.lock"; then
+  if [ -n "${FM_LOCK_HELD_PID:-}" ] && fm_pid_alive "$FM_LOCK_HELD_PID"; then
+    echo "error: teardown refused: a spawn is in progress for $ID (pid $FM_LOCK_HELD_PID); preserving task record and launch inputs for retry" >&2
+  else
+    echo "error: teardown refused: spawn lock ownership/acquisition could not be verified for $ID; preserving task record and launch inputs for retry" >&2
+  fi
+  exit 1
+fi
+LAUNCH_INPUT_LOCK_HELD=1
 META_LOCK=$(fm_meta_lock_path "$META") || exit 1
 fm_lock_acquire_wait "$META_LOCK"
 META_LOCK_HELD=1
@@ -1466,11 +1478,6 @@ remove_landed_launch_briefs() {
       return 0
     fi
   fi
-  if ! fm_lock_try_acquire "$STATE/.spawn-$ID.lock"; then
-    echo "warning: leaving generated launch inputs for $ID; a spawn is in progress" >&2
-    return 0
-  fi
-  LAUNCH_INPUT_LOCK_HELD=1
   dir=$DATA/$ID
   if [ ! -e "$dir" ] && [ ! -L "$dir" ]; then
     release_launch_input_cleanup
