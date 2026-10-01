@@ -1,7 +1,8 @@
 use strict;
 use warnings;
 use Cwd qw(getcwd);
-use Fcntl qw(O_CREAT O_EXCL O_NOFOLLOW O_RDONLY O_RDWR O_WRONLY);
+use Errno qw(EEXIST ESRCH);
+use Fcntl qw(O_CREAT O_EXCL O_NOFOLLOW O_NONBLOCK O_RDONLY O_RDWR O_WRONLY);
 use JSON::PP qw(encode_json);
 use POSIX qw(dup2);
 
@@ -115,6 +116,32 @@ sub open_new {
     or fail("cannot create $name");
   return $fh;
 }
+sub open_runner {
+  my ($name) = @_;
+  my $fh;
+  return $fh if sysopen($fh, $name, O_CREAT | O_EXCL | O_NOFOLLOW | O_RDWR, 0600);
+  fail("cannot create $name") unless $! == EEXIST;
+  sysopen(my $old, $name, O_RDONLY | O_NOFOLLOW | O_NONBLOCK) or fail("cannot create $name");
+  my @st = stat($old);
+  fail("cannot create $name") unless @st && -f _ && $st[4] == $<
+    && ($st[2] & 07777) == 0600 && $st[3] == 1 && $st[7] <= 32;
+  my $read = sysread($old, my $record, 33);
+  fail("cannot create $name") unless defined($read);
+  # The caller owns the replacement claim and holds the source launch lock:
+  # claim acquisition already refused any prior owner not proven gone. An
+  # empty regular record is residue from a crash before the PID write.
+  if ($record ne '') {
+    fail("cannot create $name") unless $record =~ /\A([1-9][0-9]{0,9})\n\z/;
+    my $pid = $1;
+    # Only ESRCH proves death; permission errors and live/reused PIDs refuse.
+    fail("cannot create $name") if kill(0, $pid) || $! != ESRCH;
+  }
+  my @current = lstat($name);
+  fail("cannot create $name") unless @current && -f _ && !-l _
+    && $current[0] == $st[0] && $current[1] == $st[1];
+  unlink($name) or fail("cannot create $name");
+  return open_new($name);
+}
 sub write_all {
   my ($fh, $value) = @_;
   my $offset = 0;
@@ -180,7 +207,7 @@ chdir($inbox_dir) or fail("cannot enter inbox directory");
 safe_dir(".", 0700) or fail("unsafe inbox directory");
 chdir($registry_dir) or fail("cannot return to registry directory");
 getcwd() eq $registry or fail("registry directory changed");
-my $runner = open_new($runner_name);
+my $runner = open_runner($runner_name);
 write_all($runner, "$runner_pid\n");
 close($runner) or fail("cannot close runner record");
 my $stage = open_new($output_name);
