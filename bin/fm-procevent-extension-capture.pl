@@ -208,7 +208,15 @@ safe_dir(".", 0700) or fail("unsafe inbox directory");
 chdir($registry_dir) or fail("cannot return to registry directory");
 getcwd() eq $registry or fail("registry directory changed");
 my $runner = open_runner($runner_name);
-write_all($runner, "$runner_pid\n");
+my @runner_stat = stat($runner);
+@runner_stat or fail("cannot stat runner record");
+write_all($runner, "$$\n");
+sub remove_runner {
+  my @current = lstat($runner_name);
+  return unless @current && -f _ && !-l _
+    && $current[0] == $runner_stat[0] && $current[1] == $runner_stat[1];
+  unlink($runner_name) or fail("cannot remove runner record");
+}
 close($runner) or fail("cannot close runner record");
 my $stage = open_new($output_name);
 my $launch_ready;
@@ -253,14 +261,14 @@ my $status = $?;
 if ($waited != $child || ($status & 127)) {
   close($stage);
   unlink($output_name);
-  unlink($runner_name);
+  remove_runner();
   print "failure\t$truncated\n";
   exit 0;
 }
 my $rc = $status >> 8;
 if ($rc != 0 && $written == 0) {
   unlink($output_name);
-  unlink($runner_name);
+  remove_runner();
   print "no-result\t$rc\t$truncated\n";
   exit 0;
 }
@@ -298,5 +306,5 @@ for my $operation ('result.terminal', 'result.silent') {
 close($stage) or fail("cannot close staged output");
 chdir($registry_dir) or fail("cannot return to registry directory");
 unlink($output_name) or fail("cannot remove staged output");
-unlink($runner_name) or fail("cannot remove runner record");
+remove_runner();
 print "captured\t$prefix.result\t$rc\t$truncated\t" . join("\t", @reservations) . "\n";
