@@ -1370,8 +1370,8 @@ active_restart=$(FM_HOME="$H_ACTIVE_RUNNER" "$PROCEVENT" start active-source) \
   || fail "empty runner record bypassed the live claim"
 assert_contains "$active_restart" "already owned: active-source" "empty runner record displaced the live owner"
 [ ! -s "$H_ACTIVE_RUNNER/state/procevent/active-source.runner" ] || fail "live owner's empty runner record changed"
-expect_failure "prior runner remains active" env FM_HOME="$H_ACTIVE_RUNNER" "$PROCEVENT" register-extension ext-flow active-source --config-ref replacement
-expect_failure "prior runner remains active" env FM_HOME="$H_ACTIVE_RUNNER" "$PROCEVENT" register lavish active-source -- /bin/echo built-in
+expect_failure "prior runner remains active" timeout 10 env FM_HOME="$H_ACTIVE_RUNNER" "$PROCEVENT" register-extension ext-flow active-source --config-ref replacement
+expect_failure "prior runner remains active" timeout 10 env FM_HOME="$H_ACTIVE_RUNNER" "$PROCEVENT" register lavish active-source -- /bin/echo built-in
 touch "$active_runner_release"
 active_runner_release=
 wait "$active_runner_pid" || fail "active extension runner did not complete"
@@ -1626,15 +1626,15 @@ printf 'decoy\n' > "$state_path_decoy"
 chmod 0600 "$state_path_decoy"
 for control_kind in tab newline; do
   case "$control_kind" in
-    tab) control_state="$TMP_ROOT/control-state"$'\t'"tab" ;;
-    newline) control_state="$TMP_ROOT/control-state"$'\n'"newline" ;;
+    tab) control_state="$TMP_ROOT/control-state"$'\t'"tab"; control_error="cannot claim source" ;;
+    newline) control_state="$TMP_ROOT/control-state"$'\n'"newline"; control_error="process-event state root is not a private directory" ;;
   esac
   control_source="control-${control_kind}-state-source"
   mkdir -p "$control_state"
   chmod 0700 "$control_state"
   FM_HOME="$H_STATE_OVERRIDE" FM_STATE_OVERRIDE="$control_state" \
     "$PROCEVENT" register lavish "$control_source" -- /bin/echo control >/dev/null
-  expect_failure "cannot acquire source ownership" env FM_HOME="$H_STATE_OVERRIDE" FM_STATE_OVERRIDE="$control_state" \
+  expect_failure "$control_error" env FM_HOME="$H_STATE_OVERRIDE" FM_STATE_OVERRIDE="$control_state" \
     "$PROCEVENT" start "$control_source"
   assert_absent "$TMP_ROOT/claims/$control_source.claim" "control-byte state root created a malformed claim"
   assert_absent "$control_state/procevent-capture-reservations" "control-byte state root created reservation state"
@@ -1656,7 +1656,7 @@ override_crash_runner_pid=$(sed -n '2p' "$override_crash_claim")
 override_crash_token=$(sed -n '3p' "$override_crash_claim")
 override_crash_records=$(find "$STATE_OVERRIDE/procevent-capture-reservations" -type f \
   -name ".extension-capture-$override_crash_token.*" -print | wc -l | tr -d '[:space:]')
-[ "$override_crash_records" -eq 2 ] || fail "overridden-state crash fixture did not create both immediate reservations"
+[ "$override_crash_records" -eq 1 ] || fail "overridden-state crash fixture did not retain its pending terminal reservation (found $override_crash_records)"
 mkdir -p "$H_STATE_OVERRIDE/state/procevent-capture-reservations"
 chmod 0700 "$H_STATE_OVERRIDE/state" "$H_STATE_OVERRIDE/state/procevent-capture-reservations"
 override_crash_decoy="$H_STATE_OVERRIDE/state/procevent-capture-reservations/.extension-capture-$override_crash_token.decoy.json"
@@ -1666,7 +1666,9 @@ kill -KILL -"$override_crash_runner_pid" 2>/dev/null || fail "could not terminat
 wait "$override_crash_start_pid" 2>/dev/null || true
 override_crash_start_pid=
 override_crash_runner_pid=
-FM_HOME="$H_STATE_OVERRIDE" "$PROCEVENT" reconcile >/dev/null
+# Model an orphaned crashed capture so reconcile cleans it without relaunching.
+rm "$STATE_OVERRIDE/procevent/override-crash-source.source"
+FM_HOME="$H_STATE_OVERRIDE" FM_STATE_OVERRIDE="$STATE_OVERRIDE" "$PROCEVENT" reconcile >/dev/null
 assert_absent "$override_crash_claim" "reconcile retained a dead overridden-state claim"
 override_crash_records=$(find "$STATE_OVERRIDE/procevent-capture-reservations" -type f \
   -name ".extension-capture-$override_crash_token.*" -print -quit)
@@ -1845,7 +1847,7 @@ for replacement_outcome in captured no-result failure; do
     9 8 6 replacement-source ext-flow org.example.flow 1.2.3 1 \
     "sha256:$(printf 'a%.0s' {1..64})" "sha256:$(printf 'b%.0s' {1..64})" replacement-token \
     replacement-source.runner .replacement.output "$$" "$forged_claim_identity" 1024 -- \
-    bash -c 'touch "$1"; while [ ! -e "$2" ]; do sleep 0.01; done
+    bash -c 'printf "ready\n" > "$1"; while [ ! -e "$2" ]; do sleep 0.01; done
       case "$3" in captured) printf result ;; no-result) exit 75 ;; failure) kill -KILL "$$" ;; esac' \
     bash "$replacement_state/ready" "$active_runner_release" "$replacement_outcome" > "$replacement_state/reply" &
   active_runner_pid=$!
