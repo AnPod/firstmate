@@ -1,0 +1,546 @@
++ set -u
+++ dirname tests/fm-documentation-audiences.test.sh
++ . tests/lib.sh
+++ '[' -n '' ']'
+++ FM_TEST_LIB_SOURCED=1
+++ umask 022
++++ dirname tests/lib.sh
+++ . tests/git-config-helpers.sh
++++ export GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1
++++ GIT_CONFIG_GLOBAL=/dev/null
++++ GIT_CONFIG_NOSYSTEM=1
+++ export FM_GATE_REFUSE_BYPASS=1
+++ FM_GATE_REFUSE_BYPASS=1
+++ export FM_TEST_SEAM=1
+++ FM_TEST_SEAM=1
+++ unset FM_TASK_ID
+++ unset TASKS_AXI_FILE TASKS_AXI_BACKEND
+++++ dirname tests/lib.sh
++++ cd tests/..
++++ pwd
+++ ROOT=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT
+++ FM_TEST_CLEANUP_DIRS=()
++++ mktemp /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/.fm-test-cleanup.1591723.XXXXXX
+++ FM_TEST_CLEANUP_REGISTRY=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/.fm-test-cleanup.1591723.iVNGpr
++++ fm_test_pid_identity 1591723
++++ local pid=1591723
++++ FM_STATE_OVERRIDE=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp
++++ bash -c '. "$1"; fm_pid_identity "$2"' _ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-wake-lib.sh 1591723
+++ FM_TEST_OWNER_IDENTITY='linux-starttime=13758639 cmdline-hex=62617368002d780074657374732f666d2d646f63756d656e746174696f6e2d61756469656e6365732e746573742e736800'
++++ mktemp /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/.fm-test-procevent.1591723.XXXXXX
+++ FM_TEST_PROCEVENT_REGISTRY=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/.fm-test-procevent.1591723.1Ylr3H
++++ mktemp /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/.fm-test-watcher.1591723.XXXXXX
+++ FM_TEST_WATCHER_REGISTRY=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/.fm-test-watcher.1591723.Vwim58
+++ FM_TEST_STUB_MAX_BLOCK_SECONDS=120
+++ export FM_TEST_STUB_MAX_BLOCK_SECONDS
+++ trap fm_test_cleanup EXIT
+++ trap 'fm_test_cleanup; exit 130' INT
+++ trap 'fm_test_cleanup; exit 143' TERM
+++ trap 'fm_test_cleanup; exit 129' HUP
+++ trap 'fm_test_cleanup; exit 131' QUIT
+++ FM_TEST_ORPHAN_MAX_AGE_SECONDS=3600
+++ '[' 0 '!=' 1 ']'
+++ fm_test_reap_orphans
+++ local marker dir mtime now owner_pid owner_identity current_identity
++++ date +%s
+++ now=1791103019
+++ for marker in "${TMPDIR:-/tmp}"/fm-*/.fm-test-fixture
+++ '[' -e '/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-*/.fm-test-fixture' ']'
+++ continue
++ CHECK=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh
++ INVENTORY=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/docs/documentation-audiences.json
+++ mktemp -d /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.XXXXXX
++ TMP_ROOT=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ
++ trap 'rm -rf "$TMP_ROOT"' EXIT
++ test_repository_inventory_passes
++ local out
+++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh
++ out='fm-doc-audience-check: ok surfaces=117 local_links=721'
++ assert_contains 'fm-doc-audience-check: ok surfaces=117 local_links=721' 'fm-doc-audience-check: ok surfaces=' 'audience check did not report exact surface coverage'
++ case "$1" in
++ :
++ assert_contains 'fm-doc-audience-check: ok surfaces=117 local_links=721' local_links= 'audience check did not report local-link validation'
++ case "$1" in
++ :
++ pass 'documentation inventory classifies every maintained prose surface exactly once'
++ printf 'ok - %s\n' 'documentation inventory classifies every maintained prose surface exactly once'
+ok - documentation inventory classifies every maintained prose surface exactly once
++ test_duplicate_and_setup_classification_fail
++ local duplicate=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/duplicate.json
++ local bad_setup=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/bad-setup.json
++ local shrink_scope=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/shrink-scope.json
++ mutate_inventory /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/docs/documentation-audiences.json /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/duplicate.json duplicate
++ local source=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/docs/documentation-audiences.json destination=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/duplicate.json mode=duplicate
++ python3 - /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/docs/documentation-audiences.json /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/duplicate.json duplicate
++ mutate_inventory /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/docs/documentation-audiences.json /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/bad-setup.json bad-setup-audience
++ local source=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/docs/documentation-audiences.json destination=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/bad-setup.json mode=bad-setup-audience
++ python3 - /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/docs/documentation-audiences.json /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/bad-setup.json bad-setup-audience
++ mutate_inventory /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/docs/documentation-audiences.json /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/shrink-scope.json shrink-scope
++ local source=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/docs/documentation-audiences.json destination=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/shrink-scope.json mode=shrink-scope
++ python3 - /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/docs/documentation-audiences.json /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/shrink-scope.json shrink-scope
++ run_expect_failure 'surfaces classified more than once' /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --inventory /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/duplicate.json
++ local 'expected=surfaces classified more than once'
++ shift
++ local out rc
++ set +e
+++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --inventory /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/duplicate.json
++ out='fm-doc-audience-check: surfaces classified more than once: .agents/skills/afk/SKILL.md'
++ rc=1
++ set -e
++ '[' 1 -ne 0 ']'
++ assert_contains 'fm-doc-audience-check: surfaces classified more than once: .agents/skills/afk/SKILL.md' 'surfaces classified more than once' 'failure did not explain '\''surfaces classified more than once'\'''
++ case "$1" in
++ :
++ run_expect_failure 'README setup target docs/tmux-backend.md has disallowed audience' /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --inventory /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/bad-setup.json
++ local 'expected=README setup target docs/tmux-backend.md has disallowed audience'
++ shift
++ local out rc
++ set +e
+++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --inventory /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/bad-setup.json
++ out='fm-doc-audience-check: README setup target docs/tmux-backend.md has disallowed audience '\''maintainer-verification'\'''
++ rc=1
++ set -e
++ '[' 1 -ne 0 ']'
++ assert_contains 'fm-doc-audience-check: README setup target docs/tmux-backend.md has disallowed audience '\''maintainer-verification'\''' 'README setup target docs/tmux-backend.md has disallowed audience' 'failure did not explain '\''README setup target docs/tmux-backend.md has disallowed audience'\'''
++ case "$1" in
++ :
++ run_expect_failure 'scope.trackedPatterns must match the fixed maintained-prose scope' /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --inventory /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/shrink-scope.json
++ local 'expected=scope.trackedPatterns must match the fixed maintained-prose scope'
++ shift
++ local out rc
++ set +e
+++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --inventory /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/shrink-scope.json
++ out='fm-doc-audience-check: scope.trackedPatterns must match the fixed maintained-prose scope'
++ rc=1
++ set -e
++ '[' 1 -ne 0 ']'
++ assert_contains 'fm-doc-audience-check: scope.trackedPatterns must match the fixed maintained-prose scope' 'scope.trackedPatterns must match the fixed maintained-prose scope' 'failure did not explain '\''scope.trackedPatterns must match the fixed maintained-prose scope'\'''
++ case "$1" in
++ :
++ pass 'classification, setup routing, and maintained-prose scope fail safely'
++ printf 'ok - %s\n' 'classification, setup routing, and maintained-prose scope fail safely'
+ok - classification, setup routing, and maintained-prose scope fail safely
++ test_required_pointer_fails
++ local missing_pointer=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/missing-pointer.json
++ mutate_inventory /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/docs/documentation-audiences.json /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/missing-pointer.json missing-owner-pointer
++ local source=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/docs/documentation-audiences.json destination=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/missing-pointer.json mode=missing-owner-pointer
++ python3 - /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/docs/documentation-audiences.json /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/missing-pointer.json missing-owner-pointer
++ run_expect_failure 'required owner pointer missing' /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --inventory /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/missing-pointer.json
++ local 'expected=required owner pointer missing'
++ shift
++ local out rc
++ set +e
+++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --inventory /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/missing-pointer.json
++ out='fm-doc-audience-check: required owner pointer missing: README.md -> docs/sessionstart-nudge.md'
++ rc=1
++ set -e
++ '[' 1 -ne 0 ']'
++ assert_contains 'fm-doc-audience-check: required owner pointer missing: README.md -> docs/sessionstart-nudge.md' 'required owner pointer missing' 'failure did not explain '\''required owner pointer missing'\'''
++ case "$1" in
++ :
++ pass 'required documentation owner pointers cannot silently disappear'
++ printf 'ok - %s\n' 'required documentation owner pointers cannot silently disappear'
+ok - required documentation owner pointers cannot silently disappear
++ test_local_links_and_no_keyword_heuristic
++ local repo=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/fixture
++ mkdir -p /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/fixture/docs
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/fixture init -q
++ printf '%s\n' '[Setup](docs/setup.md) [Policy](docs/policy.md)'
++ printf '%s\n' '# Setup'
++ printf '%s\n' '# Policy'
++ cat
++ write_fixture_inventory /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/fixture
++ local repo=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/fixture
++ cat
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/fixture add README.md docs
++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/fixture
++ printf '%s\n' '[Setup](docs/setup.md) [Policy](docs/policy.md) [Broken](docs/missing.bin)'
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/fixture add README.md
++ run_expect_failure 'unresolved local link' /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/fixture
++ local 'expected=unresolved local link'
++ shift
++ local out rc
++ set +e
+++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/fixture
++ out='fm-doc-audience-check: unresolved local link in README.md: docs/missing.bin'
++ rc=1
++ set -e
++ '[' 1 -ne 0 ']'
++ assert_contains 'fm-doc-audience-check: unresolved local link in README.md: docs/missing.bin' 'unresolved local link' 'failure did not explain '\''unresolved local link'\'''
++ case "$1" in
++ :
++ pass 'local links resolve while dates, versions, commands, and incident prose remain semantically reviewed'
++ printf 'ok - %s\n' 'local links resolve while dates, versions, commands, and incident prose remain semantically reviewed'
+ok - local links resolve while dates, versions, commands, and incident prose remain semantically reviewed
++ test_toolbelt_rows_match_tracked_bin
++ local repo=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt
++ local out
++ write_toolbelt_fixture /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt
++ local repo=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt
++ mkdir -p /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt/bin/backends /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt/docs
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt init -q
++ printf '%s\n' '#!/bin/sh'
++ printf '%s\n' 'print("helper")'
++ printf '%s\n' '[Setup](docs/setup.md) [Policy](docs/policy.md)'
++ printf '%s\n' '# Setup'
++ printf '%s\n' '# Policy'
++ printf '%s\n' '# Evidence'
++ cat
++ cat
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt add README.md docs bin
+++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt
++ out='fm-doc-audience-check: ok surfaces=5 local_links=3'
++ assert_contains 'fm-doc-audience-check: ok surfaces=5 local_links=3' 'fm-doc-audience-check: ok surfaces=' 'matching toolbelt fixture did not pass'
++ case "$1" in
++ :
++ printf '%s\n' '#!/bin/sh'
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt add bin/fm-absent.sh
++ run_expect_failure 'bin toolbelt coverage: missing rows: fm-absent.sh' /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt
++ local 'expected=bin toolbelt coverage: missing rows: fm-absent.sh'
++ shift
++ local out rc
++ set +e
+++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt
++ out='fm-doc-audience-check: bin toolbelt coverage: missing rows: fm-absent.sh'
++ rc=1
++ set -e
++ '[' 1 -ne 0 ']'
++ assert_contains 'fm-doc-audience-check: bin toolbelt coverage: missing rows: fm-absent.sh' 'bin toolbelt coverage: missing rows: fm-absent.sh' 'failure did not explain '\''bin toolbelt coverage: missing rows: fm-absent.sh'\'''
++ case "$1" in
++ :
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt rm -fq bin/fm-absent.sh
++ cat
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt add docs/scripts.md
++ run_expect_failure 'bin toolbelt rows repeated: fm-present.sh' /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt
++ local 'expected=bin toolbelt rows repeated: fm-present.sh'
++ shift
++ local out rc
++ set +e
+++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt
++ out='fm-doc-audience-check: bin toolbelt rows repeated: fm-present.sh'
++ rc=1
++ set -e
++ '[' 1 -ne 0 ']'
++ assert_contains 'fm-doc-audience-check: bin toolbelt rows repeated: fm-present.sh' 'bin toolbelt rows repeated: fm-present.sh' 'failure did not explain '\''bin toolbelt rows repeated: fm-present.sh'\'''
++ case "$1" in
++ :
++ cat
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt add docs/scripts.md
++ run_expect_failure 'rows without a tracked bin file: fm-ghost.sh' /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt
++ local 'expected=rows without a tracked bin file: fm-ghost.sh'
++ shift
++ local out rc
++ set +e
+++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt
++ out='fm-doc-audience-check: bin toolbelt coverage: rows without a tracked bin file: fm-ghost.sh'
++ rc=1
++ set -e
++ '[' 1 -ne 0 ']'
++ assert_contains 'fm-doc-audience-check: bin toolbelt coverage: rows without a tracked bin file: fm-ghost.sh' 'rows without a tracked bin file: fm-ghost.sh' 'failure did not explain '\''rows without a tracked bin file: fm-ghost.sh'\'''
++ case "$1" in
++ :
++ pass 'toolbelt rows must match tracked bin files exactly'
++ printf 'ok - %s\n' 'toolbelt rows must match tracked bin files exactly'
+ok - toolbelt rows must match tracked bin files exactly
++ test_toolbelt_rows_require_purpose_and_backticks
++ local repo=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-shape
++ write_toolbelt_fixture /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-shape
++ local repo=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-shape
++ mkdir -p /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-shape/bin/backends /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-shape/docs
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-shape init -q
++ printf '%s\n' '#!/bin/sh'
++ printf '%s\n' 'print("helper")'
++ printf '%s\n' '[Setup](docs/setup.md) [Policy](docs/policy.md)'
++ printf '%s\n' '# Setup'
++ printf '%s\n' '# Policy'
++ printf '%s\n' '# Evidence'
++ cat
++ cat
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-shape add README.md docs bin
++ cat
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-shape add docs/scripts.md
++ run_expect_failure 'bin toolbelt row missing purpose: backends/helper.py' /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-shape
++ local 'expected=bin toolbelt row missing purpose: backends/helper.py'
++ shift
++ local out rc
++ set +e
+++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-shape
++ out='fm-doc-audience-check: bin toolbelt row missing purpose: backends/helper.py'
++ rc=1
++ set -e
++ '[' 1 -ne 0 ']'
++ assert_contains 'fm-doc-audience-check: bin toolbelt row missing purpose: backends/helper.py' 'bin toolbelt row missing purpose: backends/helper.py' 'failure did not explain '\''bin toolbelt row missing purpose: backends/helper.py'\'''
++ case "$1" in
++ :
++ cat
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-shape add docs/scripts.md
++ run_expect_failure 'bin toolbelt row missing purpose: fm-present.sh' /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-shape
++ local 'expected=bin toolbelt row missing purpose: fm-present.sh'
++ shift
++ local out rc
++ set +e
+++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-shape
++ out='fm-doc-audience-check: bin toolbelt row missing purpose: fm-present.sh'
++ rc=1
++ set -e
++ '[' 1 -ne 0 ']'
++ assert_contains 'fm-doc-audience-check: bin toolbelt row missing purpose: fm-present.sh' 'bin toolbelt row missing purpose: fm-present.sh' 'failure did not explain '\''bin toolbelt row missing purpose: fm-present.sh'\'''
++ case "$1" in
++ :
++ cat
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-shape add docs/scripts.md
++ run_expect_failure 'bin toolbelt row filename is not in backticks: fm-ghost.sh' /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-shape
++ local 'expected=bin toolbelt row filename is not in backticks: fm-ghost.sh'
++ shift
++ local out rc
++ set +e
+++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-shape
++ out='fm-doc-audience-check: bin toolbelt row filename is not in backticks: fm-ghost.sh'
++ rc=1
++ set -e
++ '[' 1 -ne 0 ']'
++ assert_contains 'fm-doc-audience-check: bin toolbelt row filename is not in backticks: fm-ghost.sh' 'bin toolbelt row filename is not in backticks: fm-ghost.sh' 'failure did not explain '\''bin toolbelt row filename is not in backticks: fm-ghost.sh'\'''
++ case "$1" in
++ :
++ pass 'toolbelt rows need a backticked filename and a non-empty purpose'
++ printf 'ok - %s\n' 'toolbelt rows need a backticked filename and a non-empty purpose'
+ok - toolbelt rows need a backticked filename and a non-empty purpose
++ test_toolbelt_ignores_other_tables_and_pipe_examples
++ local repo=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-other-tables
++ write_toolbelt_fixture /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-other-tables
++ local repo=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-other-tables
++ mkdir -p /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-other-tables/bin/backends /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-other-tables/docs
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-other-tables init -q
++ printf '%s\n' '#!/bin/sh'
++ printf '%s\n' 'print("helper")'
++ printf '%s\n' '[Setup](docs/setup.md) [Policy](docs/policy.md)'
++ printf '%s\n' '# Setup'
++ printf '%s\n' '# Policy'
++ printf '%s\n' '# Evidence'
++ cat
++ cat
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-other-tables add README.md docs bin
++ cat
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-other-tables add docs/scripts.md
++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-other-tables
++ pass 'only the toolbelt table contributes rows'
++ printf 'ok - %s\n' 'only the toolbelt table contributes rows'
+ok - only the toolbelt table contributes rows
++ test_toolbelt_counts_rows_with_up_to_three_leading_spaces
++ local repo=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-indent
++ write_toolbelt_fixture /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-indent
++ local repo=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-indent
++ mkdir -p /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-indent/bin/backends /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-indent/docs
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-indent init -q
++ printf '%s\n' '#!/bin/sh'
++ printf '%s\n' 'print("helper")'
++ printf '%s\n' '[Setup](docs/setup.md) [Policy](docs/policy.md)'
++ printf '%s\n' '# Setup'
++ printf '%s\n' '# Policy'
++ printf '%s\n' '# Evidence'
++ cat
++ cat
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-indent add README.md docs bin
++ cat
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-indent add docs/scripts.md
++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-indent
++ cat
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-indent add docs/scripts.md
++ run_expect_failure 'bin toolbelt rows repeated: fm-present.sh' /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-indent
++ local 'expected=bin toolbelt rows repeated: fm-present.sh'
++ shift
++ local out rc
++ set +e
+++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-indent
++ out='fm-doc-audience-check: bin toolbelt rows repeated: fm-present.sh'
++ rc=1
++ set -e
++ '[' 1 -ne 0 ']'
++ assert_contains 'fm-doc-audience-check: bin toolbelt rows repeated: fm-present.sh' 'bin toolbelt rows repeated: fm-present.sh' 'failure did not explain '\''bin toolbelt rows repeated: fm-present.sh'\'''
++ case "$1" in
++ :
++ cat
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-indent add docs/scripts.md
++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-indent
++ pass 'toolbelt rows may be indented by up to three spaces'
++ printf 'ok - %s\n' 'toolbelt rows may be indented by up to three spaces'
+ok - toolbelt rows may be indented by up to three spaces
++ test_toolbelt_fenced_tables_cannot_hide_real_rows
++ local repo=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences fence mode expected
++ write_toolbelt_fixture /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences
++ local repo=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences
++ mkdir -p /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences/bin/backends /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences/docs
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences init -q
++ printf '%s\n' '#!/bin/sh'
++ printf '%s\n' 'print("helper")'
++ printf '%s\n' '[Setup](docs/setup.md) [Policy](docs/policy.md)'
++ printf '%s\n' '# Setup'
++ printf '%s\n' '# Policy'
++ printf '%s\n' '# Evidence'
++ cat
++ cat
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences add README.md docs bin
++ for fence in '```' '~~~'
++ for mode in valid missing extra duplicate
++ python3 - /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences/docs/scripts.md '```' valid
++ case "$mode" in
++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences
++ continue
++ for mode in valid missing extra duplicate
++ python3 - /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences/docs/scripts.md '```' missing
++ case "$mode" in
++ expected='missing rows: backends/helper.py'
++ run_expect_failure 'missing rows: backends/helper.py' /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences
++ local 'expected=missing rows: backends/helper.py'
++ shift
++ local out rc
++ set +e
+++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences
++ out='fm-doc-audience-check: bin toolbelt coverage: missing rows: backends/helper.py'
++ rc=1
++ set -e
++ '[' 1 -ne 0 ']'
++ assert_contains 'fm-doc-audience-check: bin toolbelt coverage: missing rows: backends/helper.py' 'missing rows: backends/helper.py' 'failure did not explain '\''missing rows: backends/helper.py'\'''
++ case "$1" in
++ :
++ for mode in valid missing extra duplicate
++ python3 - /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences/docs/scripts.md '```' extra
++ case "$mode" in
++ expected='rows without a tracked bin file: fm-ghost.sh'
++ run_expect_failure 'rows without a tracked bin file: fm-ghost.sh' /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences
++ local 'expected=rows without a tracked bin file: fm-ghost.sh'
++ shift
++ local out rc
++ set +e
+++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences
++ out='fm-doc-audience-check: bin toolbelt coverage: rows without a tracked bin file: fm-ghost.sh'
++ rc=1
++ set -e
++ '[' 1 -ne 0 ']'
++ assert_contains 'fm-doc-audience-check: bin toolbelt coverage: rows without a tracked bin file: fm-ghost.sh' 'rows without a tracked bin file: fm-ghost.sh' 'failure did not explain '\''rows without a tracked bin file: fm-ghost.sh'\'''
++ case "$1" in
++ :
++ for mode in valid missing extra duplicate
++ python3 - /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences/docs/scripts.md '```' duplicate
++ case "$mode" in
++ expected='bin toolbelt rows repeated: fm-present.sh'
++ run_expect_failure 'bin toolbelt rows repeated: fm-present.sh' /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences
++ local 'expected=bin toolbelt rows repeated: fm-present.sh'
++ shift
++ local out rc
++ set +e
+++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences
++ out='fm-doc-audience-check: bin toolbelt rows repeated: fm-present.sh'
++ rc=1
++ set -e
++ '[' 1 -ne 0 ']'
++ assert_contains 'fm-doc-audience-check: bin toolbelt rows repeated: fm-present.sh' 'bin toolbelt rows repeated: fm-present.sh' 'failure did not explain '\''bin toolbelt rows repeated: fm-present.sh'\'''
++ case "$1" in
++ :
++ for fence in '```' '~~~'
++ for mode in valid missing extra duplicate
++ python3 - /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences/docs/scripts.md '~~~' valid
++ case "$mode" in
++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences
++ continue
++ for mode in valid missing extra duplicate
++ python3 - /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences/docs/scripts.md '~~~' missing
++ case "$mode" in
++ expected='missing rows: backends/helper.py'
++ run_expect_failure 'missing rows: backends/helper.py' /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences
++ local 'expected=missing rows: backends/helper.py'
++ shift
++ local out rc
++ set +e
+++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences
++ out='fm-doc-audience-check: bin toolbelt coverage: missing rows: backends/helper.py'
++ rc=1
++ set -e
++ '[' 1 -ne 0 ']'
++ assert_contains 'fm-doc-audience-check: bin toolbelt coverage: missing rows: backends/helper.py' 'missing rows: backends/helper.py' 'failure did not explain '\''missing rows: backends/helper.py'\'''
++ case "$1" in
++ :
++ for mode in valid missing extra duplicate
++ python3 - /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences/docs/scripts.md '~~~' extra
++ case "$mode" in
++ expected='rows without a tracked bin file: fm-ghost.sh'
++ run_expect_failure 'rows without a tracked bin file: fm-ghost.sh' /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences
++ local 'expected=rows without a tracked bin file: fm-ghost.sh'
++ shift
++ local out rc
++ set +e
+++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences
++ out='fm-doc-audience-check: bin toolbelt coverage: rows without a tracked bin file: fm-ghost.sh'
++ rc=1
++ set -e
++ '[' 1 -ne 0 ']'
++ assert_contains 'fm-doc-audience-check: bin toolbelt coverage: rows without a tracked bin file: fm-ghost.sh' 'rows without a tracked bin file: fm-ghost.sh' 'failure did not explain '\''rows without a tracked bin file: fm-ghost.sh'\'''
++ case "$1" in
++ :
++ for mode in valid missing extra duplicate
++ python3 - /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences/docs/scripts.md '~~~' duplicate
++ case "$mode" in
++ expected='bin toolbelt rows repeated: fm-present.sh'
++ run_expect_failure 'bin toolbelt rows repeated: fm-present.sh' /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences
++ local 'expected=bin toolbelt rows repeated: fm-present.sh'
++ shift
++ local out rc
++ set +e
+++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-fences
++ out='fm-doc-audience-check: bin toolbelt rows repeated: fm-present.sh'
++ rc=1
++ set -e
++ '[' 1 -ne 0 ']'
++ assert_contains 'fm-doc-audience-check: bin toolbelt rows repeated: fm-present.sh' 'bin toolbelt rows repeated: fm-present.sh' 'failure did not explain '\''bin toolbelt rows repeated: fm-present.sh'\'''
++ case "$1" in
++ :
++ pass 'backtick and tilde examples cannot hide missing, extra, or repeated toolbelt rows'
++ printf 'ok - %s\n' 'backtick and tilde examples cannot hide missing, extra, or repeated toolbelt rows'
+ok - backtick and tilde examples cannot hide missing, extra, or repeated toolbelt rows
++ test_toolbelt_requires_one_unfenced_script_table
++ local repo=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-candidates
++ write_toolbelt_fixture /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-candidates
++ local repo=/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-candidates
++ mkdir -p /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-candidates/bin/backends /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-candidates/docs
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-candidates init -q
++ printf '%s\n' '#!/bin/sh'
++ printf '%s\n' 'print("helper")'
++ printf '%s\n' '[Setup](docs/setup.md) [Policy](docs/policy.md)'
++ printf '%s\n' '# Setup'
++ printf '%s\n' '# Policy'
++ printf '%s\n' '# Evidence'
++ cat
++ cat
++ git -C /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-candidates add README.md docs bin
++ python3 - /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-candidates/docs/scripts.md
++ run_expect_failure 'bin toolbelt table ambiguous: found 2 unfenced Script tables' /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-candidates
++ local 'expected=bin toolbelt table ambiguous: found 2 unfenced Script tables'
++ shift
++ local out rc
++ set +e
+++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-candidates
++ out='fm-doc-audience-check: bin toolbelt table ambiguous: found 2 unfenced Script tables'
++ rc=1
++ set -e
++ '[' 1 -ne 0 ']'
++ assert_contains 'fm-doc-audience-check: bin toolbelt table ambiguous: found 2 unfenced Script tables' 'bin toolbelt table ambiguous: found 2 unfenced Script tables' 'failure did not explain '\''bin toolbelt table ambiguous: found 2 unfenced Script tables'\'''
++ case "$1" in
++ :
++ cat
++ run_expect_failure 'bin toolbelt table missing: expected exactly one unfenced Script table' /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-candidates
++ local 'expected=bin toolbelt table missing: expected exactly one unfenced Script table'
++ shift
++ local out rc
++ set +e
+++ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/bin/fm-doc-audience-check.sh --root /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ/toolbelt-candidates
++ out='fm-doc-audience-check: bin toolbelt table missing: expected exactly one unfenced Script table'
++ rc=1
++ set -e
++ '[' 1 -ne 0 ']'
++ assert_contains 'fm-doc-audience-check: bin toolbelt table missing: expected exactly one unfenced Script table' 'bin toolbelt table missing: expected exactly one unfenced Script table' 'failure did not explain '\''bin toolbelt table missing: expected exactly one unfenced Script table'\'''
++ case "$1" in
++ :
++ pass 'missing and ambiguous unfenced Script tables fail explicitly'
++ printf 'ok - %s\n' 'missing and ambiguous unfenced Script tables fail explicitly'
+ok - missing and ambiguous unfenced Script tables fail explicitly
++ rm -rf /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M430RJ6EEA5VVPNTAAJN85PT/.test-toolbelt-tmp/fm-doc-audiences.tv07nJ
