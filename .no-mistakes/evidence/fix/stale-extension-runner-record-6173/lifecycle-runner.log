@@ -1,0 +1,7 @@
+ok - all registration owner transitions wait for the prior extension runner
+ok - shell-only TERM and KILL retain the live capture claim until polling stops
+ok - a dead extension runner record allows restart and capture
+ok - an empty extension runner residue allows restart and capture
+ok - live, malformed, symlink, and FIFO extension runner records remain refused
+
+all extension-binding tests passed

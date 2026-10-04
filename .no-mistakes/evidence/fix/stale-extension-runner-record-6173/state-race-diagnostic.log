@@ -1,0 +1,10 @@
+ok - owner-matched retirement refuses a stale generation and accepts the current one
+ok - caller environment, descriptors, and lifecycle entry cannot forge capture authority
+ok - extension capture reservations are bounded to their runner lifecycle
+error: process-event state root is not a private directory
+ok - control-byte state roots cannot serialize claims or reservations
+ok - crash recovery revalidates and cleans only the recorded state root
+ok - post-registration inbox symlink substitution cannot redirect extension evidence
+ok - post-registration registry symlink substitution cannot redirect external evidence
+error: cannot establish the source launch boundary: registry-race-source
+not ok - registry swap race did not complete through its pinned staging directory
