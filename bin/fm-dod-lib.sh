@@ -249,6 +249,44 @@ fm_brief_task_content_valid() {  # <file>
   [ -n "$(printf '%s' "$task" | tr -d '[:space:]')" ]
 }
 
+# When a present subsection parses empty because an unfenced same-level heading
+# ended it before any body text, print one clause naming that heading. A sibling
+# contract heading or a following level-1 heading is how a blank subsection
+# ordinarily ends, and then this prints nothing. The sibling compare ignores up
+# to three leading spaces, the same indent the heading reader allows, so an
+# indented ` ## Firstmate spec` stays the sibling rather than a heading to
+# relevel. The ending rule itself stays in bin/fm-brief-heading-lib.sh.
+fm_brief_task_heading_cutoff_clause() {  # <file>
+  local file=$1 heading body term term_cmp level subject n
+  local -a subjects=()
+  [ -f "$file" ] && [ -r "$file" ] || return 1
+  for heading in "## Captain's intent" "## Firstmate spec"; do
+    fm_brief_task_heading_present "$file" "$heading" || continue
+    body=$(fm_brief_task_heading_body "$file" "$heading")
+    [ -z "$(printf '%s' "$body" | tr -d '[:space:]')" ] || continue
+    term=$(fm_brief_task_heading_terminator "$file" "$heading") || continue
+    term_cmp=$term
+    n=0
+    while [ "$n" -lt 3 ] && [ "${term_cmp# }" != "$term_cmp" ]; do
+      term_cmp=${term_cmp# }
+      n=$((n + 1))
+    done
+    case "$term_cmp" in
+      "## Captain's intent"|"## Firstmate spec") continue ;;
+    esac
+    level=$(fm_brief_heading_line_level "$term")
+    [ "$level" -eq 2 ] || continue
+    subjects+=("$heading (ended at \`$term\`)")
+  done
+  [ "${#subjects[@]}" -gt 0 ] || return 1
+  if [ "${#subjects[@]}" -eq 1 ]; then
+    subject=${subjects[0]}
+  else
+    subject="${subjects[0]} and ${subjects[1]}"
+  fi
+  printf '%s parsed empty because a subsection body ends at the next unfenced heading of the same or higher level; put the body text before any such heading, and use ### or deeper for a heading that should stay inside the subsection\n' "$subject"
+}
+
 # Print the first `## Captain's intent` body line that opens with an operator
 # address spelling; fail when there is none. The body is never rewritten.
 fm_brief_intent_address_line() {  # <file>
@@ -280,11 +318,27 @@ EOF
 # Written once; only the two sentences about a green PR depend on the forge,
 # because on gerrit the ci step is skipped and there is no PR to report.
 fm_nm_driving_block() {  # <forge>
-  local pr_return_line='' pr_reattach_clause=';'
+  local pr_return_line='' pr_reattach_clause=';' drive_block wait_cfg
   if [ "$1" != gerrit ]; then
     pr_return_line="Only a drive call's return reports the green PR: \`no-mistakes axi status\` shows progress but never reports \`checks-passed\` while the ci step is still monitoring the PR for merge, so never wait on a status poll for the next gate or outcome.
 "
     pr_reattach_clause="; once checks are green it returns \`checks-passed\` immediately, and"
+  fi
+  # config/wait-no-turns selects the foreground drive. Absent, the text matches
+  # the backgrounded drive a home had before that flag.
+  wait_cfg=${CONFIG:-${FM_CONFIG_OVERRIDE:-${FM_HOME:-}/config}}
+  if [ -e "$wait_cfg/wait-no-turns" ]; then
+    drive_block="Drive the run with ONE foreground \`no-mistakes axi run\` and let it block.
+It bounds its own hold for you: \`--wait\` (default 8m) exists precisely so a harness with a ten-minute command cap gets a structured return instead of being killed mid-hold.
+Declare that wait using the brief's status-reporting rule before the foreground drive call.
+Never background a wait, and never arm a timer to stand in for one: a backgrounded call returns in milliseconds, so it does not wait at all, and every timer left behind fires later as a paid wake for nothing.
+${pr_return_line}Whenever a drive call returns without a gate or an outcome - its own wait elapsed, or it was killed or timed out - that is not a failure: reattach at once by re-running \`no-mistakes axi run\` without flags, and issue the same foreground call again, one at a time, until a gate or outcome comes back${pr_reattach_clause} if it refuses because no run is active, read the finished outcome from \`no-mistakes axi status\`."
+  else
+    drive_block="One drive call blocks until the next gate or outcome, which routinely outlives what your harness lets a single command run: Claude Code kills a command at ten minutes maximum, while one fix round is capped around thirty minutes and up to three rounds chain.
+So background the drive call instead of sitting in one blocking hold your harness will kill, and read its return when it finishes.
+Declare that wait using the brief's status-reporting rule before waiting on the backgrounded drive call.
+Where a harness's own command limit is not established, assume it bounds commands and use that same backgrounded shape.
+${pr_return_line}Whenever a drive call returns without a gate or an outcome - its own wait elapsed, or it was killed or timed out - reattach at once by re-running \`no-mistakes axi run\` without flags, backgrounded the same way${pr_reattach_clause} if it refuses because no run is active, read the finished outcome from \`no-mistakes axi status\`."
   fi
   cat <<EOF
 You drive no-mistakes by responding to its gates, not by implementing fixes.
@@ -299,11 +353,7 @@ When the captain's intent refers to a report, decision, or PR ("do items 1, 2, 3
 This replaces the no-mistakes skill's advice to enrich \`--intent\` with decisions and tradeoffs; that advice does not apply to Firstmate-dispatched work.
 Do not hand-edit, commit, or fix findings yourself while a run is active - the pipeline applies every fix.
 
-One drive call blocks until the next gate or outcome, which routinely outlives what your harness lets a single command run: Claude Code kills a command at ten minutes maximum, while one fix round is capped around thirty minutes and up to three rounds chain.
-So background the drive call instead of sitting in one blocking hold your harness will kill, and read its return when it finishes.
-Declare that wait using the brief's status-reporting rule before waiting on the backgrounded drive call.
-Where a harness's own command limit is not established, assume it bounds commands and use that same backgrounded shape.
-${pr_return_line}Whenever a drive call returns without a gate or an outcome - its own wait elapsed, or it was killed or timed out - reattach at once by re-running \`no-mistakes axi run\` without flags, backgrounded the same way${pr_reattach_clause} if it refuses because no run is active, read the finished outcome from \`no-mistakes axi status\`.
+$drive_block
 A killed or timed-out call is never evidence the daemon died: the daemon accepts your response immediately and runs the round in the background, so the call was only ever waiting for a read while the run kept working.
 Reattach and keep going rather than reporting the pipeline blocked; rule 7 owns the checks that decide when a pipeline block is real.
 
