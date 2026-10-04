@@ -1,0 +1,81 @@
+$ tmux -S /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/s new-session -d -s fm-lab-watch -n fm-task sleep 180
+
+$ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/bin/fm-lab-home.sh create /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/plain-home
+/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/plain-home
+
+$ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/bin/fm-busy-event.sh arm /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/plain-home/state task
+g1791103615.1657116.23631
+
+$ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/bin/fm-crew-state.sh task
+state: working · source: pane · harness busy (fm-spawn)
+
+plain-home: routine status and turn-end absorbed; watcher still running, both suppressors advanced, queue empty
+[2026-10-04T10:46:57+0200] absorbed benign signal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/plain-home/state/task.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/plain-home/state/task.turn-ended
+
+Watcher output:
+signal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/plain-home/state/other.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/plain-home/state/task.status
+
+$ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/bin/fm-wake-drain.sh
+1791103622	3	signal	other.status	needs-decision: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/plain-home/state/other.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/plain-home/state/task.status
+1791103622	4	signal	task.status	signal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/plain-home/state/other.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/plain-home/state/task.status
+wake annotation: latest wake-EVENT observed at drain, not current state: other.status: needs-decision: choose A or B
+wake annotation: unread wake-EVENT since last drain, not current state: task.status: working: compiling step 2
+wake annotation: latest wake-EVENT observed at drain, not current state: task.status: working: compiling step 3
+OPEN DECISIONS (still open, folded from the durable status logs - not just the latest line):
+other needs-decision: choose A or B
+OPEN DECISIONS: close one by answering it: bin/fm-send.sh <task> --resolve-key <key> '<answer>'
+WAKE_ACK_REQUIRED: after handling completes run bin/fm-wake-drain.sh --ack-through 4 --recovery-generation 1657217.1791103622.Lpo3Pi
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+●  WATCHER DOWN - SUPERVISION IS OFF
+●  1 task(s) in flight, but no live watcher process holds this home lock (last beat: 4s ago).
+●  Trust the emitted supervision protocol for this harness; do not use shell & for watcher repair.
+●  This is a supervision warning only; the guarded operation WILL still run.
+●  After draining queued wakes, repair missing watcher supervision with a foreground checkpoint: bin/fm-watch-checkpoint.sh --seconds 180.
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WARNING: queued wakes pending - drain them with bin/fm-wake-drain.sh before anything else.
+
+$ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/bin/fm-lab-home.sh create /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/spaced home
+/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/spaced home
+
+$ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/bin/fm-busy-event.sh arm /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/spaced home/state task
+g1791103624.1661670.13257
+
+$ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/bin/fm-crew-state.sh task
+state: working · source: pane · harness busy (fm-spawn)
+
+spaced home: routine status and turn-end absorbed; watcher still running, both suppressors advanced, queue empty
+[2026-10-04T10:47:07+0200] absorbed benign signal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/spaced home/state/task.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/spaced home/state/task.turn-ended
+
+Watcher output:
+signal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/spaced home/state/other.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/spaced home/state/task.status
+
+$ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/bin/fm-wake-drain.sh
+1791103631	3	signal	other.status	needs-decision: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/spaced home/state/other.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/spaced home/state/task.status
+1791103631	4	signal	task.status	signal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/spaced home/state/other.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/spaced home/state/task.status
+wake annotation: latest wake-EVENT observed at drain, not current state: other.status: needs-decision: choose A or B
+wake annotation: unread wake-EVENT since last drain, not current state: task.status: working: compiling step 2
+wake annotation: latest wake-EVENT observed at drain, not current state: task.status: working: compiling step 3
+OPEN DECISIONS (still open, folded from the durable status logs - not just the latest line):
+other needs-decision: choose A or B
+OPEN DECISIONS: close one by answering it: bin/fm-send.sh <task> --resolve-key <key> '<answer>'
+WAKE_ACK_REQUIRED: after handling completes run bin/fm-wake-drain.sh --ack-through 4 --recovery-generation 1661754.1791103631.whJ8na
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+●  WATCHER DOWN - SUPERVISION IS OFF
+●  1 task(s) in flight, but no live watcher process holds this home lock (last beat: 4s ago).
+●  Trust the emitted supervision protocol for this harness; do not use shell & for watcher repair.
+●  This is a supervision warning only; the guarded operation WILL still run.
+●  After draining queued wakes, repair missing watcher supervision with a foreground checkpoint: bin/fm-watch-checkpoint.sh --seconds 180.
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WARNING: queued wakes pending - drain them with bin/fm-wake-drain.sh before anything else.
+
+$ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/bin/fm-lab-home.sh create /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/stopped home
+/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/stopped home
+
+Stopped worker output:
+signal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/stopped home/state/task.turn-ended
+
+$ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/bin/fm-wake-drain.sh
+1791103635	2	signal	task.turn-ended	signal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/stopped home/state/task.turn-ended
+WAKE_ACK_REQUIRED: after handling completes run bin/fm-wake-drain.sh --ack-through 2 --recovery-generation 1666124.1791103635.FHqVv3
+
+All live scenarios passed. No harness CLI or LLM was simulated; semantic lifecycle records were seeded through fm-busy-event and consumed by the real crew-state and watcher commands.

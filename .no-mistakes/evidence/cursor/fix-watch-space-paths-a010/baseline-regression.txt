@@ -1,0 +1,4 @@
+ok - signal-home: routine signal absorbed and decision append surfaced with intact paths
+not ok - signal home: absorbed signal did not advance its suppressor
+
+exit=1

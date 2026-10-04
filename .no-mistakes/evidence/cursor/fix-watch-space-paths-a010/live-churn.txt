@@ -1,0 +1,29 @@
+$ tmux -S /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/s new-session -d -s fm-lab-watch -n fm-task python3 -u -c 'import time; i=0
+while True: print(i); i+=1; time.sleep(.2)'
+
+$ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/bin/fm-lab-home.sh create /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/churning spaced home
+/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/churning spaced home
+
+Turn-end in spaced home absorbed using actual changing tmux pane, with authoritative crew proof unavailable.
+[2026-10-04T10:48:15+0200] absorbed benign signal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/churning spaced home/state/task.turn-ended
+
+Decision during churn:
+signal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/churning spaced home/state/task.status
+
+$ /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/bin/fm-wake-drain.sh
+1791103699	2	signal	task.status	needs-decision: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431BPET6MZQ04VFTVTW1SV1/.t/churning spaced home/state/task.status
+wake annotation: latest wake-EVENT observed at drain, not current state: task.status: needs-decision: stop despite pane churn
+OPEN DECISIONS (still open, folded from the durable status logs - not just the latest line):
+task needs-decision: stop despite pane churn
+OPEN DECISIONS: close one by answering it: bin/fm-send.sh <task> --resolve-key <key> '<answer>'
+WAKE_ACK_REQUIRED: after handling completes run bin/fm-wake-drain.sh --ack-through 2 --recovery-generation 1675697.1791103699.YZFYKA
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+●  WATCHER DOWN - SUPERVISION IS OFF
+●  1 task(s) in flight, but no live watcher process holds this home lock (last beat: 3s ago).
+●  Trust the emitted supervision protocol for this harness; do not use shell & for watcher repair.
+●  This is a supervision warning only; the guarded operation WILL still run.
+●  After draining queued wakes, repair missing watcher supervision with a foreground checkpoint: bin/fm-watch-checkpoint.sh --seconds 180.
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WARNING: queued wakes pending - drain them with bin/fm-wake-drain.sh before anything else.
+
+Churn scenario and actionable override passed.
