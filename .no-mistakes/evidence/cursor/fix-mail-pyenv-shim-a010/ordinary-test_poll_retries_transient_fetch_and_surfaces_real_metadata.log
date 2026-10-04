@@ -1,0 +1,4 @@
+ok - fm-mail: a transient fetch failure recovers real metadata on a later poll
+Persisted wake queue:
+1791104021	1	check	mail:90009/41	check: mail 41 - mail from (no header) - unfetchable header - see fm-mail read
+1791104021	2	check	mail:90009/41	check: mail 41 - mail from alice@example.com - Hello captain

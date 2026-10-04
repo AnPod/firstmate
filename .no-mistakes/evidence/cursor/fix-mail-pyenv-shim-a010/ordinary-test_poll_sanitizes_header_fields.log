@@ -1,0 +1,6 @@
+.mail-validation/target.sh: line 2532: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431TJE0Y275EM461HB9PJDS/.mail-validation/tmp/fm-mail.jtiYxt/home/state/.mail-seen: No such file or directory
+.mail-validation/target.sh: line 2533: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M431TJE0Y275EM461HB9PJDS/.mail-validation/tmp/fm-mail.jtiYxt/home/state/.wake-queue: No such file or directory
+ok - fm-mail: poll sanitizes tabs and newlines in header fields
+Persisted wake queue:
+1791104022	1	check	mail:90009/60	check: mail 60 - mail from alice@example.com - Tab here
+1791104022	2	check	mail:90009/61	check: mail 61 - mail from alice@example.com - Line 99 fake

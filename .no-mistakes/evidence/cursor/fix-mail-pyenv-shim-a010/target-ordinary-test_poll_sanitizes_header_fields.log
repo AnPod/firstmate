@@ -1,0 +1,4 @@
+ok - fm-mail: poll sanitizes tabs and newlines in header fields
+Persisted wake queue:
+1791104064	1	check	mail:90009/60	check: mail 60 - mail from alice@example.com - Tab here
+1791104064	2	check	mail:90009/61	check: mail 61 - mail from alice@example.com - Line 99 fake

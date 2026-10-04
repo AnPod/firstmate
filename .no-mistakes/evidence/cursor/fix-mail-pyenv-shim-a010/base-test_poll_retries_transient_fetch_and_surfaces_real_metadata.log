@@ -1,0 +1,1 @@
+not ok - first poll of a failing fetch must succeed: expected exit 0, got 1

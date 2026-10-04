@@ -1,0 +1,2 @@
+not ok - first poll of a failing fetch must succeed: expected exit 0, got 1
+Captured poll output: shim recursion: fakebin selected python3 again
