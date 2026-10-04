@@ -22,9 +22,8 @@
 #   ship or scout spawn also refuses leftover `{TASK}` / `{FIRSTMATE_SPEC}`
 #   placeholders, an empty Task, an incomplete pair of Task subsections, or a
 #   `## Captain's intent` line opening with a Captain label or address.
-#   When a present subsection parses empty because an unfenced same-level
-#   heading ended it, that same refusal names the heading; bin/fm-dod-lib.sh
-#   owns the clause.
+#   bin/fm-dod-lib.sh owns the heading-cutoff clause in that refusal, including
+#   which ending headings it names and the nested-heading repair guidance.
 #   Every ship or scout spawn renders `launch-brief.md`; for a no-mistakes ship
 #   it also carries the current `--intent` contract and the extracted captain
 #   intent. A legacy mixed Task is accepted there only under bin/fm-dod-lib.sh's

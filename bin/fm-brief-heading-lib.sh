@@ -8,8 +8,8 @@
 # and the task text bin/fm-dispatch-resolve.sh sends to the router, so every
 # consumer sees the same section bodies.
 
-# Parse an exact ATX heading outside fenced blocks. Body mode prints through
-# the next unfenced heading at the same or a higher level; present mode reports
+# Parse an exact ATX heading outside fenced blocks. Body mode prints up to but
+# excludes the next unfenced heading at the same or a higher level; present mode reports
 # whether the heading exists; terminator mode prints that ending heading.
 fm_brief_heading_parse() {  # <file|-> <heading> <body|present|terminator>
   local file=$1 heading=$2 mode=$3 input=$1
