@@ -1228,10 +1228,11 @@ cmd_start() {
   esac
   exec 7<&-
   if [ "$extension_owner" -eq 1 ]; then
+    CDPATH='' cd -- /dev/fd/9 || die "cannot enter the source launch boundary: $id"
     launch_ready=".$id.$CLAIM_TOKEN.launch-ready"
-    launch_reply="$REG/.$id.$CLAIM_TOKEN.launch-reply"
-    (umask 077; : > "$REG/$launch_ready" && : > "$launch_reply") || {
-      rm -f -- "$REG/$launch_ready" "$launch_reply"
+    launch_reply=".$id.$CLAIM_TOKEN.launch-reply"
+    (umask 077; : > "$launch_ready" && : > "$launch_reply") || {
+      rm -f -- "$launch_ready" "$launch_reply"
       fm_procevent_source_lock_release "$id"
       die "cannot prepare the source launch boundary: $id"
     }
@@ -1243,23 +1244,24 @@ cmd_start() {
       "$CLAIM_TOKEN" "$runner" "$out" "$$" "$(fm_pid_identity "$$")" "$MAX_OUTPUT_BYTES" \
       "$launch_ready" -- "${ARGV[@]}" > "$launch_reply" &
     launch_pid=$!
-    while [ ! -s "$REG/$launch_ready" ] && kill -0 "$launch_pid" 2>/dev/null; do sleep 0.01; done
+    while [ ! -s "$launch_ready" ] && kill -0 "$launch_pid" 2>/dev/null; do sleep 0.01; done
     fm_procevent_source_lock_release "$id" \
       || die "cannot release the source launch boundary: $id"
     wait "$launch_pid" || {
-      rm -f -- "$REG/$launch_ready" "$launch_reply"
+      rm -f -- "$launch_ready" "$launch_reply"
       die "cannot safely stage the extension result"
     }
     CAPTURE_IN_FLIGHT=0
-    [ -s "$REG/$launch_ready" ] || {
-      rm -f -- "$REG/$launch_ready" "$launch_reply"
+    [ -s "$launch_ready" ] || {
+      rm -f -- "$launch_ready" "$launch_reply"
       die "cannot establish the source launch boundary: $id"
     }
     IFS= read -r capture_state < "$launch_reply" || capture_state=
-    rm -f -- "$REG/$launch_ready" "$launch_reply"
+    rm -f -- "$launch_ready" "$launch_reply"
     IFS=$'\t' read -r capture_state durable rc truncated reservation_terminal reservation_silent <<EOF
 $capture_state
 EOF
+    CDPATH='' cd -- /dev/fd/8 || die "cannot enter the external capture boundary: $id"
     exec 9<&-
     case "$capture_state" in
       captured|no-result) ;;
