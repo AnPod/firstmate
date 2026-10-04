@@ -1,0 +1,89 @@
+$ bin/fm-spawn.sh spec-cutoff <disposable-project> claude --mode direct-PR --yolo off
+exit=1
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n
+error: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n/data/spec-cutoff/brief.md must contain nonempty ## Captain's intent and ## Firstmate spec subsections (or a nonempty legacy # Task body) before spawn; ## Firstmate spec (ended at `## Scope`) parsed empty because a subsection body ends at the next unfenced heading of the same or higher level; put the body text before any such heading, and use ### or deeper for a heading that should stay inside the subsection
+Observed expectations: PASS
+
+$ bin/fm-spawn.sh intent-cutoff <disposable-project> claude --mode direct-PR --yolo off
+exit=1
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n
+error: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n/data/intent-cutoff/brief.md must contain nonempty ## Captain's intent and ## Firstmate spec subsections (or a nonempty legacy # Task body) before spawn; ## Captain's intent (ended at `## Ask`) parsed empty because a subsection body ends at the next unfenced heading of the same or higher level; put the body text before any such heading, and use ### or deeper for a heading that should stay inside the subsection
+Observed expectations: PASS
+
+$ bin/fm-spawn.sh both-cutoff <disposable-project> claude --mode direct-PR --yolo off
+exit=1
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n
+error: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n/data/both-cutoff/brief.md must contain nonempty ## Captain's intent and ## Firstmate spec subsections (or a nonempty legacy # Task body) before spawn; ## Captain's intent (ended at `## Ask`) and ## Firstmate spec (ended at `   ## Scope`) parsed empty because a subsection body ends at the next unfenced heading of the same or higher level; put the body text before any such heading, and use ### or deeper for a heading that should stay inside the subsection
+Observed expectations: PASS
+
+$ bin/fm-spawn.sh sibling-spec-0 <disposable-project> claude --mode direct-PR --yolo off
+exit=1
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n
+error: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n/data/sibling-spec-0/brief.md must contain nonempty ## Captain's intent and ## Firstmate spec subsections (or a nonempty legacy # Task body) before spawn
+Observed expectations: PASS
+
+$ bin/fm-spawn.sh sibling-intent-0 <disposable-project> claude --mode direct-PR --yolo off
+exit=1
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n
+error: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n/data/sibling-intent-0/brief.md must contain nonempty ## Captain's intent and ## Firstmate spec subsections (or a nonempty legacy # Task body) before spawn
+Observed expectations: PASS
+
+$ bin/fm-spawn.sh sibling-spec-1 <disposable-project> claude --mode direct-PR --yolo off
+exit=1
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n
+error: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n/data/sibling-spec-1/brief.md must contain nonempty ## Captain's intent and ## Firstmate spec subsections (or a nonempty legacy # Task body) before spawn
+Observed expectations: PASS
+
+$ bin/fm-spawn.sh sibling-intent-1 <disposable-project> claude --mode direct-PR --yolo off
+exit=1
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n
+error: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n/data/sibling-intent-1/brief.md must contain nonempty ## Captain's intent and ## Firstmate spec subsections (or a nonempty legacy # Task body) before spawn
+Observed expectations: PASS
+
+$ bin/fm-spawn.sh sibling-spec-2 <disposable-project> claude --mode direct-PR --yolo off
+exit=1
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n
+error: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n/data/sibling-spec-2/brief.md must contain nonempty ## Captain's intent and ## Firstmate spec subsections (or a nonempty legacy # Task body) before spawn
+Observed expectations: PASS
+
+$ bin/fm-spawn.sh sibling-intent-2 <disposable-project> claude --mode direct-PR --yolo off
+exit=1
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n
+error: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n/data/sibling-intent-2/brief.md must contain nonempty ## Captain's intent and ## Firstmate spec subsections (or a nonempty legacy # Task body) before spawn
+Observed expectations: PASS
+
+$ bin/fm-spawn.sh sibling-spec-3 <disposable-project> claude --mode direct-PR --yolo off
+exit=1
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n
+error: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n/data/sibling-spec-3/brief.md must contain nonempty ## Captain's intent and ## Firstmate spec subsections (or a nonempty legacy # Task body) before spawn
+Observed expectations: PASS
+
+$ bin/fm-spawn.sh sibling-intent-3 <disposable-project> claude --mode direct-PR --yolo off
+exit=1
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n
+error: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n/data/sibling-intent-3/brief.md must contain nonempty ## Captain's intent and ## Firstmate spec subsections (or a nonempty legacy # Task body) before spawn
+Observed expectations: PASS
+
+$ bin/fm-spawn.sh nested <disposable-project> claude --mode direct-PR --yolo off
+exit=1
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n
+error: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n/data/nested/brief.md ## Captain's intent has an operator-address line: Captain: Fix pager.; write the captain's actual words without a Captain label or address before spawn, since the heading already records provenance
+Observed expectations: PASS
+
+$ bin/fm-spawn.sh fenced <disposable-project> claude --mode direct-PR --yolo off
+exit=1
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n
+error: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n/data/fenced/brief.md ## Captain's intent has an operator-address line: Captain: Fix pager.; write the captain's actual words without a Captain label or address before spawn, since the heading already records provenance
+Observed expectations: PASS
+
+$ bin/fm-spawn.sh later <disposable-project> claude --mode direct-PR --yolo off
+exit=1
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n
+error: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n/data/later/brief.md ## Captain's intent has an operator-address line: Captain: Fix pager.; write the captain's actual words without a Captain label or address before spawn, since the heading already records provenance
+Observed expectations: PASS
+
+$ bin/fm-spawn.sh level-one <disposable-project> claude --mode direct-PR --yolo off
+exit=1
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n
+error: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4304YVDGZMQMD3QPG6WNREG/.spawn-lab-buuxjp9n/data/level-one/brief.md must contain nonempty ## Captain's intent and ## Firstmate spec subsections (or a nonempty legacy # Task body) before spawn
+Observed expectations: PASS
