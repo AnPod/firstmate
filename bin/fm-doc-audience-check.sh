@@ -10,8 +10,10 @@
 # rows. It does not keyword-lint prose.
 # When docs/scripts.md is tracked, every tracked file under bin/ needs exactly
 # one row in the toolbelt table, and every such row must name a tracked bin/ file.
-# Exactly one unfenced table must have Script as its first header cell and a
-# separator under it; missing or ambiguous candidates are refused explicitly.
+# Within the unfenced # The bin/ toolbelt section, exactly one unfenced table
+# must have Script as its first header cell and a separator under it.
+# The section ends at the next level-one heading; missing headings or missing
+# or ambiguous table candidates are refused explicitly.
 # Backtick and tilde fences (up to three leading spaces) are ignored, closing
 # only with the same delimiter and at least the opening length.
 # The selected table ends at the first line that is not a table row.
@@ -325,9 +327,25 @@ def toolbelt_row_names(text: str) -> list[str]:
             fence = (opening.group(1)[0], len(opening.group(1)))
             lines[index] = ""
 
-    candidates: list[int] = []
+    section_start = None
+    section_end = len(lines)
     for index, line in enumerate(lines):
-        header = toolbelt_table_body(line)
+        heading = re.match(r"^ {0,3}#\s+(.+?)\s*#*\s*$", line)
+        if heading is None:
+            continue
+        if section_start is not None:
+            section_end = index
+            break
+        if heading.group(1) == "The bin/ toolbelt":
+            section_start = index + 1
+    if section_start is None:
+        fail("bin toolbelt section missing: expected # The bin/ toolbelt")
+    # Preserve original line numbers while excluding tables outside this section.
+    lines = lines[:section_end]
+
+    candidates: list[int] = []
+    for index in range(section_start, section_end):
+        header = toolbelt_table_body(lines[index])
         if header is None:
             continue
         header_cells = header.split("|")

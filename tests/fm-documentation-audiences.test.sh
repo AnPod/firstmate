@@ -146,7 +146,7 @@ write_toolbelt_fixture() {
   printf '%s\n' '# Policy' > "$repo/docs/policy.md"
   printf '%s\n' '# Evidence' > "$repo/docs/evidence.md"
   cat > "$repo/docs/scripts.md" <<'MD'
-# Toolbelt
+# The bin/ toolbelt
 
 | Script | Purpose |
 | --- | --- |
@@ -190,7 +190,7 @@ test_toolbelt_rows_match_tracked_bin() {
 
   git -C "$repo" rm -fq bin/fm-absent.sh || fail "could not remove the extra bin fixture"
   cat > "$repo/docs/scripts.md" <<'MD'
-# Toolbelt
+# The bin/ toolbelt
 
 | Script | Purpose |
 | --- | --- |
@@ -204,7 +204,7 @@ MD
     "$CHECK" --root "$repo"
 
   cat > "$repo/docs/scripts.md" <<'MD'
-# Toolbelt
+# The bin/ toolbelt
 
 | Script | Purpose |
 | --- | --- |
@@ -223,7 +223,7 @@ test_toolbelt_rows_require_purpose_and_backticks() {
   write_toolbelt_fixture "$repo"
 
   cat > "$repo/docs/scripts.md" <<'MD'
-# Toolbelt
+# The bin/ toolbelt
 
 | Script | Purpose |
 | --- | --- |
@@ -235,7 +235,7 @@ MD
     "$CHECK" --root "$repo"
 
   cat > "$repo/docs/scripts.md" <<'MD'
-# Toolbelt
+# The bin/ toolbelt
 
 | Script | Purpose |
 | --- | --- |
@@ -247,7 +247,7 @@ MD
     "$CHECK" --root "$repo"
 
   cat > "$repo/docs/scripts.md" <<'MD'
-# Toolbelt
+# The bin/ toolbelt
 
 | Script | Purpose |
 | --- | --- |
@@ -265,7 +265,7 @@ test_toolbelt_ignores_other_tables_and_pipe_examples() {
   local repo="$TMP_ROOT/toolbelt-other-tables"
   write_toolbelt_fixture "$repo"
   cat > "$repo/docs/scripts.md" <<'MD'
-# Toolbelt
+# The bin/ toolbelt
 
 Other tables and pipe-prefixed examples are not toolbelt rows.
 
@@ -300,7 +300,7 @@ test_toolbelt_counts_rows_with_up_to_three_leading_spaces() {
   write_toolbelt_fixture "$repo"
 
   cat > "$repo/docs/scripts.md" <<'MD'
-# Toolbelt
+# The bin/ toolbelt
 
 | Script | Purpose |
 | --- | --- |
@@ -312,7 +312,7 @@ MD
     || fail "a toolbelt row indented by three spaces was not counted"
 
   cat > "$repo/docs/scripts.md" <<'MD'
-# Toolbelt
+# The bin/ toolbelt
 
 | Script | Purpose |
 | --- | --- |
@@ -325,7 +325,7 @@ MD
     "$CHECK" --root "$repo"
 
   cat > "$repo/docs/scripts.md" <<'MD'
-# Toolbelt
+# The bin/ toolbelt
 
 | Script | Purpose |
 | --- | --- |
@@ -363,7 +363,7 @@ elif mode == "extra":
     rows.append("| `fm-ghost.sh` | Extra row |\n")
 elif mode == "duplicate":
     rows.append(rows[0])
-Path(path).write_text("# Toolbelt\n\n" + example + header + "".join(rows))
+Path(path).write_text(example + "# The bin/ toolbelt\n\n" + example + header + "".join(rows))
 PYFIXTURE
       case "$mode" in
         valid)
@@ -389,10 +389,22 @@ from pathlib import Path
 path = Path(sys.argv[1])
 path.write_text("| Script | Note |\n| --- | --- |\n| unrelated | Example |\n\n" + path.read_text())
 PYFIXTURE
-  run_expect_failure "bin toolbelt table ambiguous: found 2 unfenced Script tables"     "$CHECK" --root "$repo"
+  "$CHECK" --root "$repo" >/dev/null \
+    || fail "an unrelated Script table before the toolbelt was selected"
+
+  cat >> "$repo/docs/scripts.md" <<'MD'
+
+## More tools
+
+| Script | Purpose |
+| --- | --- |
+| `fm-present.sh` | Second candidate inside the section |
+MD
+  run_expect_failure "bin toolbelt table ambiguous: found 2 unfenced Script tables" \
+    "$CHECK" --root "$repo"
 
   cat > "$repo/docs/scripts.md" <<'MD'
-# Toolbelt
+# The bin/ toolbelt
 
 ```markdown
 | Script | Purpose |
@@ -405,7 +417,46 @@ PYFIXTURE
 | unrelated | Example |
 MD
   run_expect_failure "bin toolbelt table missing: expected exactly one unfenced Script table"     "$CHECK" --root "$repo"
-  pass "missing and ambiguous unfenced Script tables fail explicitly"
+  write_toolbelt_fixture "$repo"
+  cat >> "$repo/docs/scripts.md" <<'MD'
+
+# Other section
+
+| Script | Purpose |
+| --- | --- |
+| `fm-ghost.sh` | Outside the toolbelt section |
+MD
+  "$CHECK" --root "$repo" >/dev/null \
+    || fail "a Script table after the next level-one heading was selected"
+
+  cat > "$repo/docs/scripts.md" <<'MD'
+# The bin/ toolbelt
+
+# Other section
+
+| Script | Purpose |
+| --- | --- |
+| `fm-present.sh` | Outside the toolbelt section |
+| `backends/helper.py` | Outside the toolbelt section |
+MD
+  run_expect_failure "bin toolbelt table missing: expected exactly one unfenced Script table" \
+    "$CHECK" --root "$repo"
+
+  cat > "$repo/docs/scripts.md" <<'MD'
+```markdown
+# The bin/ toolbelt
+```
+
+# Other section
+
+| Script | Purpose |
+| --- | --- |
+| `fm-present.sh` | Present entrypoint |
+| `backends/helper.py` | Nested helper |
+MD
+  run_expect_failure "bin toolbelt section missing: expected # The bin/ toolbelt" \
+    "$CHECK" --root "$repo"
+  pass "only one unfenced Script table inside the toolbelt section is accepted"
 }
 
 test_repository_inventory_passes
