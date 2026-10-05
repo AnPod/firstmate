@@ -19,8 +19,8 @@ Verified on 2026-06-11 across versions 1.15.7 through 1.17.6, with busy-queue be
 
 OpenCode can auto-upgrade in the background, and the running TUI can exit mid-task.
 That behavior was observed live during an upgrade from 1.15.7 to 1.17.3.
-If a Firstmate-managed task's pane shows the exit banner, native `--continue` is not its recovery path.
-Follow `../stuck-crewmate-recovery/SKILL.md` through `references/common/control-and-recovery.md` and use the guarded relaunch: `FM_HOME=<this-firstmate-home> bin/fm-control.sh <task-id> relaunch --note '<progress so far>'`.
+If a Firstmate-managed pane shows the exit banner, follow `references/common/control-and-recovery.md`: crewmates (ship/scout tasks) use `../stuck-crewmate-recovery/SKILL.md` and the guarded relaunch: `FM_HOME=<this-firstmate-home> bin/fm-control.sh <task-id> relaunch --note '<progress so far>'`.
+Secondmates follow the Recovery section of `../secondmate-provisioning/SKILL.md`.
 The native resume row above records tool behavior only for cases where that recovery procedure explicitly calls for it.
 
 ## Busy-queued Enter
