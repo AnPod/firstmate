@@ -1161,6 +1161,33 @@ test_manual_backend_captain_hold_keeps_generated_briefs() {
   pass "a captain-held task on a manual backlog keeps generated briefs"
 }
 
+test_manual_backend_without_task_directory_skips_tasks_axi() {
+  local case_dir rc
+  case_dir=$(make_case manual-no-directory-brief-cleanup)
+  write_meta "$case_dir" no-mistakes ship
+  printf '%s\n' manual > "$case_dir/config/backlog-backend"
+  assert_absent "$case_dir/data/task-x1" "fixture unexpectedly has a task directory"
+  : > "$case_dir/tasks-axi.calls"
+  cat > "$case_dir/fakebin/tasks-axi" <<'SH'
+#!/usr/bin/env bash
+printf '%s\n' "$*" >> "$FM_TASKS_AXI_CALLS"
+exit 1
+SH
+  chmod +x "$case_dir/fakebin/tasks-axi"
+
+  set +e
+  FM_TASKS_AXI_CALLS="$case_dir/tasks-axi.calls" \
+    run_teardown "$case_dir" > "$case_dir/stdout" 2> "$case_dir/stderr"
+  rc=$?
+  set -e
+
+  expect_code 0 "$rc" "manual-no-directory-brief-cleanup: teardown should succeed: $(cat "$case_dir/stderr")"
+  assert_absent "$case_dir/state/task-x1.meta" "manual-no-directory-brief-cleanup: task record still present"
+  [ ! -s "$case_dir/tasks-axi.calls" ] \
+    || fail "manual teardown without a task directory invoked tasks-axi: $(cat "$case_dir/tasks-axi.calls")"
+  pass "a manual backlog without a task directory does not invoke tasks-axi"
+}
+
 test_manual_backend_without_hold_removes_generated_briefs() {
   local case_dir rc
   case_dir=$(make_case manual-unheld-brief-cleanup)
@@ -4812,6 +4839,7 @@ test_captain_held_teardown_keeps_generated_briefs
 test_landed_scout_teardown_removes_briefs_and_keeps_the_report
 test_teardown_manual_backend_leaves_the_backlog_to_the_operator
 test_manual_backend_captain_hold_keeps_generated_briefs
+test_manual_backend_without_task_directory_skips_tasks_axi
 test_manual_backend_without_hold_removes_generated_briefs
 test_local_only_truly_unpushed_refuses
 test_local_only_merged_to_local_main_allows

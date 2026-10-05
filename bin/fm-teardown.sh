@@ -1467,6 +1467,16 @@ remove_landed_launch_briefs() {
   [ "$KIND" = ship ] || [ "$KIND" = scout ] || return 0
   [ "$FORCE" != --force ] || return 0
   [ "${BACKLOG_TRANSITION:-close}" != retain ] || return 0
+  dir=$DATA/$ID
+  if [ ! -e "$dir" ] && [ ! -L "$dir" ]; then
+    release_launch_input_cleanup
+    return 0
+  fi
+  if [ -L "$dir" ] || [ ! -d "$dir" ]; then
+    echo "warning: leaving generated launch inputs for $ID; $dir is not a real directory" >&2
+    release_launch_input_cleanup
+    return 0
+  fi
   if [ "${TEARDOWN_BACKLOG_APPLIES:-0}" != 1 ] && fm_backlog_backend_manual "$CONFIG"; then
     open_status=0
     FM_HOME="$FM_HOME" FM_STATE_OVERRIDE="$STATE" \
@@ -1478,16 +1488,6 @@ remove_landed_launch_briefs() {
       fi
       return 0
     fi
-  fi
-  dir=$DATA/$ID
-  if [ ! -e "$dir" ] && [ ! -L "$dir" ]; then
-    release_launch_input_cleanup
-    return 0
-  fi
-  if [ -L "$dir" ] || [ ! -d "$dir" ]; then
-    echo "warning: leaving generated launch inputs for $ID; $dir is not a real directory" >&2
-    release_launch_input_cleanup
-    return 0
   fi
   if ! LAUNCH_INPUT_MANIFEST=$(mktemp "$STATE/.launch-inputs-$ID.XXXXXX"); then
     echo "warning: cannot create generated launch input manifest for $ID; retaining task record for retry" >&2
