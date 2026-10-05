@@ -65,7 +65,8 @@
 # by itself causes a false refusal of landed work.
 # A gh lookup error falls back to the content check; if that is also inconclusive,
 # teardown refuses rather than risk discarding unlanded work.
-# Uncommitted changes are never landed.
+# Uncommitted changes are never landed; dirty refusals distinguish untracked-only
+# leftovers from tracked edits and list at most ten non-exempt untracked paths.
 # local-only projects additionally accept work merged into the local default
 # branch (firstmate performs that merge after configured approval) as a fallback
 # for the common case where there is no remote at all.
@@ -88,8 +89,17 @@
 # session-start sweep could still close, while a journal bound to any other pane
 # - or a version 1 attempt whose workspace is still present or unreadable - may
 # name a live quarantined space and is retained for that sweep.
-# data/<id>/ is deliberately left in place: a successor spawn reads brief.md
-# from it.
+# data/<id>/ stays. A landed ship or scout close removes generated launch inputs
+# there: brief.md, launch-brief.md, ship-instructions.md, and their in-progress
+# render temps. Teardown takes the spawn lock before the meta lock and holds it
+# through cleanup and record removal; contention or unverifiable ownership refuses
+# before destructive cleanup, preserving the inputs and task record for retry.
+# Enumeration or removal failure preserves the task record for retry. report.md and every other durable record, including
+# contributions.json, stay. A --force discard and a captain-held retain leave
+# the briefs, because a successor spawn of that same id still reads brief.md.
+# A manual backlog never records that retain, so the same question is asked
+# again at removal time: briefs stay unless the read proves the item is not
+# held, and a failed read keeps them too.
 # Worktree-slot ownership (teardown-slot-collision): a treehouse pool slot is
 # reused across tasks, so a stale, duplicated, or drifted worktree= record can
 # name a slot a DIFFERENT live task now holds. Cleanup kills every process under
@@ -98,7 +108,10 @@
 # cleanup step, teardown verifies record exclusivity: no OTHER task record in
 # this home or any locally registered Firstmate home may name the same live path
 # in its worktree= or home=. One live path with two task records is the reuse
-# collision itself, whichever record is stale.
+# collision itself, whichever record is stale. The one exception is a slot whose
+# owner claim (below) names another task: this teardown is then records-only and
+# touches nothing under the slot, so the scan is skipped rather than stranding
+# the stale record and, with it, the claimant's own teardown.
 # That scan alone cannot prove THIS record is the current owner, because the task
 # that took the slot next may leave no record it can reach - its own worker may
 # have exited and its record been cleaned up, or it may live in a home this
@@ -175,7 +188,8 @@
 # leased home and state in place instead of hiding a still-held lease.
 # Usage: fm-teardown.sh <task-id> [--force] [--legacy-record]
 #   --force skips ordinary-task dirty and landed-work checks, skips scout report
-#   checks, and discards secondmate child work for kind=secondmate. Only use it
+#   checks, and discards secondmate child work for kind=secondmate. It also
+#   leaves generated launch briefs in place for a successor spawn. Only use it
 #   when the captain has explicitly said to discard the work.
 #   --legacy-record accepts a task record that predates the spawn_gen field:
 #   teardown then proceeds only when the recorded endpoint is confirmed dead or
@@ -448,8 +462,23 @@ DESCENDANT_TASK_IDS=()
 DESCENDANT_TASK_KINDS=()
 DESCENDANT_TASK_HOMES=()
 DESCENDANT_TREEHOUSE_LOCK_PATHS=()
+LAUNCH_INPUT_LOCK_HELD=0
+LAUNCH_INPUT_MANIFEST=
+release_launch_input_cleanup() {
+  local cleanup_status=0
+  if [ -n "$LAUNCH_INPUT_MANIFEST" ]; then
+    if rm -f -- "$LAUNCH_INPUT_MANIFEST"; then
+      LAUNCH_INPUT_MANIFEST=
+    else
+      echo "warning: cannot remove generated launch input manifest for $ID; retaining task record for retry" >&2
+      cleanup_status=1
+    fi
+  fi
+  return "$cleanup_status"
+}
 teardown_release_locks() {
   local status=$? i
+  release_launch_input_cleanup || true
   if declare -F teardown_release_herdr_locks >/dev/null 2>&1; then
     teardown_release_herdr_locks || true
   fi
@@ -472,6 +501,10 @@ teardown_release_locks() {
   if [ "$META_LOCK_HELD" = 1 ]; then
     fm_lock_release "$META_LOCK" || true
     META_LOCK_HELD=0
+  fi
+  if [ "$LAUNCH_INPUT_LOCK_HELD" = 1 ]; then
+    fm_lock_release "$STATE/.spawn-$ID.lock" || true
+    LAUNCH_INPUT_LOCK_HELD=0
   fi
   if [ -n "${SM_LIVENESS_LOCK:-}" ]; then
     fm_lock_release "$SM_LIVENESS_LOCK" || true
@@ -503,6 +536,16 @@ fm_backlog_record_present "$META" "task record" "$STATE" || {
   echo "error: teardown refused: $FM_BACKLOG_TRANSITION_ERROR" >&2
   exit 1
 }
+# Match spawn's lock order and exclude same-ID launch readers and renderers.
+if ! fm_lock_try_acquire "$STATE/.spawn-$ID.lock"; then
+  if [ -n "${FM_LOCK_HELD_PID:-}" ] && fm_pid_alive "$FM_LOCK_HELD_PID"; then
+    echo "error: teardown refused: a spawn is in progress for $ID (pid $FM_LOCK_HELD_PID); preserving task record and launch inputs for retry" >&2
+  else
+    echo "error: teardown refused: spawn lock ownership/acquisition could not be verified for $ID; preserving task record and launch inputs for retry" >&2
+  fi
+  exit 1
+fi
+LAUNCH_INPUT_LOCK_HELD=1
 META_LOCK=$(fm_meta_lock_path "$META") || exit 1
 fm_lock_acquire_wait "$META_LOCK"
 META_LOCK_HELD=1
@@ -1408,6 +1451,86 @@ retire_busy_state() {
   fi
 }
 
+# Drop generated launch inputs after a landed ship or scout close. The task
+# directory itself stays, and so does every file this function does not name:
+# report.md is the scout deliverable, and contributions.json is the durable
+# observation record. A symlink or other non-regular input is left in place
+# rather than followed. A --force discard and a captain-held retain skip this
+# entirely so a successor spawn can still read brief.md. A manual backlog
+# skips that retain, so this asks the same open question and keeps the briefs
+# unless the read proves the item is not held.
+# A busy spawn preserves inputs without blocking record cleanup. Enumerate render
+# temps successfully before deleting anything; a failed sweep retains the task
+# record for retry. The EXIT cleanup also releases an interrupted spawn-lock hold.
+remove_landed_launch_briefs() {
+  local dir path name open_status
+  [ "$KIND" = ship ] || [ "$KIND" = scout ] || return 0
+  [ "$FORCE" != --force ] || return 0
+  [ "${BACKLOG_TRANSITION:-close}" != retain ] || return 0
+  dir=$DATA/$ID
+  if [ ! -e "$dir" ] && [ ! -L "$dir" ]; then
+    release_launch_input_cleanup
+    return 0
+  fi
+  if [ -L "$dir" ] || [ ! -d "$dir" ]; then
+    echo "warning: leaving generated launch inputs for $ID; $dir is not a real directory" >&2
+    release_launch_input_cleanup
+    return 0
+  fi
+  if [ "${TEARDOWN_BACKLOG_APPLIES:-0}" != 1 ] && fm_backlog_backend_manual "$CONFIG"; then
+    open_status=0
+    FM_HOME="$FM_HOME" FM_STATE_OVERRIDE="$STATE" \
+      FM_DATA_OVERRIDE="$DATA" FM_CONFIG_OVERRIDE="$CONFIG" \
+      "$SCRIPT_DIR/fm-captain-hold.sh" open "$ID" >/dev/null 2>&1 || open_status=$?
+    if [ "$open_status" != 1 ]; then
+      if [ "$open_status" != 0 ]; then
+        echo "warning: leaving generated launch inputs for $ID; whether its backlog item is still held for the captain could not be read" >&2
+      fi
+      return 0
+    fi
+  fi
+  if ! LAUNCH_INPUT_MANIFEST=$(mktemp "$STATE/.launch-inputs-$ID.XXXXXX"); then
+    echo "warning: cannot create generated launch input manifest for $ID; retaining task record for retry" >&2
+    release_launch_input_cleanup
+    return 1
+  fi
+  if ! find "$dir" -mindepth 1 -maxdepth 1 \( \
+      -name '.launch-brief.md.*' -o \
+      -name '.ship-instructions.md.*' -o \
+      -name '.brief.md.promote.*' -o \
+      -name '.brief.md.scout.*' \
+    \) -print0 > "$LAUNCH_INPUT_MANIFEST"; then
+    echo "warning: cannot enumerate generated launch inputs for $ID; retaining task record for retry" >&2
+    release_launch_input_cleanup
+    return 1
+  fi
+  for name in brief.md launch-brief.md ship-instructions.md; do
+    path=$dir/$name
+    [ -e "$path" ] || [ -L "$path" ] || continue
+    if [ -L "$path" ] || [ ! -f "$path" ]; then
+      echo "warning: leaving $path; landed teardown removes only a regular generated launch input" >&2
+      continue
+    fi
+    if ! rm -f -- "$path"; then
+      echo "warning: cannot remove generated launch input $path; retaining task record for retry" >&2
+      release_launch_input_cleanup
+      return 1
+    fi
+  done
+  while IFS= read -r -d '' path; do
+    if [ -L "$path" ] || [ ! -f "$path" ]; then
+      echo "warning: leaving $path; landed teardown removes only a regular generated launch input" >&2
+      continue
+    fi
+    if ! rm -f -- "$path"; then
+      echo "warning: cannot remove generated launch input $path; retaining task record for retry" >&2
+      release_launch_input_cleanup
+      return 1
+    fi
+  done < "$LAUNCH_INPUT_MANIFEST"
+  release_launch_input_cleanup
+}
+
 validate_pr_poll_cleanup() {
   local state_dir=$1 id=$2 state_device artifact has_artifact=0
   fm_task_id_path_safe "$id" || return 0
@@ -1861,6 +1984,23 @@ teardown_treehouse_return() {
   return 1
 }
 
+report_worktree_dirt() {
+  # Use the same porcelain snapshot and exemptions as the refusal predicate.
+  printf '%s\n' "$1" | awk '
+    /^\?\? / { if (++untracked <= 10) paths = paths "  " substr($0, 4) "\n"; next }
+    NF { tracked = 1 }
+    END {
+      if (tracked) print "uncommitted changes present (includes tracked edits)"
+      else print "uncommitted changes present (untracked-only leftovers)"
+      if (untracked) {
+        print "untracked paths (up to 10):"
+        printf "%s", paths
+        if (untracked > 10) print "  ... additional untracked paths omitted"
+      }
+    }
+  ' >&2
+}
+
 validate_worktree_teardown_safety() {
   local dirty_raw dirty unpushed_raw unpushed DEFAULT unmerged_raw unmerged branch
   [ -d "$WT" ] || return 0
@@ -1877,7 +2017,7 @@ validate_worktree_teardown_safety() {
     echo "Restore the git index state, or get the captain's explicit OK to discard, then --force." >&2
     return 1
   fi
-  dirty=$(printf '%s\n' "$dirty_raw" | grep -vE '^\?\? (\.claude/|\.fm-(grok|kimi)-turnend$)' | head -1 || true)
+  dirty=$(printf '%s\n' "$dirty_raw" | grep -vE '^\?\? (\.claude/|\.fm-(grok|kimi)-turnend$)' || true)
 
   if ! unpushed_raw=$(git -C "$WT" log --oneline HEAD --not --remotes -- 2>/dev/null); then
     if worktree_safety_blocked_by_lock "commits not on a remote"; then
@@ -1902,14 +2042,14 @@ validate_worktree_teardown_safety() {
     unmerged=$(printf '%s\n' "$unmerged_raw" | head -5)
     if [ -n "$dirty" ] || [ -n "$unmerged" ]; then
       echo "REFUSED: local-only worktree $WT has work not yet merged into $DEFAULT and not on any remote." >&2
-      [ -n "$dirty" ] && echo "uncommitted changes present" >&2
+      [ -n "$dirty" ] && report_worktree_dirt "$dirty"
       [ -n "$unmerged" ] && printf 'commits not yet on %s:\n%s\n' "$DEFAULT" "$unmerged" >&2
       echo "Merge the branch into local $DEFAULT first (bin/fm-merge-local.sh after the captain approves), or push to a fork/remote, or get the captain's explicit OK to discard, then --force." >&2
       return 1
     fi
   elif [ -n "$dirty" ]; then
     echo "REFUSED: worktree $WT has uncommitted changes." >&2
-    echo "uncommitted changes present" >&2
+    report_worktree_dirt "$dirty"
     echo "Commit them (or get the captain's explicit OK to discard, then --force)." >&2
     return 1
   elif [ -n "$unpushed" ]; then
@@ -2357,6 +2497,12 @@ require_exclusive_worktree_slot_record() {
   local record_meta=$1 record_id=$2 record_state=$3 worktree=$4
   local slot state_dir other other_id field other_path other_slot
   slot=$(canonical_existing_dir "$worktree") || return 0
+  # A slot whose owner claim names another task was reassigned, so this record's
+  # teardown is records-only and touches nothing under it; another record naming
+  # the slot is then no hazard, and refusing would strand this stale record and
+  # block the claimant's own teardown behind it.
+  fm_treehouse_slot_owner_state "$slot" "$record_id"
+  [ "$FM_TREEHOUSE_SLOT_OWNER" != other ] || return 0
   collect_local_firstmate_states "$record_state" || return 1
   for state_dir in "${TREEHOUSE_OWNER_STATES[@]}"; do
     for other in "$state_dir"/*.meta; do
@@ -2390,11 +2536,11 @@ require_exclusive_task_worktree_slot() {
 # Positive slot ownership, read from the claim the task that took the slot wrote
 # into the slot itself (bin/fm-wake-lib.sh owns the claim and its states).
 #
-# The record scan above proves that no OTHER task record names this slot. It
-# cannot prove that THIS record is not the stale one, because the task that took
-# the slot next may leave no record this scan can reach: its own worker may have
-# exited and its record been cleaned up, or it may belong to a home this machine
-# does not register. The claim closes that gap from the other side - it names the
+# For a slot this task still claims, or one with no claim, the record scan above
+# proves that no OTHER task record names it. It cannot prove that THIS record is
+# not the stale one, because the task that took the slot next may leave no record
+# this scan can reach: its own worker may have exited and its record been cleaned
+# up, or it may belong to a home this machine does not register. The claim closes that gap from the other side - it names the
 # task that actually took the slot, and it is written under the same project lock
 # that allocates it - so a claim naming another task is proof the slot was
 # reassigned after this record was written.
@@ -3796,6 +3942,10 @@ if [ -e "$HERDR_PRESENTATION_JOURNAL" ] || [ -L "$HERDR_PRESENTATION_JOURNAL" ];
     echo "warning: retaining herdr presentation journal for $ID; it still names a projected workspace the session-start sweep owns, not the closed endpoint" >&2
   fi
 fi
+# Generated launch briefs are not the deliverable. Remove them only after the
+# endpoint is gone and every earlier refusal has already kept the task intact,
+# and before the record itself goes, so a failed removal can still be retried.
+remove_landed_launch_briefs || exit 1
 # The record is gone, so the backlog must not still show this task in flight
 # when teardown reports success. Still under this task's meta lock, so a steer
 # racing the same id stays serialized exactly as it was before. A captain-held
