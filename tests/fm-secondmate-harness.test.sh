@@ -330,6 +330,21 @@ test_destination_verdicts() {
       [ ! -e "$d/dest/crew-harness" ] || fail "$phase destination still exists"
     fi
   done
+  printf 'pi\n' > "$d/src/crew-harness"
+  cp "$d/src/crew-harness" "$d/link-target"
+  ln -s "$d/link-target" "$d/dest/crew-harness"
+  : > "$report"
+  FM_INHERITABLE_CONFIG=crew-harness FM_CONFIG_INHERIT_REPORT="$report" \
+    propagate_inheritable_config "$d/src" "$d/dest" || fail "identical symlink propagation failed"
+  assert_contains "$(cat "$report")" $'crew-harness\tpushed\t' "identical symlink verdict wrong"
+  [ ! -L "$d/dest/crew-harness" ] && [ -f "$d/dest/crew-harness" ] || \
+    fail "identical destination symlink was not replaced with a regular file"
+  cmp -s "$d/src/crew-harness" "$d/dest/crew-harness" || fail "identical symlink replacement bytes wrong"
+  cmp -s "$d/src/crew-harness" "$d/link-target" || fail "identical symlink target was overwritten"
+  : > "$report"
+  FM_INHERITABLE_CONFIG=crew-harness FM_CONFIG_INHERIT_REPORT="$report" \
+    propagate_inheritable_config "$d/src" "$d/dest" || fail "symlink replacement repeat failed"
+  assert_contains "$(cat "$report")" $'crew-harness\tunchanged\t' "symlink replacement repeat verdict wrong"
   printf 'old\n' > "$d/dest/crew-harness"
   printf 'new\n' > "$d/src/crew-harness"
   for phase in before after; do
