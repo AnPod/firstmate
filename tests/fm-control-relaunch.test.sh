@@ -816,6 +816,24 @@ test_claude_permission_mode_refuses_before_stop() {
   pass "fm-control relaunch: invalid Claude permission modes refuse before stopping the old agent"
 }
 
+test_non_claude_permission_mode_refuses_before_stop() {
+  local dir out rc id=rl-permission-non-claude
+  dir=$(new_case permission-non-claude "$id")
+  add_ship_task "$dir" "$id" claude
+  printf 'codex' > "$dir/fake/becomes"
+  mkdir -p "$dir/home/config"
+  printf 'bogus\n' > "$dir/home/config/claude-permission-mode"
+  cp "$dir/home/state/$id.meta" "$dir/meta-before"
+  out=$(run_control "$dir" "$id" relaunch --harness codex --note "invalid permission mode"); rc=$?
+  expect_code 1 "$rc" "invalid permission mode must refuse a non-Claude replacement"
+  assert_contains "$out" "error: config/claude-permission-mode holds 'bogus'; accepted values are: bypass (--dangerously-skip-permissions, the default when the file is absent), auto (--permission-mode auto)" "permission-mode refusal diagnostic missing"
+  [ "$(cat "$dir/fake/command")" = claude ] || fail "invalid permission mode stopped the old agent"
+  [ ! -s "$dir/fake/literal" ] || fail "invalid permission mode sent lifecycle input"
+  [ ! -s "$dir/fake/keys" ] || fail "invalid permission mode sent lifecycle keys"
+  cmp -s "$dir/meta-before" "$dir/home/state/$id.meta" || fail "permission-mode refusal changed the task record"
+  pass "fm-control relaunch: invalid permission mode refuses a non-Claude replacement before stopping the old agent"
+}
+
 test_claude_permission_mode_follows_the_relaunch() {
   local dir out rc mode flag id=rl-permission
   for mode in bypass auto; do
@@ -2596,6 +2614,7 @@ test_same_harness_relaunch_keeps_the_profile_axes
 test_native_ultra_relaunch_preserves_profile_and_rejects_before_stop
 test_signed_out_worker_account_pin_refuses_before_stop
 test_claude_permission_mode_refuses_before_stop
+test_non_claude_permission_mode_refuses_before_stop
 test_claude_permission_mode_follows_the_relaunch
 test_worker_account_pin_follows_the_relaunch
 test_pi_exclude_tools_follow_the_relaunch

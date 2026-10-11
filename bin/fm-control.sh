@@ -76,7 +76,7 @@
 #              worker account pin (bin/fm-worker-account-lib.sh) here, so a pin
 #              that no longer resolves or is signed out refuses before the old
 #              agent stops.
-#              Claude replacements also validate config/claude-permission-mode
+#              Every replacement also validates config/claude-permission-mode
 #              before stopping the old agent (bin/fm-config-inherit-lib.sh).
 #              The same pre-stop refusal applies to this home's worker tool
 #              exclusions (bin/fm-exclude-tools-lib.sh): a malformed list, or a
@@ -965,9 +965,7 @@ resolve_relaunch_profile() {
   [ "$account_model" != default ] || account_model=
   fm_worker_account_select "$TARGET_HARNESS" "${FM_CONFIG_OVERRIDE:-$FM_HOME/config}" \
     "$account_model" "$TARGET_HARNESS" >/dev/null || return 1
-  if [ "$TARGET_HARNESS" = claude ]; then
-    fm_claude_permission_mode_resolve "${FM_CONFIG_OVERRIDE:-$FM_HOME/config}" >/dev/null || return 1
-  fi
+  fm_claude_permission_mode_resolve "${FM_CONFIG_OVERRIDE:-$FM_HOME/config}" >/dev/null || return 1
   # Likewise config/crew-exclude-tools: a malformed file, or a replacement
   # runtime that cannot hide the listed tools, refuses here, before the old
   # agent stops. Secondmate agents are not covered.
