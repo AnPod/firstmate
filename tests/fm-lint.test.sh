@@ -1925,35 +1925,44 @@ SH
   pass "the roots sidecar and telemetry record the run's final exit status"
 }
 
-test_comma_decimal_worker_timing() {
-  local tmp fakebin fixture telemetry roots_log out rc
-  tmp=$(fm_test_tmproot fm-lint-comma-timing)
-  fakebin=$(fm_fakebin "$tmp")
-  fm_lint_stub_shellcheck "$fakebin" "$tmp/stub.log"
-  fixture="$tmp/clean.sh"
-  telemetry="$tmp/lint.tsv"
-  roots_log="$tmp/lint.roots.tsv"
-  printf '#!/usr/bin/env bash\nexit 0\n' > "$fixture"
-  # Simulate a comma-decimal locale even on hosts with only C/POSIX locales.
-  # BASH_ENV applies to both the lint coordinator and its Bash workers.
-  cat > "$tmp/bash-env" <<'SH'
-unset EPOCHREALTIME
-EPOCHREALTIME=1791579450,003863
-SH
-  rc=0
-  out=$(PATH="$fakebin:$PATH" BASH_ENV="$tmp/bash-env" FM_LINT_JOBS=1 \
-    "$LINT" --telemetry "$telemetry" "$fixture" 2>&1) || rc=$?
-  [ "$rc" -eq 0 ] || fail "comma-decimal worker timing failed"$'\n'"$out"
-  assert_not_contains "$out" "value too great for base" "comma-decimal timing caused an arithmetic error"
-  assert_not_contains "$out" "operand expected" "comma-decimal timing broke deadline arithmetic"
-  awk -F '\t' '$1 == "begin" { n++; if ($6 != "1791579450003") exit 1 }
-    END { if (n != 1) exit 1 }' "$roots_log" \
-    || fail "the worker did not record the expected begin timestamp"
-  awk -F '\t' '$1 == "end" { n++; if ($6 != "1791579450003" ||
-    $7 != "1791579450003" || $8 != 0 || $9 != 0 || $10 != "ok") exit 1 }
-    END { if (n != 1) exit 1 }' "$roots_log" \
-    || fail "the worker did not record the expected timestamps and zero duration"
-  pass "lint worker timing accepts a comma-decimal EPOCHREALTIME"
+test_worker_timing_decimal_and_fallback() {
+  local tmp fakebin fixture telemetry roots_log out rc raw expected
+  for raw in 1791579450,003863 1791579450.003863 absent; do
+    tmp=$(fm_test_tmproot fm-lint-worker-timing)
+    fakebin=$(fm_fakebin "$tmp")
+    fm_lint_stub_shellcheck "$fakebin" "$tmp/stub.log"
+    fixture="$tmp/clean.sh"
+    telemetry="$tmp/lint.tsv"
+    roots_log="$tmp/lint.roots.tsv"
+    printf '#!/usr/bin/env bash\nexit 0\n' > "$fixture"
+    # Simulate a comma-decimal locale even on hosts with only C/POSIX locales.
+    # BASH_ENV applies to both the lint coordinator and its Bash workers.
+    printf 'unset EPOCHREALTIME\n' > "$tmp/bash-env"
+    expected=1791579450003
+    if [ "$raw" = absent ]; then
+      expected=1791579450000
+      # Pin the fallback clock so begin/end assertions cannot race a second tick.
+      printf '#!/usr/bin/env bash\nif [ "$1" = +%%s ]; then\n  printf "1791579450\\n"\nelse\n  exec %q "$@"\nfi\n' \
+        "$(command -v date)" > "$fakebin/date"
+      chmod +x "$fakebin/date"
+    else
+      printf 'EPOCHREALTIME=%q\n' "$raw" >> "$tmp/bash-env"
+    fi
+    rc=0
+    out=$(PATH="$fakebin:$PATH" BASH_ENV="$tmp/bash-env" FM_LINT_JOBS=1 \
+      "$LINT" --telemetry "$telemetry" "$fixture" 2>&1) || rc=$?
+    [ "$rc" -eq 0 ] || fail "worker timing failed for $raw"$'\n'"$out"
+    assert_not_contains "$out" "value too great for base" "comma-decimal timing caused an arithmetic error"
+    assert_not_contains "$out" "operand expected" "comma-decimal timing broke deadline arithmetic"
+    awk -F '\t' -v expected="$expected" '$1 == "begin" { n++; if ($6 != expected) exit 1 }
+      END { if (n != 1) exit 1 }' "$roots_log" \
+      || fail "the worker did not record the expected begin timestamp"
+    awk -F '\t' -v expected="$expected" '$1 == "end" { n++; if ($6 != expected ||
+      $7 != expected || $8 != 0 || $9 != 0 || $10 != "ok") exit 1 }
+      END { if (n != 1) exit 1 }' "$roots_log" \
+      || fail "the worker did not record the expected timestamps and zero duration"
+    pass "lint worker timing accepts EPOCHREALTIME=$raw"
+  done
 }
 
 test_roots_sidecar_records_per_root_lifecycle() {
@@ -2094,7 +2103,7 @@ test_source_excerpt_with_oom_text_stays_findings
 test_require_bounds_refuses_when_enforcement_is_missing
 test_pinned_shellcheck_memory_limit
 test_sidecar_result_exit_reflects_final_status
-test_comma_decimal_worker_timing
+test_worker_timing_decimal_and_fallback
 test_roots_sidecar_records_per_root_lifecycle
 test_seeded_module_boundary_parity
 test_changed_mode_lints_only_the_changed_file
