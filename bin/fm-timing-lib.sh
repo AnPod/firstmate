@@ -10,8 +10,9 @@
 # manual tracing. These helpers record per-step elapsed times as the run happens,
 # so the next slow run is answerable from the durable record alone.
 #
-# OFF BY DEFAULT, AND INERT. Every helper is a no-op unless FM_TIMING_LOG names a
-# file. Nothing here talks to the network, waits, locks, or changes control flow:
+# OFF BY DEFAULT, AND INERT. Recording helpers are no-ops unless FM_TIMING_LOG
+# names a file; fm_timing_now_ms remains available independently of recording.
+# Nothing here talks to the network, waits, locks, or changes control flow:
 # a failed append is discarded rather than propagated, because losing a diagnostic
 # line must never change what a sweep does or how it exits.
 #
