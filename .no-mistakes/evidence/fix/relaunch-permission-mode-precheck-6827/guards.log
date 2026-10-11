@@ -1,0 +1,17 @@
+/tmp/fm-lab.GouhG2
+mode=bogus target=claude
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /tmp/fm-lab.GouhG2
+error: config/claude-permission-mode holds 'bogus'; accepted values are: bypass (--dangerously-skip-permissions, the default when the file is absent), auto (--permission-mode auto)
+Original Claude process alive; task metadata unchanged
+mode=bogus target=codex
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /tmp/fm-lab.GouhG2
+error: config/claude-permission-mode holds 'bogus'; accepted values are: bypass (--dangerously-skip-permissions, the default when the file is absent), auto (--permission-mode auto)
+Original Claude process alive; task metadata unchanged
+mode=directory target=claude
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /tmp/fm-lab.GouhG2
+error: config/claude-permission-mode must be a readable regular file holding one of: bypass, auto
+Original Claude process alive; task metadata unchanged
+mode=directory target=codex
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /tmp/fm-lab.GouhG2
+error: config/claude-permission-mode must be a readable regular file holding one of: bypass, auto
+Original Claude process alive; task metadata unchanged

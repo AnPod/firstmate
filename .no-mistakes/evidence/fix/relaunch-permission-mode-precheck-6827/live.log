@@ -1,0 +1,69 @@
+/tmp/fm-lab.nnfcx2
+SCENARIO mode=bogus target=claude
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /tmp/fm-lab.nnfcx2
+REFUSED: tmux endpoint 'primary:%0' is malformed or does not belong to task check; preserving task state.
+exit=1
+Original process 293760 remains alive; durable task record unchanged
+SCENARIO mode=bogus target=codex
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /tmp/fm-lab.nnfcx2
+REFUSED: tmux endpoint 'primary:%0' is malformed or does not belong to task check; preserving task state.
+exit=1
+Original process 293760 remains alive; durable task record unchanged
+SCENARIO mode=directory target=claude
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /tmp/fm-lab.nnfcx2
+REFUSED: tmux endpoint 'primary:%0' is malformed or does not belong to task check; preserving task state.
+exit=1
+Original process 293760 remains alive; durable task record unchanged
+SCENARIO mode=directory target=codex
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /tmp/fm-lab.nnfcx2
+REFUSED: tmux endpoint 'primary:%0' is malformed or does not belong to task check; preserving task state.
+exit=1
+Original process 293760 remains alive; durable task record unchanged
+Welcome to Claude Code v2.1.289
+..........................................................
+
+     *                                       █████▓▓░
+                                 *         ███▓░     ░░
+            ░░░░░░                        ███▓░
+    ░░░   ░░░░░░░░░░                      ███▓░
+   ░░░░░░░░░░░░░░░░░░░    *                ██▓░░      ▓
+                                             ░▓▓███▓▓░
+ *                                 ░░░░
+                                 ░░░░░░░░
+                               ░░░░░░░░░░░░░░░░
+       █████████                                        *
+      ██▄█████▄██                        *
+       █████████      *
+.......█ █   █ █..........................................
+
+ Let's get started.
+
+ Choose the text style that looks best with your terminal
+ To change this later, run /theme
+
+     Auto (match terminal)
+ ❯ ✔ Dark mode
+     Light mode
+     Dark mode (colorblind-friendly)
+     Light mode (colorblind-friendly)
+     Dark mode (ANSI colors only)
+     Light mode (ANSI colors only)
+
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+  1  function greet() {
+  2 -  console.log("Hello, World!");
+  2 +  console.log("Hello, Claude!");
+  3  }
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+  Syntax theme: Monokai Extended (ctrl+t to disable)
+
+
+
+{
+  "loggedIn": false,
+  "authMethod": "none",
+  "apiProvider": "firstParty",
+  "analyticsDisabled": false,
+  "projectsDirectory": "/home/box/.claude/projects",
+  "configDirectory": "/home/box/.claude"
+}
