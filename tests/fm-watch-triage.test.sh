@@ -6652,6 +6652,9 @@ test_signal_grace_maximum() {
       if [ "$mode" = joining ]; then
         printf 'blocked: another task needs help\n' > "$state/two.status"
         set_mtime "$base" "$state/two.status"
+      else
+        printf 'done: final report updated\n' >> "$state/one.status"
+        set_mtime "$base" "$state/one.status"
       fi
       touch "$state/one.turn-ended"
       set_mtime "$((base + 1))" "$state/one.turn-ended"
@@ -6670,6 +6673,14 @@ test_signal_grace_maximum() {
       [ -e "$i" ] || continue
       grep -F "$i" "$out" >/dev/null || fail "$mode: wake omitted $i: $(cat "$out")"
       grep -F "$i" "$state/.wake-queue" >/dev/null || fail "$mode: queue omitted $i"
+      [ "$(awk -F '\t' -v key="$(basename "$i")" '$3 == "signal" && $4 == key { count++ } END { print count+0 }' "$state/.wake-queue")" -eq 1 ] \
+        || fail "$mode: queue repeated $i"
+      case "$i" in
+        *.status)
+          status_presentation_marker_reported_matches "$state/.seen-$(basename "$i" .status)_status" "$(status_observed_signature "$i")" \
+            || fail "$mode: reported signature is stale for $i"
+          ;;
+      esac
     done
   done
   pass "signal grace is a maximum only for batches whose terminal/paused statuses have newer turn-end markers"

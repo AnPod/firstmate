@@ -2036,6 +2036,16 @@ EOF
   [ "$found" -eq 1 ]
 }
 
+merge_pending_signals() {
+  pending=$(printf '%s\n%s\n' "$pending" "$(scan_signals)" | awk -F '\t' '
+    NF == 3 {
+      if (!($1 in rows)) keys[++count] = $1
+      rows[$1] = $0
+    }
+    END { for (i = 1; i <= count; i++) print rows[keys[i]] }
+  ')
+}
+
 # Integer grace is a maximum coalescing wait. Rescan before each settlement
 # check so statuses arriving during the wait join the batch. Fractional and
 # other non-integer overrides retain the original single sleep.
@@ -2049,7 +2059,7 @@ wait_signal_grace() {
     signal_batch_settled "$pending" && return 0
     sleep 1
     remaining=$((remaining - 1))
-    pending=$(printf '%s\n%s' "$pending" "$(scan_signals)")
+    merge_pending_signals
   done
   return 0
 }
@@ -2964,7 +2974,7 @@ EOF
   pending=$(scan_signals)
   if [ -n "$pending" ]; then
     wait_signal_grace
-    pending=$(printf '%s\n%s' "$pending" "$(scan_signals)")
+    merge_pending_signals
     # The final coalesced signal set is the watcher-carried status-change
     # trigger for this home's published summary. Start it before either
     # surfacing or absorbing the signal, but never wait on it: see
