@@ -1,0 +1,19 @@
+format	fm-lint-roots-v1
+meta	shellcheck_version	0.11.0
+meta	platform	Linux x86_64
+meta	image_os	unknown
+meta	image_version	unknown
+meta	mode	full
+meta	partition	all
+meta	jobs	1
+meta	bounds_enforced	0
+meta	root_deadline_seconds	unbounded
+meta	root_kill_grace_seconds	unbounded
+meta	root_memory_limit_kib	unbounded
+meta	timing_mechanism	none
+begin	1	/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7EVFPM8A20EVKB38K30C/.timing-live-qhfrj783/clean.sh	0	full	1791579450003
+end	1	/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7EVFPM8A20EVKB38K30C/.timing-live-qhfrj783/clean.sh	0	full	1791579450003	1791579450003	0	0	ok	unavailable	1
+meta	roots_begun	1
+meta	roots_completed	1
+meta	roots_unfinished	0
+meta	result_exit	0
