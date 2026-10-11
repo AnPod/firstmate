@@ -1,0 +1,6 @@
+ok - untracked Pi task scratch does not block landed-work teardown
+ok - untracked Pi extensions still block teardown alongside exempt task scratch
+ok - tracked/no-mistakes: dirty refusal classifies leftovers and preserves work
+ok - tracked/local-only: dirty refusal classifies leftovers and preserves work
+ok - mixed/no-mistakes: dirty refusal classifies leftovers and preserves work
+ok - mixed/local-only: dirty refusal classifies leftovers and preserves work

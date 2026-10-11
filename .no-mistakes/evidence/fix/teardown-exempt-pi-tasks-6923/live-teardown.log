@@ -1,0 +1,95 @@
+/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/scratch
+🌳 Setting up worktree...
+🌳 Leased worktree at ~/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/scratch/pool/.treehouse/demo-280e38/1/demo. Run 'treehouse return ~/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/scratch/pool/.treehouse/demo-280e38/1/demo' to release it.
+SCENARIO scratch BEFORE
+?? .pi/tasks/uuid/state.json
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/scratch
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+●  WATCHER DOWN - SUPERVISION IS OFF
+●  1 task(s) in flight, but no watcher has a fresh beacon (last beat: never, grace 300s).
+●  Trust the emitted supervision protocol for this harness; do not use shell & for watcher repair.
+●  This is a supervision warning only; the guarded operation WILL still run.
+●  watcher supervision is owned by the stop-hook park; inspect the hook registration and watcher startup path before ending the turn.
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+teardown: reaping leaked worktree process group for proof: 79679
+🌳 Worktree returned to pool.
+teardown proof complete (window fm-lab-proof:fm-proof, worktree /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/scratch/pool/.treehouse/demo-280e38/1/demo)
+Backlog: proof just finished (this home keeps no markdown backlog at /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/scratch/data/backlog.md). Update /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/scratch/data/backlog.md - move proof to Done, keep Done to the 10 most recent, then re-scan Queued and dispatch only work whose blockers are gone and date is due.
+RESULT scratch exit=0 metadata=removed
+/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/sibling
+🌳 Setting up worktree...
+🌳 Leased worktree at ~/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/sibling/pool/.treehouse/demo-2b9d20/1/demo. Run 'treehouse return ~/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/sibling/pool/.treehouse/demo-2b9d20/1/demo' to release it.
+SCENARIO sibling BEFORE
+?? .pi/extensions/custom.ts
+?? .pi/tasks/uuid/state.json
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/sibling
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+●  WATCHER DOWN - SUPERVISION IS OFF
+●  1 task(s) in flight, but no watcher has a fresh beacon (last beat: never, grace 300s).
+●  Trust the emitted supervision protocol for this harness; do not use shell & for watcher repair.
+●  This is a supervision warning only; the guarded operation WILL still run.
+●  watcher supervision is owned by the stop-hook park; inspect the hook registration and watcher startup path before ending the turn.
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REFUSED: worktree /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/sibling/pool/.treehouse/demo-2b9d20/1/demo has uncommitted changes.
+uncommitted changes present (untracked-only leftovers)
+untracked paths (up to 10):
+  .pi/extensions/custom.ts
+Commit them (or get the captain's explicit OK to discard, then --force).
+RESULT sibling exit=1 metadata=retained
+?? .pi/extensions/custom.ts
+?? .pi/tasks/uuid/state.json
+/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/tracked
+🌳 Setting up worktree...
+🌳 Leased worktree at ~/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/tracked/pool/.treehouse/demo-08f166/1/demo. Run 'treehouse return ~/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/tracked/pool/.treehouse/demo-08f166/1/demo' to release it.
+SCENARIO tracked BEFORE
+ M .pi/tasks/uuid/state.json
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/tracked
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+●  WATCHER DOWN - SUPERVISION IS OFF
+●  1 task(s) in flight, but no watcher has a fresh beacon (last beat: never, grace 300s).
+●  Trust the emitted supervision protocol for this harness; do not use shell & for watcher repair.
+●  This is a supervision warning only; the guarded operation WILL still run.
+●  watcher supervision is owned by the stop-hook park; inspect the hook registration and watcher startup path before ending the turn.
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REFUSED: worktree /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/tracked/pool/.treehouse/demo-08f166/1/demo has uncommitted changes.
+uncommitted changes present (includes tracked edits)
+Commit them (or get the captain's explicit OK to discard, then --force).
+RESULT tracked exit=1 metadata=retained
+ M .pi/tasks/uuid/state.json
+/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/staged
+🌳 Setting up worktree...
+🌳 Leased worktree at ~/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/staged/pool/.treehouse/demo-954157/1/demo. Run 'treehouse return ~/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/staged/pool/.treehouse/demo-954157/1/demo' to release it.
+SCENARIO staged BEFORE
+M  .pi/tasks/uuid/state.json
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/staged
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+●  WATCHER DOWN - SUPERVISION IS OFF
+●  1 task(s) in flight, but no watcher has a fresh beacon (last beat: never, grace 300s).
+●  Trust the emitted supervision protocol for this harness; do not use shell & for watcher repair.
+●  This is a supervision warning only; the guarded operation WILL still run.
+●  watcher supervision is owned by the stop-hook park; inspect the hook registration and watcher startup path before ending the turn.
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REFUSED: worktree /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/staged/pool/.treehouse/demo-954157/1/demo has uncommitted changes.
+uncommitted changes present (includes tracked edits)
+Commit them (or get the captain's explicit OK to discard, then --force).
+RESULT staged exit=1 metadata=retained
+M  .pi/tasks/uuid/state.json
+/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/unlanded
+🌳 Setting up worktree...
+🌳 Leased worktree at ~/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/unlanded/pool/.treehouse/demo-511b79/1/demo. Run 'treehouse return ~/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/unlanded/pool/.treehouse/demo-511b79/1/demo' to release it.
+SCENARIO unlanded BEFORE
+?? .pi/tasks/uuid/state.json
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/unlanded
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+●  WATCHER DOWN - SUPERVISION IS OFF
+●  1 task(s) in flight, but no watcher has a fresh beacon (last beat: never, grace 300s).
+●  Trust the emitted supervision protocol for this harness; do not use shell & for watcher repair.
+●  This is a supervision warning only; the guarded operation WILL still run.
+●  watcher supervision is owned by the stop-hook park; inspect the hook registration and watcher startup path before ending the turn.
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REFUSED: local-only worktree /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ6Y89KYZP7PPP35JM384P/.test-live/unlanded/pool/.treehouse/demo-511b79/1/demo has work not yet merged into main and not on any remote.
+commits not yet on main:
+5e69a3b unlanded
+Merge the branch into local main first (bin/fm-merge-local.sh after the captain approves), or push to a fork/remote, or get the captain's explicit OK to discard, then --force.
+RESULT unlanded exit=1 metadata=retained
+?? .pi/tasks/uuid/state.json
