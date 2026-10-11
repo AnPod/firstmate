@@ -1,0 +1,8 @@
+fm-contributions: unsafe contribution record destination
+poll exit: 1
+/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7CP5H2SZ7T627AC33DVB/.test-phase-tmp/fm-contributions.qKTIdG/manual/data/delivery device=39
+/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7CP5H2SZ7T627AC33DVB/.test-phase-tmp/fm-contributions.qKTIdG/manual/data/delivery/contributions.json device=40
+/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7CP5H2SZ7T627AC33DVB/.test-phase-tmp/fm-contributions.qKTIdG/manual/data/delivery device=39
+/home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7CP5H2SZ7T627AC33DVB/.test-phase-tmp/fm-contributions.qKTIdG/manual/data/delivery/contributions.json device=40
+fm-contributions: unsafe contribution record destination
+retry exit: 1

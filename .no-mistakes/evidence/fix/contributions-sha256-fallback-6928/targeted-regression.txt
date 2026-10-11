@@ -1,0 +1,4 @@
+fm-contributions: unsafe contribution record destination
+/tmp/fm-contributions.rKvdbW/sha256sum-fallback/data/delivery device=39 links=2
+/tmp/fm-contributions.rKvdbW/sha256sum-fallback/data/delivery/contributions.json device=40 links=1
+not ok - poll without shasum failed
