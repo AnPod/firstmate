@@ -1942,6 +1942,7 @@ test_worker_timing_decimal_and_fallback() {
     if [ "$raw" = absent ]; then
       expected=1791579450000
       # Pin the fallback clock so begin/end assertions cannot race a second tick.
+      # shellcheck disable=SC2016 # Arguments expand when the generated date stub runs.
       printf '#!/usr/bin/env bash\nif [ "$1" = +%%s ]; then\n  printf "1791579450\\n"\nelse\n  exec %q "$@"\nfi\n' \
         "$(command -v date)" > "$fakebin/date"
       chmod +x "$fakebin/date"
