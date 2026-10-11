@@ -1263,6 +1263,50 @@ test_dirty_worktree_refuses() {
   pass "dirty worktree is refused even when its committed work has landed (dirty always wins)"
 }
 
+test_untracked_pi_tasks_allows() {
+  local case_dir rc
+  case_dir=$(make_case pi-tasks-landed)
+  write_meta "$case_dir" no-mistakes ship
+  wt_commit_file "$case_dir" feature.txt hello
+  land_on_origin_main "$case_dir" feature.txt hello
+  mkdir -p "$case_dir/wt/.pi/tasks/test-uuid"
+  printf '%s\n' '{}' > "$case_dir/wt/.pi/tasks/test-uuid/state.json"
+
+  rc=0
+  run_teardown "$case_dir" > "$case_dir/stdout" 2> "$case_dir/stderr" || rc=$?
+  expect_code 0 "$rc" "pi-tasks: teardown should allow landed work with only Pi task scratch"
+  ! grep -q REFUSED "$case_dir/stderr" || fail "pi-tasks: teardown refused scratch"
+  assert_absent "$case_dir/state/task-x1.meta" "pi-tasks: teardown kept task metadata"
+  pass "untracked Pi task scratch does not block landed-work teardown"
+}
+
+test_untracked_pi_extension_refuses() {
+  local case_dir rc before meta_before
+  case_dir=$(make_case pi-extension-untracked)
+  write_meta "$case_dir" no-mistakes ship
+  wt_commit_file "$case_dir" feature.txt hello
+  land_on_origin_main "$case_dir" feature.txt hello
+  mkdir -p "$case_dir/wt/.pi/tasks/test-uuid" "$case_dir/wt/.pi/extensions"
+  printf '%s\n' '{}' > "$case_dir/wt/.pi/tasks/test-uuid/state.json"
+  printf '%s\n' 'export default function custom() {}' > "$case_dir/wt/.pi/extensions/custom.ts"
+  before=$(git -C "$case_dir/wt" status --porcelain --untracked-files=all)
+  meta_before=$(cat "$case_dir/state/task-x1.meta")
+
+  rc=0
+  run_teardown "$case_dir" > "$case_dir/stdout" 2> "$case_dir/stderr" || rc=$?
+  expect_code 1 "$rc" "pi-extension: teardown must refuse untracked extension files"
+  grep -q REFUSED "$case_dir/stderr" || fail "pi-extension: no refusal"
+  grep -Fxq '  .pi/extensions/custom.ts' "$case_dir/stderr" || fail "pi-extension: extension not named"
+  ! grep -Fq '.pi/tasks/' "$case_dir/stderr" || fail "pi-extension: exempt scratch named"
+  assert_present "$case_dir/wt/.pi/tasks/test-uuid/state.json" "pi-extension: scratch removed"
+  assert_present "$case_dir/wt/.pi/extensions/custom.ts" "pi-extension: extension removed"
+  assert_present "$case_dir/state/task-x1.meta" "pi-extension: metadata removed"
+  [ "$before" = "$(git -C "$case_dir/wt" status --porcelain --untracked-files=all)" ] \
+    || fail "pi-extension: worktree changed"
+  [ "$meta_before" = "$(cat "$case_dir/state/task-x1.meta")" ] || fail "pi-extension: metadata changed"
+  pass "untracked Pi extensions still block teardown alongside exempt task scratch"
+}
+
 assert_dirty_diagnostic() {
   local kind=$1 mode=$2 case_dir rc before n
   case_dir=$(make_case "dirty-$kind-$mode")
@@ -1305,7 +1349,7 @@ assert_dirty_diagnostic() {
     ! grep -q 'untracked-only' "$case_dir/stderr" || fail "$kind/$mode: misclassified as untracked-only"
   fi
   if [ "$kind" != tracked ]; then
-    grep -Fq '00 proof scratch/' "$case_dir/stderr" || fail "$kind/$mode: scratch folder not named"
+    grep -Fq '00 proof scratch/server.log' "$case_dir/stderr" || fail "$kind/$mode: scratch folder not named"
     grep -Fxq '  09-scratch.txt' "$case_dir/stderr" || fail "$kind/$mode: tenth path missing"
     ! grep -q '10-scratch.txt\|11-scratch.txt\|\.claude/\|\.fm-grok-turnend' "$case_dir/stderr" \
       || fail "$kind/$mode: path list exceeded its bound or included exempt files"
@@ -4687,6 +4731,8 @@ test_content_in_default_fallback_allows
 test_content_fallback_uses_recorded_base_branch
 test_content_fallback_refreshes_stale_origin_ref
 test_dirty_worktree_refuses
+test_untracked_pi_tasks_allows
+test_untracked_pi_extension_refuses
 test_untracked_only_refusal_diagnostic
 test_tracked_edit_refusal_diagnostic
 test_mixed_refusal_diagnostic
