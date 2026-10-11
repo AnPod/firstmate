@@ -1,0 +1,142 @@
+[
+  {
+    "mode": "settled",
+    "result": "pass",
+    "elapsed_seconds": 1.222,
+    "grace": 6,
+    "stdout": "signal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-pb383n0g/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-pb383n0g/state/two.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-pb383n0g/state/one.turn-ended /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-pb383n0g/state/two.turn-ended\n",
+    "stderr": "",
+    "queue": "1791697035\t1\tsignal\tone.status\tsignal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-pb383n0g/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-pb383n0g/state/two.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-pb383n0g/state/one.turn-ended /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-pb383n0g/state/two.turn-ended\n1791697035\t2\tsignal\ttwo.status\tsignal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-pb383n0g/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-pb383n0g/state/two.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-pb383n0g/state/one.turn-ended /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-pb383n0g/state/two.turn-ended\n1791697035\t3\tsignal\tone.turn-ended\tsignal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-pb383n0g/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-pb383n0g/state/two.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-pb383n0g/state/one.turn-ended /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-pb383n0g/state/two.turn-ended\n1791697035\t4\tsignal\ttwo.turn-ended\tsignal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-pb383n0g/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-pb383n0g/state/two.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-pb383n0g/state/one.turn-ended /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-pb383n0g/state/two.turn-ended\n",
+    "markers": {
+      ".seen-two_turn-ended": "0:1791697015",
+      ".seen-two_status": "v2\tr1:3236007374726f6e673a34303a323439303430393a323032362d31302d31312030373a33373a31342e303534343437363830202b3032303000726567756c61722066696c653a38316134002d007265616461626c65007265616461626c65\t26@strong:40:2490409:2026-10-11 07:37:14.054447680 +0200",
+      ".seen-one_status": "v2\tr1:3135007374726f6e673a34303a323439303430383a323032362d31302d31312030373a33373a31342e303530343437363830202b3032303000726567756c61722066696c653a38316134002d007265616461626c65007265616461626c65\t15@strong:40:2490408:2026-10-11 07:37:14.050447680 +0200",
+      ".seen-one_turn-ended": "0:1791697015"
+    }
+  },
+  {
+    "mode": "arriving",
+    "result": "fail",
+    "error": "{'.seen-one_status': 'v2\\tr1:3432007374726f6e673a34303a323439303430383a323032362d31302d31312030373a33373a31362e313130343437363830202b3032303000726567756c61722066696c653a38316134002d007265616461626c65007265616461626c65\\t42@strong:40:2490408:2026-10-11 07:37:16.110447680 +0200', '.seen-one_turn-ended': '0:1791697017'}"
+  },
+  {
+    "mode": "missing",
+    "result": "pass",
+    "elapsed_seconds": 3.443,
+    "grace": 2,
+    "stdout": "signal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-xlbuc1qe/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-xlbuc1qe/state/two.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-xlbuc1qe/state/one.turn-ended\n",
+    "stderr": "",
+    "queue": "1791697042\t1\tsignal\tone.status\tsignal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-xlbuc1qe/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-xlbuc1qe/state/two.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-xlbuc1qe/state/one.turn-ended\n1791697042\t2\tsignal\ttwo.status\tsignal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-xlbuc1qe/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-xlbuc1qe/state/two.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-xlbuc1qe/state/one.turn-ended\n1791697042\t3\tsignal\tone.turn-ended\tsignal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-xlbuc1qe/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-xlbuc1qe/state/two.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-xlbuc1qe/state/one.turn-ended\n",
+    "markers": {
+      ".seen-two_status": "v2\tr1:3236007374726f6e673a34303a323531393034323a323032362d31302d31312030373a33373a31382e373436343437363830202b3032303000726567756c61722066696c653a38316134002d007265616461626c65007265616461626c65\t26@strong:40:2519042:2026-10-11 07:37:18.746447680 +0200",
+      ".seen-one_status": "v2\tr1:3135007374726f6e673a34303a323439303430383a323032362d31302d31312030373a33373a31382e373436343437363830202b3032303000726567756c61722066696c653a38316134002d007265616461626c65007265616461626c65\t15@strong:40:2490408:2026-10-11 07:37:18.746447680 +0200",
+      ".seen-one_turn-ended": "0:1791697019"
+    }
+  },
+  {
+    "mode": "older",
+    "result": "pass",
+    "elapsed_seconds": 3.641,
+    "grace": 2,
+    "stdout": "signal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-7bx1vpzi/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-7bx1vpzi/state/two.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-7bx1vpzi/state/one.turn-ended /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-7bx1vpzi/state/two.turn-ended\n",
+    "stderr": "",
+    "queue": "1791697046\t1\tsignal\tone.status\tsignal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-7bx1vpzi/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-7bx1vpzi/state/two.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-7bx1vpzi/state/one.turn-ended /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-7bx1vpzi/state/two.turn-ended\n1791697046\t2\tsignal\ttwo.status\tsignal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-7bx1vpzi/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-7bx1vpzi/state/two.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-7bx1vpzi/state/one.turn-ended /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-7bx1vpzi/state/two.turn-ended\n1791697046\t3\tsignal\tone.turn-ended\tsignal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-7bx1vpzi/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-7bx1vpzi/state/two.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-7bx1vpzi/state/one.turn-ended /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-7bx1vpzi/state/two.turn-ended\n1791697046\t4\tsignal\ttwo.turn-ended\tsignal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-7bx1vpzi/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-7bx1vpzi/state/two.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-7bx1vpzi/state/one.turn-ended /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-7bx1vpzi/state/two.turn-ended\n",
+    "markers": {
+      ".seen-two_turn-ended": "0:1791697022",
+      ".seen-two_status": "v2\tr1:3236007374726f6e673a34303a323531393139363a323032362d31302d31312030373a33373a32332e303232343437363830202b3032303000726567756c61722066696c653a38316134002d007265616461626c65007265616461626c65\t26@strong:40:2519196:2026-10-11 07:37:23.022447680 +0200",
+      ".seen-one_status": "v2\tr1:3135007374726f6e673a34303a323531393036393a323032362d31302d31312030373a33373a32332e303232343437363830202b3032303000726567756c61722066696c653a38316134002d007265616461626c65007265616461626c65\t15@strong:40:2519069:2026-10-11 07:37:23.022447680 +0200",
+      ".seen-one_turn-ended": "0:1791697024"
+    }
+  },
+  {
+    "mode": "equal",
+    "result": "pass",
+    "elapsed_seconds": 3.558,
+    "grace": 2,
+    "stdout": "signal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-t9dyeebp/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-t9dyeebp/state/two.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-t9dyeebp/state/one.turn-ended /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-t9dyeebp/state/two.turn-ended\n",
+    "stderr": "",
+    "queue": "1791697050\t1\tsignal\tone.status\tsignal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-t9dyeebp/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-t9dyeebp/state/two.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-t9dyeebp/state/one.turn-ended /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-t9dyeebp/state/two.turn-ended\n1791697051\t2\tsignal\ttwo.status\tsignal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-t9dyeebp/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-t9dyeebp/state/two.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-t9dyeebp/state/one.turn-ended /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-t9dyeebp/state/two.turn-ended\n1791697051\t3\tsignal\tone.turn-ended\tsignal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-t9dyeebp/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-t9dyeebp/state/two.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-t9dyeebp/state/one.turn-ended /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-t9dyeebp/state/two.turn-ended\n1791697051\t4\tsignal\ttwo.turn-ended\tsignal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-t9dyeebp/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-t9dyeebp/state/two.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-t9dyeebp/state/one.turn-ended /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-t9dyeebp/state/two.turn-ended\n",
+    "markers": {
+      ".seen-two_turn-ended": "0:1791697027",
+      ".seen-two_status": "v2\tr1:3236007374726f6e673a34303a323531393139363a323032362d31302d31312030373a33373a32372e353632343437363830202b3032303000726567756c61722066696c653a38316134002d007265616461626c65007265616461626c65\t26@strong:40:2519196:2026-10-11 07:37:27.562447680 +0200",
+      ".seen-one_status": "v2\tr1:3135007374726f6e673a34303a323531393036393a323032362d31302d31312030373a33373a32372e353632343437363830202b3032303000726567756c61722066696c653a38316134002d007265616461626c65007265616461626c65\t15@strong:40:2519069:2026-10-11 07:37:27.562447680 +0200",
+      ".seen-one_turn-ended": "0:1791697028"
+    }
+  },
+  {
+    "mode": "absent",
+    "result": "pass",
+    "elapsed_seconds": 2.847,
+    "grace": 2,
+    "stdout": "signal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-42g0q7kb/state/one.status\n",
+    "stderr": "",
+    "queue": "1791697054\t1\tsignal\tone.status\tsignal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-42g0q7kb/state/one.status\n",
+    "markers": {
+      ".seen-one_status": "v2\tr1:3135007374726f6e673a34303a323531393036393a323032362d31302d31312030373a33373a33312e393934343437363830202b3032303000726567756c61722066696c653a38316134002d007265616461626c65007265616461626c65\t15@strong:40:2519069:2026-10-11 07:37:31.994447680 +0200"
+    }
+  },
+  {
+    "mode": "working",
+    "result": "pass",
+    "elapsed_seconds": 3.071,
+    "grace": 2,
+    "stdout": "signal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-g5zoi7j9/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-g5zoi7j9/state/one.turn-ended\n",
+    "stderr": "",
+    "queue": "1791697058\t1\tsignal\tone.status\tsignal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-g5zoi7j9/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-g5zoi7j9/state/one.turn-ended\n1791697058\t2\tsignal\tone.turn-ended\tsignal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-g5zoi7j9/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-g5zoi7j9/state/one.turn-ended\n",
+    "markers": {
+      ".seen-one_status": "v2\tr1:3138007374726f6e673a34303a323531393036393a323032362d31302d31312030373a33373a33352e363734343437363830202b3032303000726567756c61722066696c653a38316134002d007265616461626c65007265616461626c65\t18@strong:40:2519069:2026-10-11 07:37:35.674447680 +0200",
+      ".seen-one_turn-ended": "0:1791697036"
+    }
+  },
+  {
+    "mode": "bare",
+    "result": "pass",
+    "elapsed_seconds": 2.528,
+    "grace": 2,
+    "stdout": "signal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-yz1jr4u5/state/one.turn-ended\n",
+    "stderr": "",
+    "queue": "1791697062\t1\tsignal\tone.turn-ended\tsignal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-yz1jr4u5/state/one.turn-ended\n",
+    "markers": {
+      ".seen-one_turn-ended": "0:1791697039"
+    }
+  },
+  {
+    "mode": "fractional",
+    "result": "pass",
+    "elapsed_seconds": 3.298,
+    "grace": 2.5,
+    "stdout": "signal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-o__izajf/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-o__izajf/state/one.turn-ended\n",
+    "stderr": "",
+    "queue": "1791697066\t1\tsignal\tone.status\tsignal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-o__izajf/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-o__izajf/state/one.turn-ended\n1791697066\t2\tsignal\tone.turn-ended\tsignal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-o__izajf/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-o__izajf/state/one.turn-ended\n",
+    "markers": {
+      ".seen-one_status": "v2\tr1:3135007374726f6e673a34303a323531393036393a323032362d31302d31312030373a33373a34322e393832343437363830202b3032303000726567756c61722066696c653a38316134002d007265616461626c65007265616461626c65\t15@strong:40:2519069:2026-10-11 07:37:42.982447680 +0200",
+      ".seen-one_turn-ended": "0:1791697043"
+    }
+  },
+  {
+    "mode": "joining",
+    "result": "pass",
+    "elapsed_seconds": 3.553,
+    "grace": 2,
+    "stdout": "signal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-u20t0ksn/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-u20t0ksn/state/two.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-u20t0ksn/state/one.turn-ended\n",
+    "stderr": "",
+    "queue": "1791697070\t1\tsignal\tone.status\tsignal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-u20t0ksn/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-u20t0ksn/state/two.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-u20t0ksn/state/one.turn-ended\n1791697070\t2\tsignal\ttwo.status\tsignal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-u20t0ksn/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-u20t0ksn/state/two.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-u20t0ksn/state/one.turn-ended\n1791697070\t3\tsignal\tone.turn-ended\tsignal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-u20t0ksn/state/one.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-u20t0ksn/state/two.status /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-u20t0ksn/state/one.turn-ended\n",
+    "markers": {
+      ".seen-two_status": "v2\tr1:3333007374726f6e673a34303a323532373534343a323032362d31302d31312030373a33373a34382e313032343437363830202b3032303000726567756c61722066696c653a38316134002d007265616461626c65007265616461626c65\t33@strong:40:2527544:2026-10-11 07:37:48.102447680 +0200",
+      ".seen-one_status": "v2\tr1:3135007374726f6e673a34303a323531393036393a323032362d31302d31312030373a33373a34372e313138343437363830202b3032303000726567756c61722066696c653a38316134002d007265616461626c65007265616461626c65\t15@strong:40:2519069:2026-10-11 07:37:47.118447680 +0200",
+      ".seen-one_turn-ended": "0:1791697048"
+    }
+  },
+  {
+    "mode": "default-dedup",
+    "result": "pass",
+    "elapsed_seconds": 34.193,
+    "grace": 30,
+    "stdout": "signal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-thldmmef/state/one.status\n",
+    "stderr": "",
+    "queue": "1791697105\t1\tsignal\tone.status\tsignal: /home/box/.no-mistakes/worktrees/ba40ea07ff34/01M4MQ7GZ7MJ3J9X33CN0S6Q68/.watch-lab-thldmmef/state/one.status\n",
+    "markers": {
+      ".seen-one_status": "v2\tr1:3135007374726f6e673a34303a323532373532383a323032362d31302d31312030373a33373a35312e353636343437363830202b3032303000726567756c61722066696c653a38316134002d007265616461626c65007265616461626c65\t15@strong:40:2527528:2026-10-11 07:37:51.566447680 +0200"
+    }
+  }
+]
