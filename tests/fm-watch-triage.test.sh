@@ -6603,6 +6603,78 @@ test_paused_until_that_passed_is_rechecked_before_the_cadence() {
   pass "a declared wait whose until time has passed is rechecked at once, then held to the cadence"
 }
 
+# Small maximum-grace fixtures use exact timestamp ordering and bounded exits.
+# Six seconds leaves ample headroom for an early wake, yet the old unconditional
+# sleep cannot pass the early bound. Measure from the first poll beacon so
+# watcher startup cannot satisfy a full-wait assertion. Those cases need only
+# two seconds.
+test_signal_grace_maximum() {
+  local mode dir state out pid start elapsed grace early base i
+  for mode in settled arriving missing older equal absent working bare fractional joining; do
+    dir=$(make_case "signal-grace-$mode"); state="$dir/state"; out="$dir/watch.out"
+    base=$(( $(date +%s) - 20 ))
+    grace=2; early=0
+    case "$mode" in settled|arriving) grace=6; early=1 ;; fractional) grace=2.5 ;; esac
+    if [ "$mode" != bare ]; then
+      printf 'done: finished\n' > "$state/one.status"
+      set_mtime "$base" "$state/one.status"
+    fi
+    case "$mode" in
+      settled|missing|older|equal)
+        printf 'paused: waiting for reset\n' > "$state/two.status"
+        set_mtime "$base" "$state/two.status"
+        touch "$state/one.turn-ended"
+        set_mtime "$((base + 1))" "$state/one.turn-ended"
+        case "$mode" in
+          settled) touch "$state/two.turn-ended"; set_mtime "$((base + 1))" "$state/two.turn-ended" ;;
+          older) touch "$state/two.turn-ended"; set_mtime "$((base - 1))" "$state/two.turn-ended" ;;
+          equal) touch "$state/two.turn-ended"; set_mtime "$base" "$state/two.turn-ended" ;;
+        esac
+        ;;
+      working)
+        printf 'working: progress\n' > "$state/one.status"
+        set_mtime "$base" "$state/one.status"
+        touch "$state/one.turn-ended"; set_mtime "$((base + 1))" "$state/one.turn-ended"
+        ;;
+      bare) touch "$state/one.turn-ended" ;;
+      fractional) touch "$state/one.turn-ended"; set_mtime "$((base + 1))" "$state/one.turn-ended" ;;
+    esac
+    watch_bg "$state" "$dir/fakebin" "$out" env FM_SIGNAL_GRACE="$grace"
+    pid=$!
+    if [ "$mode" = arriving ] || [ "$mode" = joining ]; then
+      # Wait for the poll to start, then allow the first signal scan to finish.
+      i=0
+      while [ ! -e "$state/.last-watcher-beat" ] && [ "$i" -lt 100 ]; do
+        sleep 0.1; i=$((i + 1))
+      done
+      [ -e "$state/.last-watcher-beat" ] || { reap "$pid"; fail "$mode: no watcher poll"; }
+      sleep 0.5
+      if [ "$mode" = joining ]; then
+        printf 'blocked: another task needs help\n' > "$state/two.status"
+        set_mtime "$base" "$state/two.status"
+      fi
+      touch "$state/one.turn-ended"
+      set_mtime "$((base + 1))" "$state/one.turn-ended"
+    fi
+    wait_for_exit "$pid" 150 || { reap "$pid"; fail "$mode: no signal wake"; }
+    start=$(file_mtime "$state/.last-watcher-beat")
+    [ -n "$start" ] || fail "$mode: missing first poll beacon"
+    elapsed=$(( $(date +%s) - start ))
+    if [ "$early" -eq 1 ]; then
+      [ "$elapsed" -lt 5 ] || fail "$mode: settled batch waited ${elapsed}s (maximum $grace)"
+    else
+      [ "$elapsed" -ge 2 ] || fail "$mode: unsettled/fractional batch woke early after ${elapsed}s"
+    fi
+    grep -F 'signal:' "$out" >/dev/null || fail "$mode: missing signal wake: $(cat "$out")"
+    for i in "$state"/*.status "$state"/*.turn-ended; do
+      [ -e "$i" ] || continue
+      grep -F "$i" "$out" >/dev/null || fail "$mode: wake omitted $i: $(cat "$out")"
+      grep -F "$i" "$state/.wake-queue" >/dev/null || fail "$mode: queue omitted $i"
+    done
+  done
+  pass "signal grace is a maximum only for batches whose terminal/paused statuses have newer turn-end markers"
+}
+
 # CI's stock macOS Bash lane sets FM_TEST_ONLY to run just the bash-3.2
 # churn-deferral regression. The rest of this file is not a 3.2 snapshot suite.
 if [ -n "${FM_TEST_ONLY:-}" ]; then
@@ -6610,6 +6682,7 @@ if [ -n "${FM_TEST_ONLY:-}" ]; then
   exit 0
 fi
 
+test_signal_grace_maximum
 test_status_span_actionable_classifier
 test_status_span_survives_a_later_routine_append
 test_status_span_respects_decision_closure

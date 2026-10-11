@@ -288,7 +288,7 @@ HOME_SUMMARY_INTERVAL=${FM_HOME_SUMMARY_INTERVAL:-300}
 case "$HOME_SUMMARY_INTERVAL" in
   ''|*[!0-9]*|0) HOME_SUMMARY_INTERVAL=300 ;;
 esac
-SIGNAL_GRACE=${FM_SIGNAL_GRACE:-30}   # seconds to linger after a signal so trailing
+SIGNAL_GRACE=${FM_SIGNAL_GRACE:-30}   # maximum seconds to wait after a signal so trailing
                                       # signals (a status write, then the same turn's
                                       # turn-end hook) coalesce into one wake
 CLEANUP_LOCK_BOUND=${FM_WATCHER_CLEANUP_LOCK_BOUND:-2}  # seconds EXIT cleanup may
@@ -2015,6 +2015,45 @@ scan_signals() {
   return 0
 }
 
+# A batch settles only when it contains terminal or paused statuses and every
+# such status has a strictly newer turn-end marker. Classification stays in the
+# shared library; bare markers and non-terminal statuses cannot settle a batch.
+signal_batch_settled() {  # <tab-separated scan_signals rows>
+  local sf sig f line found=0
+  while IFS=$(printf '\t') read -r sf sig f; do
+    case "$f" in
+      *.status)
+        line=$(last_status_line "$f")
+        if status_is_terminal_verb "$line" || status_is_paused "$line"; then
+          found=1
+          [ "${f%.status}.turn-ended" -nt "$f" ] || return 1
+        fi
+        ;;
+    esac
+  done <<EOF
+$1
+EOF
+  [ "$found" -eq 1 ]
+}
+
+# Integer grace is a maximum coalescing wait. Rescan before each settlement
+# check so statuses arriving during the wait join the batch. Fractional and
+# other non-integer overrides retain the original single sleep.
+wait_signal_grace() {
+  local remaining
+  case "$SIGNAL_GRACE" in
+    ''|*[!0-9]*) sleep "$SIGNAL_GRACE"; return ;;
+  esac
+  remaining=$((10#$SIGNAL_GRACE))
+  while [ "$remaining" -gt 0 ]; do
+    signal_batch_settled "$pending" && return 0
+    sleep 1
+    remaining=$((remaining - 1))
+    pending=$(printf '%s\n%s' "$pending" "$(scan_signals)")
+  done
+  return 0
+}
+
 # Deliver a durably queued process-event result to firstmate. Publication is
 # owned by bin/fm-procevent.sh - by the runner at capture time and by reconcile's
 # re-announcement - so this decides only whether a queued check record has been
@@ -2917,14 +2956,14 @@ EOF
     fi
   fi
 
-  # On the first changed signal, linger one grace period and re-scan before
+  # On the first changed signal, wait up to the maximum grace and re-scan before
   # classifying: a crewmate's final status write and the same turn's turn-end
   # hook land seconds apart, and reporting them as separate actionable wakes
   # costs a full firstmate turn each. The re-scan also picks up a newer
   # signature for an already-pending file (last write wins below).
   pending=$(scan_signals)
   if [ -n "$pending" ]; then
-    sleep "$SIGNAL_GRACE"
+    wait_signal_grace
     pending=$(printf '%s\n%s' "$pending" "$(scan_signals)")
     # The final coalesced signal set is the watcher-carried status-change
     # trigger for this home's published summary. Start it before either
