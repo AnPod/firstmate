@@ -123,6 +123,9 @@ SELF="$SELF_DIR/fm-lint.sh"
 ROOT="$(cd "$SELF_DIR/.." && pwd -P)"
 cd "$ROOT" || exit 1
 
+# shellcheck source=bin/fm-timing-lib.sh
+. "$SELF_DIR/fm-timing-lib.sh"
+
 # The sibling timeout library supplies the shared group-kill watchdog that
 # bounds each root when FM_LINT_REQUIRE_BOUNDS=1 requires it; without the
 # library a required-bounds run refuses in preflight rather than lint uncapped.
@@ -142,12 +145,7 @@ fm_lint_worker_stop() {
 }
 
 fm_lint_now_ms() {
-  if [ -n "${EPOCHREALTIME:-}" ]; then
-    local seconds=${EPOCHREALTIME%.*} micros=${EPOCHREALTIME#*.}
-    printf '%s\n' "$((seconds * 1000 + 10#${micros:0:3}))"
-  else
-    printf '%s\n' "$(($(date +%s) * 1000))"
-  fi
+  fm_timing_now_ms
 }
 
 # Names are listed only for signal numbers that agree on Linux and macOS; any

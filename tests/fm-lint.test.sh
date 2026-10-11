@@ -798,6 +798,7 @@ test_changed_mode_hides_cross_file_codes_that_ci_still_sees() {
   mkdir -p "$test_root/bin/backends" "$test_root/tests" "$test_root/.github/workflows"
   lint="$test_root/bin/fm-lint.sh"
   cp "$LINT" "$lint"
+  cp "$ROOT/bin/fm-timing-lib.sh" "$(dirname "$lint")/"
   cp "$ROOT/bin/fm-lint-workflows.sh" "$test_root/bin/"
   cp "$ROOT"/.github/workflows/* "$test_root/.github/workflows/"
   printf '#!/usr/bin/env bash\nexit 0\n' > "$test_root/bin/backends/noop.sh"
@@ -1154,6 +1155,7 @@ test_rejects_direct_beads_cli_invocations() {
   mkdir -p "$tmp/repo/bin/backends" "$tmp/repo/tests"
   lint_copy="$tmp/repo/bin/fm-lint.sh"
   cp "$LINT" "$lint_copy"
+  cp "$ROOT/bin/fm-timing-lib.sh" "$(dirname "$lint_copy")/"
   cat > "$tmp/repo/bin/fm-lint-workflows.sh" <<'SH'
 #!/usr/bin/env bash
 exit 0
@@ -1206,6 +1208,7 @@ test_rejects_direct_beads_cli_in_explicit_core_path() {
   lint_copy="$tmp/repo/bin/fm-lint.sh"
   target="$tmp/repo/bin/direct-beads.sh"
   cp "$LINT" "$lint_copy"
+  cp "$ROOT/bin/fm-timing-lib.sh" "$(dirname "$lint_copy")/"
   printf '#!/usr/bin/env bash\nbd close fm-example\n' > "$target"
   chmod +x "$lint_copy"
   fm_lint_stub_shellcheck "$fakebin" "$log"
@@ -1800,6 +1803,7 @@ test_require_bounds_refuses_when_enforcement_is_missing() {
   lone_dir="$tmp/lone"
   mkdir -p "$lone_dir"
   cp "$LINT" "$lone_dir/fm-lint.sh"
+  cp "$ROOT/bin/fm-timing-lib.sh" "$lone_dir/"
   chmod +x "$lone_dir/fm-lint.sh"
   rc=0
   out=$(PATH="$fakebin:$PATH" FM_LINT_REQUIRE_BOUNDS=1 \
@@ -1888,6 +1892,7 @@ test_sidecar_result_exit_reflects_final_status() {
   roots_log="$tmp/lint.roots.tsv"
   mkdir -p "$tmp/repo/bin/backends" "$tmp/repo/tests" "$tmp/repo/.github/workflows"
   cp "$LINT" "$tmp/repo/bin/fm-lint.sh"
+  cp "$ROOT/bin/fm-timing-lib.sh" "$tmp/repo/bin/"
   cp "$ROOT/bin/fm-timeout-lib.sh" "$tmp/repo/bin/fm-timeout-lib.sh"
   cat > "$tmp/repo/bin/fm-lint-workflows.sh" <<'SH'
 #!/usr/bin/env bash
@@ -1918,6 +1923,37 @@ SH
   grep -q $'^result_exit\t1$' "$telemetry" \
     || fail "telemetry recorded the pre-check status instead of the final exit"
   pass "the roots sidecar and telemetry record the run's final exit status"
+}
+
+test_comma_decimal_worker_timing() {
+  local tmp fakebin fixture telemetry roots_log out rc
+  tmp=$(fm_test_tmproot fm-lint-comma-timing)
+  fakebin=$(fm_fakebin "$tmp")
+  fm_lint_stub_shellcheck "$fakebin" "$tmp/stub.log"
+  fixture="$tmp/clean.sh"
+  telemetry="$tmp/lint.tsv"
+  roots_log="$tmp/lint.roots.tsv"
+  printf '#!/usr/bin/env bash\nexit 0\n' > "$fixture"
+  # Simulate a comma-decimal locale even on hosts with only C/POSIX locales.
+  # BASH_ENV applies to both the lint coordinator and its Bash workers.
+  cat > "$tmp/bash-env" <<'SH'
+unset EPOCHREALTIME
+EPOCHREALTIME=1791579450,003863
+SH
+  rc=0
+  out=$(PATH="$fakebin:$PATH" BASH_ENV="$tmp/bash-env" FM_LINT_JOBS=1 \
+    "$LINT" --telemetry "$telemetry" "$fixture" 2>&1) || rc=$?
+  [ "$rc" -eq 0 ] || fail "comma-decimal worker timing failed"$'\n'"$out"
+  assert_not_contains "$out" "value too great for base" "comma-decimal timing caused an arithmetic error"
+  assert_not_contains "$out" "operand expected" "comma-decimal timing broke deadline arithmetic"
+  awk -F '\t' '$1 == "begin" { n++; if ($6 != "1791579450003") exit 1 }
+    END { if (n != 1) exit 1 }' "$roots_log" \
+    || fail "the worker did not record the expected begin timestamp"
+  awk -F '\t' '$1 == "end" { n++; if ($6 != "1791579450003" ||
+    $7 != "1791579450003" || $8 != 0 || $9 != 0 || $10 != "ok") exit 1 }
+    END { if (n != 1) exit 1 }' "$roots_log" \
+    || fail "the worker did not record the expected timestamps and zero duration"
+  pass "lint worker timing accepts a comma-decimal EPOCHREALTIME"
 }
 
 test_roots_sidecar_records_per_root_lifecycle() {
@@ -2058,6 +2094,7 @@ test_source_excerpt_with_oom_text_stays_findings
 test_require_bounds_refuses_when_enforcement_is_missing
 test_pinned_shellcheck_memory_limit
 test_sidecar_result_exit_reflects_final_status
+test_comma_decimal_worker_timing
 test_roots_sidecar_records_per_root_lifecycle
 test_seeded_module_boundary_parity
 test_changed_mode_lints_only_the_changed_file
